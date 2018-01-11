@@ -38,3 +38,8 @@ Makefile*
 CMakeLists.txt.user*
 
 *.ini
+
+.vs
+
+[Dd]ebug/
+x64/

@@ -1,0 +1,13 @@
+LIBRARY
+EXPORTS
+
+ReadIniInt
+WriteIniInt
+ReadIniDouble
+WriteIniDouble
+ReadIniStdString
+WriteIniStdString
+ReadIniString
+WriteIniString
+
+InitSocket

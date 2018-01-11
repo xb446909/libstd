@@ -1,6 +1,12 @@
 #ifndef __SOCKET_H
 #define __SOCKET_H
 
+#ifdef __GNUC__
+#ifndef __stdcall
+#define __stdcall
+#endif
+#endif
+
 #define TCP_SERVER		0
 #define TCP_CLIENT		1
 #define UDP             2
@@ -17,6 +23,6 @@
 
 typedef int(*RecvCallback)(int nType, const char* szIP, int nPort, int nSize, const char* szRecv);
 
-int InitSocket(int nID, int nType, const char* szIniPath = 0, RecvCallback pCallback = 0);
+int __stdcall InitSocket(int nID, int nType, const char* szIniPath = 0, RecvCallback pCallback = 0);
 
 #endif

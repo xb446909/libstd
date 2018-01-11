@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "tcpserverproc.h"
 #include <iostream>
 
@@ -43,10 +44,18 @@ void TcpServerProc::handle_read_header(const boost::system::error_code &error, s
         std::cerr << "Socket error from " << remote_endpoint.address().to_string()
                   << ":" << remote_endpoint.port() << " : " << error.message() << std::endl;
 #endif
-        if (m_param->callback)
-        {
-            m_param->callback(RECV_ERROR, remote_endpoint.address().to_string().c_str(),
-                              remote_endpoint.port(), error.message().length() + 1, error.message().c_str());
+		if (m_param->callback)
+		{
+			if (error.value() == 2)
+			{
+				m_param->callback(RECV_CLOSE, remote_endpoint.address().to_string().c_str(),
+					remote_endpoint.port(), error.message().length() + 1, error.message().c_str());
+			}
+			else
+			{
+				m_param->callback(RECV_ERROR, remote_endpoint.address().to_string().c_str(),
+					remote_endpoint.port(), error.message().length() + 1, error.message().c_str());
+			}
         }
     }
 }

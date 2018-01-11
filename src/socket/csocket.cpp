@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "csocket.h"
 #include "ctcpserver.h"
 

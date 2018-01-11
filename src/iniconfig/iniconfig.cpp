@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "iniconfig.h"
 #include <iostream>
 #include <boost/property_tree/ptree.hpp>

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "socket.h"
 #include "iniconfig.h"
 #include "csocket.h"
@@ -6,7 +7,7 @@
 
 std::map<int, socket_param_ptr> g_mapSockets;
 
-int InitSocket(int nID, int nType, const char* szIniPath, RecvCallback pCallback)
+int __stdcall InitSocket(int nID, int nType, const char* szIniPath, RecvCallback pCallback)
 {
     g_mapSockets.erase(nID);
     boost::shared_ptr<CSocket> socket = CSocket::Create(nType);
