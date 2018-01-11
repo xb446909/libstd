@@ -17,7 +17,7 @@ private:
     void handle_accept(tcpserver_proc_ptr proc_ptr,
           const boost::system::error_code& error);
 
-    tcp::acceptor m_acceptor;
+    boost::shared_ptr<tcp::acceptor> m_acceptor;
     std::vector<tcpserver_proc_ptr> m_vecProcs;
 };
 

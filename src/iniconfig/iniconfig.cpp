@@ -62,12 +62,12 @@ void __stdcall WriteIniDouble(const char* szSection, const char* szKey, double d
     WriteVal(szSection, szKey, dbVal, szFile);
 }
 
-std::string __stdcall ReadIniDouble(const char* szSection, const char* szKey, std::string strDefault, const char* szFile)
+std::string __stdcall ReadIniStdString(const char* szSection, const char* szKey, std::string strDefault, const char* szFile)
 {
     return (std::string)ReadVal(szSection, szKey, strDefault, szFile);
 }
 
-void __stdcall WriteIniDouble(const char* szSection, const char* szKey, std::string str, const char* szFile)
+void __stdcall WriteIniStdString(const char* szSection, const char* szKey, std::string str, const char* szFile)
 {
     WriteVal(szSection, szKey, str, szFile);
 }

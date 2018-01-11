@@ -43,3 +43,7 @@ HEADERS += \
 INCLUDEPATH += ../inc
 
 DEFINES += _DEBUG
+
+win32 {
+    INCLUDEPATH += D:\boost\include
+}

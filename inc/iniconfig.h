@@ -4,7 +4,9 @@
 #include <string>
 
 #ifdef __GNUC__
+#ifndef __stdcall
 #define __stdcall
+#endif
 #endif
 
 int __stdcall ReadIniInt(const char* szSection, const char* szKey, int nDefault, const char* szFile);

@@ -4,7 +4,6 @@
 #include <iostream>
 
 CTcpServer::CTcpServer()
-    : m_acceptor(m_io_service)
 {
 
 }
@@ -19,7 +18,7 @@ void CTcpServer::SetParam(socket_param_ptr &param)
     int nPort = ReadIniInt(section.str().c_str(), "Port", 10000, param->szIniPath.c_str());
 
     tcp::endpoint endpoint(boost::asio::ip::address::from_string(szIp), nPort);
-    m_acceptor = tcp::acceptor(m_io_service, endpoint);
+    m_acceptor = boost::make_shared<tcp::acceptor>(m_io_service, endpoint);
 
     start_accept();
 }
@@ -27,7 +26,7 @@ void CTcpServer::SetParam(socket_param_ptr &param)
 void CTcpServer::start_accept()
 {
     tcpserver_proc_ptr proc_ptr = boost::make_shared<TcpServerProc>(m_io_service, m_param);
-    m_acceptor.async_accept(proc_ptr->getSocket(),
+    m_acceptor->async_accept(proc_ptr->getSocket(),
                             boost::bind(&CTcpServer::handle_accept, this, proc_ptr,
                                         boost::asio::placeholders::error));
     m_vecProcs.push_back(proc_ptr);

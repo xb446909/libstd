@@ -12,7 +12,7 @@ int InitSocket(int nID, int nType, const char* szIniPath, RecvCallback pCallback
     boost::shared_ptr<CSocket> socket = CSocket::Create(nType);
     socket_param_ptr param = boost::make_shared<SocketParam>(nID, nType, socket, std::string(szIniPath), pCallback);
     g_mapSockets.insert(std::pair<int, socket_param_ptr>(nID, param));
-
+    socket->SetParam(param);
     switch (nType)
     {
         case TCP_SERVER:
