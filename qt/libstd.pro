@@ -6,9 +6,9 @@
 
 QT       -= core gui
 
-TARGET = std
+TARGET = libstd
 TEMPLATE = lib
-CONFIG += staticlib
+#CONFIG += staticlib
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -45,5 +45,10 @@ INCLUDEPATH += ../inc
 DEFINES += _DEBUG
 
 win32 {
-    INCLUDEPATH += D:\boost\include
+    INCLUDEPATH += D:/boost/include
+    LIBS += -LD:/boost/lib/x86/vc100
+    DEF_FILE = ../vs/libstd.def
 }
+
+DEFINES += _QT
+
