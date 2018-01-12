@@ -11,3 +11,7 @@ ReadIniString
 WriteIniString
 
 InitSocket
+UninitSocket
+TCPConnect
+TCPSend
+TCPRecv

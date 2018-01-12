@@ -10,14 +10,16 @@ class CTcpServer : public CSocket
 {
 public:
     CTcpServer();
-    void SetParam(socket_param_ptr& param);
-
+	virtual ~CTcpServer();
+	virtual void SetParam(socket_param_ptr& param);
+	virtual int Send(const char * szSendBuf, int nlen, const char * szDstIP, int nDstPort);
+	virtual int Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort);
 private:
     void start_accept();
     void handle_accept(tcpserver_proc_ptr proc_ptr,
           const boost::system::error_code& error);
-	void run();
-	void start();
+	int getProcIndex(const char* ip, int port);
+	void socket_closed(const char* ip, int port);
 
     boost::shared_ptr<tcp::acceptor> m_acceptor;
     std::vector<tcpserver_proc_ptr> m_vecProcs;

@@ -32,9 +32,12 @@ class CSocket
 {
 public:
     CSocket();
+	virtual ~CSocket();
     static boost::shared_ptr<CSocket> Create(int nType);
     virtual void SetParam(socket_param_ptr& param) { m_param = param; }
-
+	virtual int Send(const char * szSendBuf, int nlen, const char * szDstIP, int nDstPort);
+	virtual int Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort);
+	virtual int Connect(int nTimeoutMs);
 protected:
     socket_param_ptr m_param;
     boost::asio::io_service m_io_service;

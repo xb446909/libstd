@@ -18,6 +18,32 @@ void TcpServerProc::start()
                                boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
 }
 
+int TcpServerProc::Send(const char * szSendBuf, int nlen)
+{
+	int transferredbytes = 0;
+	try
+	{
+		transferredbytes = boost::asio::write(m_socket, boost::asio::buffer(szSendBuf, nlen));
+	}
+	catch (boost::system::system_error ec)
+	{
+		tcp::endpoint remote_endpoint = m_socket.remote_endpoint();
+		std::cerr << "Write error: " << ec.what() << std::endl;
+		if (ec.code() == boost::asio::error::eof)
+		{
+			return SOCK_CLOSED;
+		}
+		socket_closed(remote_endpoint.address().to_string().c_str(), remote_endpoint.port());
+	}
+	
+	return transferredbytes;
+}
+
+int TcpServerProc::Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs)
+{
+	return 0;
+}
+
 void TcpServerProc::handle_read_header(const boost::system::error_code &error, std::size_t bytes_transferred)
 {
     tcp::endpoint remote_endpoint = m_socket.remote_endpoint();
@@ -46,10 +72,11 @@ void TcpServerProc::handle_read_header(const boost::system::error_code &error, s
 #endif
 		if (m_param->callback)
 		{
-			if (error.value() == 2)
+			if (error.value() == boost::asio::error::eof)
 			{
 				m_param->callback(RECV_CLOSE, remote_endpoint.address().to_string().c_str(),
 					remote_endpoint.port(), error.message().length() + 1, error.message().c_str());
+				socket_closed(remote_endpoint.address().to_string().c_str(), remote_endpoint.port());
 			}
 			else
 			{

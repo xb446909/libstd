@@ -157,6 +157,7 @@
     <ClInclude Include="..\inc\socket.h" />
     <ClInclude Include="..\inc\stdafx.h" />
     <ClInclude Include="..\src\socket\csocket.h" />
+    <ClInclude Include="..\src\socket\ctcpclient.h" />
     <ClInclude Include="..\src\socket\ctcpserver.h" />
     <ClInclude Include="..\src\socket\tcpserverproc.h" />
     <ClInclude Include="targetver.h" />
@@ -164,6 +165,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\iniconfig\iniconfig.cpp" />
     <ClCompile Include="..\src\socket\csocket.cpp" />
+    <ClCompile Include="..\src\socket\ctcpclient.cpp" />
     <ClCompile Include="..\src\socket\ctcpserver.cpp" />
     <ClCompile Include="..\src\socket\socket.cpp" />
     <ClCompile Include="..\src\socket\tcpserverproc.cpp" />

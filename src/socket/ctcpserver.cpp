@@ -8,7 +8,10 @@
 
 CTcpServer::CTcpServer()
 {
+}
 
+CTcpServer::~CTcpServer()
+{
 }
 
 void CTcpServer::SetParam(socket_param_ptr &param)
@@ -25,7 +28,25 @@ void CTcpServer::SetParam(socket_param_ptr &param)
 
     start_accept();
 
-	start();
+	boost::thread thrd(boost::bind(&boost::asio::io_service::run, &m_io_service));
+}
+
+int CTcpServer::Send(const char * szSendBuf, int nlen, const char * szDstIP, int nDstPort)
+{
+	int nIndex = getProcIndex(szDstIP, nDstPort);
+	if (nIndex == -1)
+	{
+		if (m_vecProcs.size() == 1)
+			return m_vecProcs[0]->Send(szSendBuf, nlen);
+		else
+			return SOCKET_ERROR;
+	}
+	return m_vecProcs[nIndex]->Send(szSendBuf, nlen);
+}
+
+int CTcpServer::Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort)
+{
+	return 0;
 }
 
 void CTcpServer::start_accept()
@@ -34,7 +55,6 @@ void CTcpServer::start_accept()
     m_acceptor->async_accept(proc_ptr->getSocket(),
                             boost::bind(&CTcpServer::handle_accept, this, proc_ptr,
                                         boost::asio::placeholders::error));
-    m_vecProcs.push_back(proc_ptr);
 }
 
 void CTcpServer::handle_accept(tcpserver_proc_ptr proc_ptr,
@@ -43,6 +63,8 @@ void CTcpServer::handle_accept(tcpserver_proc_ptr proc_ptr,
 	tcp::endpoint remote_endpoint = proc_ptr->getSocket().remote_endpoint();
     if (!error)
     {
+		proc_ptr->socket_closed = boost::bind(&CTcpServer::socket_closed, this, _1, _2);
+		m_vecProcs.push_back(proc_ptr);
         proc_ptr->start();
 #ifdef _DEBUG
         std::cout << "New connection: " << remote_endpoint.address().to_string()
@@ -66,13 +88,25 @@ void CTcpServer::handle_accept(tcpserver_proc_ptr proc_ptr,
     start_accept();
 }
 
-void CTcpServer::run()
+int CTcpServer::getProcIndex(const char* ip, int port)
 {
-	m_io_service.run();
+	if (!ip) return -1;
+	for (int i = 0; i < m_vecProcs.size(); i++)
+	{
+		tcp::endpoint ep = m_vecProcs[i]->getSocket().remote_endpoint();
+		if ((ep.address().to_string().compare(ip) == 0) && (ep.port() == port))
+		{
+			return i;
+		}
+	}
+	return -1;
 }
 
-void CTcpServer::start()
+void CTcpServer::socket_closed(const char * ip, int port)
 {
-	boost::function0<void> f = boost::bind(&CTcpServer::run, this);
-	boost::thread thrd(f);
+	int nIndex = getProcIndex(ip, port);
+	if (nIndex != -1)
+	{
+		m_vecProcs.erase(m_vecProcs.begin() + nIndex);
+	}
 }

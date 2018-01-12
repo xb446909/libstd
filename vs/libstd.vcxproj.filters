@@ -42,6 +42,9 @@
     <ClInclude Include="..\inc\stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\socket\ctcpclient.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -64,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="..\src\iniconfig\iniconfig.cpp">
       <Filter>源文件\iniconfig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\socket\ctcpclient.cpp">
+      <Filter>源文件\socket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
