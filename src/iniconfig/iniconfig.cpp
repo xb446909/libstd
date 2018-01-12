@@ -36,6 +36,14 @@ template <typename T>
 void WriteVal(const char* szSection, const char* szKey, T val, const char* szFile)
 {
     boost::property_tree::ptree pt;
+	try
+	{
+		boost::property_tree::ini_parser::read_ini(szFile, pt);
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
     std::string path(szSection);
     path += ".";
     path += szKey;
