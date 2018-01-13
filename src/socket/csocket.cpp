@@ -7,10 +7,6 @@ CSocket::CSocket()
 {
 }
 
-CSocket::~CSocket()
-{
-}
-
 boost::shared_ptr<CSocket> CSocket::Create(int nType)
 {
     boost::shared_ptr<CSocket> socket;
@@ -41,5 +37,9 @@ int CSocket::Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * sz
 int CSocket::Connect(int nTimeoutMs)
 {
 	return SOCK_ERROR;
+}
+
+void CSocket::Close()
+{
 }
 

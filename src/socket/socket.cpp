@@ -29,6 +29,9 @@ int __stdcall InitSocket(int nID, int nType, const char* szIniPath, RecvCallback
 
 void __stdcall UninitSocket(int nID)
 {
+	if (g_mapSockets.find(nID) == g_mapSockets.end())
+		return;
+	g_mapSockets[nID]->socket->Close();
 	g_mapSockets.erase(nID);
 }
 
@@ -36,7 +39,7 @@ int __stdcall TCPConnect(int nID, int nTimeoutMs)
 {
 	if (g_mapSockets.find(nID) == g_mapSockets.end())
 		return SOCK_ERROR;
-	return 0;
+	return g_mapSockets[nID]->socket->Connect(nTimeoutMs);
 }
 
 int __stdcall TCPSend(int nID, const char * szSendBuf, int nlen, const char * szDstIP, int nDstPort)

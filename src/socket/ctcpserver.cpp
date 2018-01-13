@@ -10,10 +10,6 @@ CTcpServer::CTcpServer()
 {
 }
 
-CTcpServer::~CTcpServer()
-{
-}
-
 void CTcpServer::SetParam(socket_param_ptr &param)
 {
     CSocket::SetParam(param);
@@ -28,6 +24,7 @@ void CTcpServer::SetParam(socket_param_ptr &param)
 
     start_accept();
 
+	m_io_service.reset();
 	boost::thread thrd(boost::bind(&boost::asio::io_service::run, &m_io_service));
 }
 
@@ -47,6 +44,15 @@ int CTcpServer::Send(const char * szSendBuf, int nlen, const char * szDstIP, int
 int CTcpServer::Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort)
 {
 	return 0;
+}
+
+void CTcpServer::Close()
+{
+	for (size_t i = 0; i < m_vecProcs.size(); i++)
+	{
+		m_vecProcs[i]->Close();
+	}
+	m_vecProcs.clear();
 }
 
 void CTcpServer::start_accept()

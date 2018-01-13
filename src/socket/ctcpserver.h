@@ -10,10 +10,10 @@ class CTcpServer : public CSocket
 {
 public:
     CTcpServer();
-	virtual ~CTcpServer();
 	virtual void SetParam(socket_param_ptr& param);
 	virtual int Send(const char * szSendBuf, int nlen, const char * szDstIP, int nDstPort);
 	virtual int Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort);
+	virtual void Close();
 private:
     void start_accept();
     void handle_accept(tcpserver_proc_ptr proc_ptr,

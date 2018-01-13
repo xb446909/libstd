@@ -20,7 +20,7 @@ public:
     void start();
 	int Send(const char * szSendBuf, int nlen);
 	int Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs);
-
+	void Close();
 private:
 	void handle_read_header(const boost::system::error_code &error, std::size_t bytes_transferred);
 

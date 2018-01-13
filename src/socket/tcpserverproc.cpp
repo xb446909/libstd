@@ -44,6 +44,12 @@ int TcpServerProc::Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs)
 	return 0;
 }
 
+void TcpServerProc::Close()
+{
+	m_socket.shutdown(tcp::socket::shutdown_both);
+	m_socket.close();
+}
+
 void TcpServerProc::handle_read_header(const boost::system::error_code &error, std::size_t bytes_transferred)
 {
     tcp::endpoint remote_endpoint = m_socket.remote_endpoint();
