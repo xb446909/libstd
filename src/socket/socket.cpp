@@ -7,7 +7,7 @@
 
 std::map<int, socket_param_ptr> g_mapSockets;
 
-int __stdcall InitSocket(int nID, int nType, const char* szIniPath, RecvCallback pCallback)
+int __stdcall InitSocket(int nID, int nType, const char* szIniPath, SocketRecvCallback pCallback)
 {
 	std::string strIni;
 	if ((!szIniPath) || (!strcmp(szIniPath, "")))

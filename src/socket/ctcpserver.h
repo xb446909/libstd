@@ -1,5 +1,5 @@
-#ifndef CTCPSERVER_H
-#define CTCPSERVER_H
+#ifndef __CTCPSERVER_H
+#define __CTCPSERVER_H
 
 #include "csocket.h"
 #include "tcpserverproc.h"
@@ -25,4 +25,4 @@ private:
     std::vector<tcpserver_proc_ptr> m_vecProcs;
 };
 
-#endif // CTCPSERVER_H
+#endif // __CTCPSERVER_H

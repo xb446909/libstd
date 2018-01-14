@@ -15,3 +15,8 @@ UninitSocket
 TCPConnect
 TCPSend
 TCPRecv
+
+InitCOM
+UninitCOM
+OpenCOM
+WriteCOM

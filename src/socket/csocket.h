@@ -1,5 +1,5 @@
-#ifndef CSOCKET_H
-#define CSOCKET_H
+#ifndef __CSOCKET_H
+#define __CSOCKET_H
 
 #include "socket.h"
 #include <boost/make_shared.hpp>
@@ -14,8 +14,8 @@ typedef struct _tagSocketParam
     int nType;
     boost::shared_ptr<CSocket> socket;
     std::string szIniPath;
-    RecvCallback callback;
-    _tagSocketParam(int nId, int nType, boost::shared_ptr<CSocket> socket, std::string szIniPath, RecvCallback callback)
+	SocketRecvCallback callback;
+    _tagSocketParam(int nId, int nType, boost::shared_ptr<CSocket> socket, std::string szIniPath, SocketRecvCallback callback)
         : nId(nId)
         , nType(nType)
         , socket(socket)
@@ -43,4 +43,4 @@ protected:
     boost::asio::io_service m_io_service;
 };
 
-#endif // CSOCKET_H
+#endif // __CSOCKET_H

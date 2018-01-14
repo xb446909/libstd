@@ -154,8 +154,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\iniconfig.h" />
+    <ClInclude Include="..\inc\serialport.h" />
     <ClInclude Include="..\inc\socket.h" />
     <ClInclude Include="..\inc\stdafx.h" />
+    <ClInclude Include="..\src\serialport\cserialport.h" />
     <ClInclude Include="..\src\socket\csocket.h" />
     <ClInclude Include="..\src\socket\ctcpclient.h" />
     <ClInclude Include="..\src\socket\ctcpserver.h" />
@@ -164,6 +166,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\iniconfig\iniconfig.cpp" />
+    <ClCompile Include="..\src\serialport\cserialport.cpp" />
+    <ClCompile Include="..\src\serialport\serialport.cpp" />
     <ClCompile Include="..\src\socket\csocket.cpp" />
     <ClCompile Include="..\src\socket\ctcpclient.cpp" />
     <ClCompile Include="..\src\socket\ctcpserver.cpp" />

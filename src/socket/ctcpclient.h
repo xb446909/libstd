@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __CTCPCLIENT_H
+#define __CTCPCLIENT_H
+
 #include "csocket.h"
 #include <boost/thread/mutex.hpp>  
 #include <boost/thread/condition.hpp>
@@ -27,4 +29,4 @@ private:
 	uint8_t m_readBuf[readBufSize];
 	int m_nReadBytes;
 };
-
+#endif // __CTCPCLIENT_H

@@ -1,5 +1,5 @@
-#ifndef TCPSERVERPROC_H
-#define TCPSERVERPROC_H
+#ifndef __TCPSERVERPROC_H
+#define __TCPSERVERPROC_H
 
 #include <boost/asio.hpp>
 #include <boost/enable_shared_from_this.hpp>
@@ -31,4 +31,4 @@ private:
 
 typedef boost::shared_ptr<TcpServerProc> tcpserver_proc_ptr;
 
-#endif // TCPSERVERPROC_H
+#endif // __TCPSERVERPROC_H

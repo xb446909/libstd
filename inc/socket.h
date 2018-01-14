@@ -21,9 +21,9 @@
 #define SOCK_TIMEOUT	-2
 #define SOCK_CLOSED		-3
 
-typedef int(*RecvCallback)(int nType, const char* szIP, int nPort, int nSize, const char* szRecv);
+typedef int(*SocketRecvCallback)(int nType, const char* szIP, int nPort, int nSize, const char* szRecv);
 
-int __stdcall InitSocket(int nID, int nType, const char* szIniPath = 0, RecvCallback pCallback = 0);
+int __stdcall InitSocket(int nID, int nType, const char* szIniPath = 0, SocketRecvCallback pCallback = 0);
 void __stdcall UninitSocket(int nID);
 
 int __stdcall TCPConnect(int nID, int nTimeoutMs);

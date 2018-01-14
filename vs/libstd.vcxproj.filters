@@ -19,31 +19,49 @@
     <Filter Include="源文件\iniconfig">
       <UniqueIdentifier>{cf0aadc2-db2c-489b-8c65-2de1862cd623}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\serialport">
+      <UniqueIdentifier>{9a6d607d-6b54-45f3-a6e2-622fcf40b0b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\iniconfig">
+      <UniqueIdentifier>{17903813-b96e-4b07-9c93-74e2d919d2c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\socket">
+      <UniqueIdentifier>{acf786f7-84e1-4fb8-a5d1-dcda362c7932}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\serialport">
+      <UniqueIdentifier>{a37192ac-f02c-44d6-b02a-e2baaf34d944}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\socket\csocket.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\socket\ctcpserver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\socket\tcpserverproc.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\iniconfig.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\socket.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\inc\stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\iniconfig.h">
+      <Filter>头文件\iniconfig</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\socket\csocket.h">
+      <Filter>头文件\socket</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\socket\ctcpclient.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\socket\ctcpserver.h">
+      <Filter>头文件\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\socket.h">
+      <Filter>头文件\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\socket\tcpserverproc.h">
+      <Filter>头文件\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\serialport\cserialport.h">
+      <Filter>头文件\serialport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\serialport.h">
+      <Filter>头文件\serialport</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +88,12 @@
     </ClCompile>
     <ClCompile Include="..\src\socket\ctcpclient.cpp">
       <Filter>源文件\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\serialport\cserialport.cpp">
+      <Filter>源文件\serialport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\serialport\serialport.cpp">
+      <Filter>源文件\serialport</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
