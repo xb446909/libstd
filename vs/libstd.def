@@ -20,3 +20,4 @@ InitCOM
 UninitCOM
 OpenCOM
 WriteCOM
+ReadCOM

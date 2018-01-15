@@ -44,3 +44,10 @@ int __stdcall WriteCOM(int nID, const char * szSend, int nLen)
 		return COM_ERROR_ID;
 	return g_mapSerialPort[nID]->Write(szSend, nLen);
 }
+
+int __stdcall ReadCOM(int nID, char * szBuf, int nBufLen, int nTimeout)
+{
+	if (g_mapSerialPort.find(nID) == g_mapSerialPort.end())
+		return COM_ERROR_ID;
+	return g_mapSerialPort[nID]->Read(szBuf, nBufLen, nTimeout);
+}

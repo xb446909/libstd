@@ -17,6 +17,7 @@ int __stdcall InitCOM(int nID, const char* szIniPath = 0, SerialPortRecvCallback
 int __stdcall UninitCOM(int nID);
 int __stdcall OpenCOM(int nID);
 int __stdcall WriteCOM(int nID, const char* szSend, int nLen);
+int __stdcall ReadCOM(int nID, char* szBuf, int nBufLen, int nTimeout);
 
 #endif // __SERIALPORT_H
 

@@ -20,7 +20,7 @@ int __stdcall InitSocket(int nID, int nType, const char* szIniPath, SocketRecvCa
 	}
     g_mapSockets.erase(nID);
     boost::shared_ptr<CSocket> socket = CSocket::Create(nType);
-    socket_param_ptr param = boost::make_shared<SocketParam>(nID, nType, socket, strIni, pCallback);
+    socket_param_ptr param = boost::make_shared<CSocket::SocketParam>(nID, nType, socket, strIni, pCallback);
     g_mapSockets.insert(std::pair<int, socket_param_ptr>(nID, param));
     socket->SetParam(param);
 
