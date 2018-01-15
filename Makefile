@@ -5,7 +5,7 @@ TARGET := libstd.a
 
 SRC_DIR := src
 INC_DIR := inc
-SRC := $(patsubst ./%,%,$(shell find . -type f -name "*.cpp"))
+SRC := $(patsubst ./%,%,$(shell find $(SRC_DIR) -type f -name "*.cpp"))
 OBJ_DIR := obj
 AR := ar
 

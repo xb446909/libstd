@@ -36,7 +36,7 @@ int CTcpServer::Send(const char * szSendBuf, int nlen, const char * szDstIP, int
 		if (m_vecProcs.size() == 1)
 			return m_vecProcs[0]->Send(szSendBuf, nlen);
 		else
-			return SOCKET_ERROR;
+			return SOCK_ERROR;
 	}
 	return m_vecProcs[nIndex]->Send(szSendBuf, nlen);
 }
