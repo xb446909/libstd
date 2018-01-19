@@ -21,12 +21,14 @@ public:
 	int Send(const char * szSendBuf, int nlen);
 	int Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs);
 	void Close();
+    tcp::endpoint getRemoteEndpoint() { return m_remote_endpoint; }
 private:
 	void handle_read_header(const boost::system::error_code &error, std::size_t bytes_transferred);
 
     tcp::socket m_socket;
     socket_param_ptr m_param;
     uint8_t m_readBuf[readBufSize];
+    tcp::endpoint m_remote_endpoint;
 };
 
 typedef boost::shared_ptr<TcpServerProc> tcpserver_proc_ptr;

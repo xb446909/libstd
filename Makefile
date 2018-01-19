@@ -1,5 +1,5 @@
 CXX := g++
-CXX_FLAGS := -O3 -Wall -fPIC -shared
+CXX_FLAGS := -O3 -Wall -fPIC -shared -std=gnu++11
 LD_FLAGS	:= -fPIC -shared
 TARGET := libstd.so
 

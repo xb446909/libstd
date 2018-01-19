@@ -31,14 +31,16 @@ SOURCES += \
     ../src/iniconfig/iniconfig.cpp \
     ../src/socket/csocket.cpp \
     ../src/socket/ctcpserver.cpp \
-    ../src/socket/tcpserverproc.cpp
+    ../src/socket/tcpserverproc.cpp \
+    ../src/socket/ctcpclient.cpp
 
 HEADERS += \
     ../inc/socket.h \
     ../inc/iniconfig.h \
     ../src/socket/csocket.h \
     ../src/socket/ctcpserver.h \
-    ../src/socket/tcpserverproc.h
+    ../src/socket/tcpserverproc.h \
+    ../src/socket/ctcpclient.h
 
 INCLUDEPATH += ../inc
 

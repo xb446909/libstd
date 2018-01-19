@@ -99,7 +99,7 @@ int CTcpServer::getProcIndex(const char* ip, int port)
 	if (!ip) return -1;
 	for (int i = 0; i < m_vecProcs.size(); i++)
 	{
-		tcp::endpoint ep = m_vecProcs[i]->getSocket().remote_endpoint();
+        tcp::endpoint ep = m_vecProcs[i]->getRemoteEndpoint();
 		if ((ep.address().to_string().compare(ip) == 0) && (ep.port() == port))
 		{
 			return i;
