@@ -43,5 +43,6 @@ CMakeLists.txt.user*
 
 [Dd]ebug/
 x64/
+[Rr]elease/
 
 obj/
