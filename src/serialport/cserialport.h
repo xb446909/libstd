@@ -14,6 +14,7 @@ public:
 	enum { readBufSize = 10240 };
 
 	CSerialPort(int nId, const std::string& szIniPath, SerialPortRecvCallback pCallback);
+	~CSerialPort();
 	int Open();
 	int Write(const char* szBuf, int nLen);
 	int Read(char* szBuf, int nBufLen, int nTimeoutMs);

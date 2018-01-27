@@ -16,6 +16,12 @@ CSerialPort::CSerialPort(int nId, const std::string & szIniPath, SerialPortRecvC
 {
 }
 
+CSerialPort::~CSerialPort()
+{
+	m_io_service.stop();
+	boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+}
+
 int CSerialPort::Open()
 {
 	std::stringstream ssSection;
@@ -96,7 +102,6 @@ int CSerialPort::Read(char * szBuf, int nBufLen, int nTimeoutMs)
 	{
 		return COM_ERROR;
 	}
-
 	boost::mutex::scoped_lock lock(m_io_mutex);
 
 	m_nReadRet = 0;
@@ -108,7 +113,6 @@ int CSerialPort::Read(char * szBuf, int nBufLen, int nTimeoutMs)
 
 	m_io_service.reset();
 	boost::thread thrd(boost::bind(&boost::asio::io_service::run, &m_io_service));
-
 	m_condition.wait(m_io_mutex);
 	return m_nReadRet;
 }
@@ -118,8 +122,12 @@ void CSerialPort::handle_timer(const boost::system::error_code & error)
 	if (!error)
 	{
 		std::cout << "Timeout" << std::endl;
-		m_condition.notify_one();
 	}
+	else
+	{
+		std::cerr << "Timer error: " << error.message() << std::endl;
+	}
+	m_condition.notify_one();
 }
 
 void CSerialPort::read_handler(
