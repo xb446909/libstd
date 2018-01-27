@@ -7,6 +7,12 @@ CSocket::CSocket()
 {
 }
 
+CSocket::~CSocket()
+{
+	m_io_service.stop();
+	boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+}
+
 boost::shared_ptr<CSocket> CSocket::Create(int nType)
 {
     boost::shared_ptr<CSocket> socket;

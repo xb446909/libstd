@@ -28,6 +28,7 @@ public:
 	}SocketParam;
 	
     CSocket();
+	virtual ~CSocket();
     static boost::shared_ptr<CSocket> Create(int nType);
     virtual void SetParam(boost::shared_ptr<CSocket::SocketParam>& param) { m_param = param; }
 	virtual int Send(const char * szSendBuf, int nlen, const char * szDstIP, int nDstPort);
