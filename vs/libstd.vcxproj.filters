@@ -31,6 +31,12 @@
     <Filter Include="头文件\serialport">
       <UniqueIdentifier>{a37192ac-f02c-44d6-b02a-e2baaf34d944}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\coordtransform">
+      <UniqueIdentifier>{03d1c855-dae9-488f-9f80-776e212d047f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\coordtransform">
+      <UniqueIdentifier>{bd7dd65e-5365-46cb-a766-fe121d93c417}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -63,6 +69,15 @@
     <ClInclude Include="..\inc\serialport.h">
       <Filter>头文件\serialport</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\coordtransform.h">
+      <Filter>头文件\coordtransform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\coordtransform\ccoordtransform.h">
+      <Filter>头文件\coordtransform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\coordtransform\ccoordtransform3dmultipt.h">
+      <Filter>头文件\coordtransform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -94,6 +109,15 @@
     </ClCompile>
     <ClCompile Include="..\src\serialport\serialport.cpp">
       <Filter>源文件\serialport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\coordtransform\coordtransform.cpp">
+      <Filter>源文件\coordtransform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\coordtransform\ccoordtransform.cpp">
+      <Filter>源文件\coordtransform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\coordtransform\ccoordtransform3dmultipt.cpp">
+      <Filter>源文件\coordtransform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

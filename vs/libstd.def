@@ -21,3 +21,7 @@ UninitCOM
 OpenCOM
 WriteCOM
 ReadCOM
+
+InitTransform
+SetPoints
+Transform
