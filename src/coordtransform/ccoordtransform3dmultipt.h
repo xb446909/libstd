@@ -9,6 +9,7 @@ public:
 	virtual ~CCoordTransform3DMultiPt();
 	virtual int SetTransPoints(std::vector<boost::numeric::ublas::vector<double> > src, 
 		std::vector<boost::numeric::ublas::vector<double> > dst);
+	virtual int TransformPoint(boost::numeric::ublas::vector<double> src, boost::numeric::ublas::vector<double>& dst);
 
 private:
 	bool runRANSAC(const boost::numeric::ublas::matrix<double>& m1,
@@ -46,6 +47,8 @@ private:
 
 	bool checkSubset(
 		const boost::numeric::ublas::matrix<double>& ms1, int count);
+
+
 
 	boost::numeric::ublas::matrix<double> m_mat;
 	int modelPoints;

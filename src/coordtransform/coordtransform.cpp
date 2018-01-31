@@ -14,6 +14,9 @@ int __stdcall InitTransform(int nID, int nType)
 
 int __stdcall SetPoints(int nID, double * srcX, double * srcY, double * srcZ, double * dstX, double * dstY, double * dstZ, int nSize)
 {
+	if (g_mapTransforms.find(nID) == g_mapTransforms.end())
+		return TRANSFORM_ERROR;
+
 	std::vector<boost::numeric::ublas::vector<double> > srcVec, dstVec;
 	for (int i = 0; i < nSize; i++)
 	{
@@ -34,5 +37,21 @@ int __stdcall SetPoints(int nID, double * srcX, double * srcY, double * srcZ, do
 
 int __stdcall Transform(int nID, double srcX, double srcY, double srcZ, double * dstX, double * dstY, double * dstZ)
 {
-	return 0;
+	if (g_mapTransforms.find(nID) == g_mapTransforms.end())
+		return TRANSFORM_ERROR;
+
+	boost::numeric::ublas::vector<double> src(3);
+	boost::numeric::ublas::vector<double> dst;
+	src[0] = srcX;
+	src[1] = srcY;
+	src[2] = srcZ;
+	
+	int nRet = g_mapTransforms[nID]->TransformPoint(src, dst);
+	if ((nRet == TRANSFORM_SUCCESS) && (dst.size() == 3))
+	{
+		*dstX = dst[0];
+		*dstY = dst[1];
+		*dstZ = dst[2];
+	}
+	return nRet;
 }

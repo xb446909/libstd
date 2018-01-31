@@ -21,6 +21,7 @@ public:
 	CCoordTransform();
 	virtual ~CCoordTransform();
 	virtual int SetTransPoints(std::vector<boost::numeric::ublas::vector<double> > src, std::vector<boost::numeric::ublas::vector<double> > dst) = 0;
+	virtual int TransformPoint(boost::numeric::ublas::vector<double> src, boost::numeric::ublas::vector<double>& dst) = 0;
 };
 
 

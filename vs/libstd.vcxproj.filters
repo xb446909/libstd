@@ -78,6 +78,9 @@
     <ClInclude Include="..\src\coordtransform\ccoordtransform3dmultipt.h">
       <Filter>头文件\coordtransform</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\coordtransform\Matrix.h">
+      <Filter>头文件\coordtransform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -118,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="..\src\coordtransform\ccoordtransform3dmultipt.cpp">
       <Filter>源文件\coordtransform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\coordtransform\Matrix.cpp">
+      <Filter>头文件\coordtransform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
