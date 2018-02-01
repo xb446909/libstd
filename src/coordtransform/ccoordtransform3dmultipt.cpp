@@ -4,7 +4,7 @@
 #include <boost/random.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/triangular.hpp>
-#include "Matrix.cpp"
+#include "matrix.cpp"
 #include <algorithm>
 
 CCoordTransform3DMultiPt::CCoordTransform3DMultiPt()
