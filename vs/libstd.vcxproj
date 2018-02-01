@@ -162,7 +162,7 @@
     <ClInclude Include="..\inc\stdafx.h" />
     <ClInclude Include="..\src\coordtransform\ccoordtransform.h" />
     <ClInclude Include="..\src\coordtransform\ccoordtransform3dmultipt.h" />
-    <ClInclude Include="..\src\coordtransform\Matrix.h" />
+    <ClInclude Include="..\src\coordtransform\matrix.h" />
     <ClInclude Include="..\src\serialport\cserialport.h" />
     <ClInclude Include="..\src\socket\csocket.h" />
     <ClInclude Include="..\src\socket\ctcpclient.h" />
@@ -174,7 +174,7 @@
     <ClCompile Include="..\src\coordtransform\ccoordtransform.cpp" />
     <ClCompile Include="..\src\coordtransform\ccoordtransform3dmultipt.cpp" />
     <ClCompile Include="..\src\coordtransform\coordtransform.cpp" />
-    <ClCompile Include="..\src\coordtransform\Matrix.cpp" />
+    <ClCompile Include="..\src\coordtransform\matrix.cpp" />
     <ClCompile Include="..\src\iniconfig\iniconfig.cpp" />
     <ClCompile Include="..\src\serialport\cserialport.cpp" />
     <ClCompile Include="..\src\serialport\serialport.cpp" />
