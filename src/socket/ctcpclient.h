@@ -21,6 +21,7 @@ private:
 	void handle_timer(const boost::system::error_code& error);
 	void handle_connect(const boost::system::error_code& error);
 	void handle_read(const boost::system::error_code& error, std::size_t bytes_transferred);
+	bool is_connect(const tcp::socket& socket);
 
 	tcp::socket m_socket;
 	boost::asio::deadline_timer m_timer;

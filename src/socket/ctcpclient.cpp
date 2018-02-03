@@ -34,7 +34,8 @@ int CTcpClient::Connect(int nTimeoutMs)
 	boost::thread thrd(boost::bind(&boost::asio::io_service::run, &m_io_service));
 
 	m_condition.wait(m_io_mutex);
-	return m_socket.is_open() ? SOCK_SUCCESS : SOCK_ERROR;
+
+	return is_connect(m_socket) ? SOCK_SUCCESS : SOCK_ERROR;
 }
 
 int CTcpClient::Send(const char * szSendBuf, int nlen, const char * szDstIP, int nDstPort)
@@ -46,8 +47,6 @@ int CTcpClient::Send(const char * szSendBuf, int nlen, const char * szDstIP, int
 	}
 	catch (boost::system::system_error ec)
 	{
-		tcp::endpoint remote_endpoint = m_socket.remote_endpoint();
-		std::cerr << "Write error: " << ec.what() << std::endl;
 		if (ec.code() == boost::asio::error::eof)
 		{
 			Close();
@@ -61,7 +60,10 @@ int CTcpClient::Send(const char * szSendBuf, int nlen, const char * szDstIP, int
 int CTcpClient::Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort)
 {
 	boost::mutex::scoped_lock lock(m_io_mutex);
-
+	if (!m_socket.available())
+	{
+		return SOCKET_ERROR;
+	}
 	m_nReadBytes = 0;
 	m_socket.async_read_some(boost::asio::buffer(szRecvBuf, nBufLen),
 		boost::bind(&CTcpClient::handle_read, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
@@ -112,4 +114,16 @@ void CTcpClient::handle_read(const boost::system::error_code & error, std::size_
 	m_nReadBytes = bytes_transferred;
 	m_timer.cancel();
 	m_condition.notify_one();
+}
+
+bool CTcpClient::is_connect(const tcp::socket & socket)
+{
+	boost::system::error_code ec;
+	boost::asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(ec);
+	if (ec)
+	{
+		std::cerr << ec.message() << std::endl;
+		return false;
+	}
+	return true;
 }
