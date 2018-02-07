@@ -15,7 +15,10 @@ int __stdcall InitTransform(int nID, int nType)
 int __stdcall SetPoints(int nID, double * srcX, double * srcY, double * srcZ, double * dstX, double * dstY, double * dstZ, int nSize)
 {
 	if (g_mapTransforms.find(nID) == g_mapTransforms.end())
+	{
+		std::cerr << "SetPoints g_mapTransforms.find(nID) ERR" << std::endl;
 		return TRANSFORM_ERROR;
+	}
 
 	std::vector<boost::numeric::ublas::vector<double> > srcVec, dstVec;
 	for (int i = 0; i < nSize; i++)

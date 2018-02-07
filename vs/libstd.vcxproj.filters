@@ -37,6 +37,9 @@
     <Filter Include="源文件\coordtransform">
       <UniqueIdentifier>{bd7dd65e-5365-46cb-a766-fe121d93c417}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\opencv">
+      <UniqueIdentifier>{00c46521-19df-4855-8452-4c1e53ec3279}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -76,9 +79,6 @@
       <Filter>头文件\coordtransform</Filter>
     </ClInclude>
     <ClInclude Include="..\src\coordtransform\ccoordtransform3dmultipt.h">
-      <Filter>头文件\coordtransform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\coordtransform\matrix.h">
       <Filter>头文件\coordtransform</Filter>
     </ClInclude>
   </ItemGroup>
@@ -122,8 +122,86 @@
     <ClCompile Include="..\src\coordtransform\ccoordtransform3dmultipt.cpp">
       <Filter>源文件\coordtransform</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\coordtransform\matrix.cpp">
-      <Filter>源文件\coordtransform</Filter>
+    <ClCompile Include="..\src\opencv\persistence.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\glob.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\algorithm.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\alloc.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\arithm.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\array.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\cmdparser.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\convert.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\copy.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\datastructs.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\drawing.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\dxt.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\gl_core_3_1.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\gpumat.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\lapack.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\mathfuncs.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matmul.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matop.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matrix.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\opengl_interop.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\opengl_interop_deprecated.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\out.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\parallel.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\rand.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\stat.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\system.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\tables.cpp">
+      <Filter>源文件\opencv</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

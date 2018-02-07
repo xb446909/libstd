@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #include "ccoordtransform3dmultipt.h"
 #include <boost/math/special_functions/round.hpp>
-#include <boost/random.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/triangular.hpp>
-#include "matrix.cpp"
 #include <algorithm>
+#include <opencv2/core.hpp>
 
 CCoordTransform3DMultiPt::CCoordTransform3DMultiPt()
 	: modelPoints(4)
@@ -162,17 +161,15 @@ bool CCoordTransform3DMultiPt::getSubset(const boost::numeric::ublas::matrix<dou
 	int elemSize = sizeof(double) * 3;
 	elemSize /= sizeof(int);
 
-	boost::mt19937 gen;
-	boost::uniform_int<> dist(-1, INT_MAX);
-	boost::variate_generator<boost::mt19937&, boost::uniform_int<> > die(gen, dist);
+	srand((unsigned)time(0));
 
-	int a[] = { 0, 4, 3, 1 };
+	int a[] = { 5, 4, 0, 6 };
 
 	for (; iters < maxAttempts; iters++)
 	{
 		for (i = 0; i < modelPoints && iters < maxAttempts; )
 		{
-			idx[i] = idx_i =  die() % count;
+			idx[i] = idx_i = rand() % count;
 
 			for (j = 0; j < i; j++)
 				if (idx_i == idx[j])
@@ -195,6 +192,7 @@ bool CCoordTransform3DMultiPt::getSubset(const boost::numeric::ublas::matrix<dou
 			}
 			i++;
 		}
+
 		if (!checkPartialSubsets && i == modelPoints &&
 			(!checkSubset(ms1, i) || !checkSubset(ms2, i)))
 			continue;
@@ -248,6 +246,11 @@ int CCoordTransform3DMultiPt::runKernel(
 	const boost::numeric::ublas::matrix<double>& m2, 
 	boost::numeric::ublas::matrix<double>& model)
 {
+	//std::cout << "M1" << std::endl;
+	//std::cout << m1 << std::endl;
+	//std::cout << "M2" << std::endl;
+	//std::cout << m2 << std::endl;
+
 	std::vector< boost::numeric::ublas::vector<double> > vecsFrom;
 	std::vector< boost::numeric::ublas::vector<double> > vecsTo;
 
@@ -265,6 +268,7 @@ int CCoordTransform3DMultiPt::runKernel(
 		vecsFrom.push_back(vf);
 		vecsTo.push_back(vt);
 	}
+
 
 	boost::numeric::ublas::matrix<double> A(12, 12, 0);
 	boost::numeric::ublas::vector<double> B(12);
@@ -285,32 +289,25 @@ int CCoordTransform3DMultiPt::runKernel(
 			aptr += 16;
 		}
 	}
-	
-	typedef hanssoft::matrix<double>       dMatrix;
-	typedef std::valarray<double>          dVector;
 
-	dMatrix dA(A.size1(), A.size2());
-	dVector dB(B.size());
-	dVector dX(B.size());
+	cv::Mat matA(12, 12, CV_64FC1, (double*)&A.data()[0]);
+	cv::Mat matB(12, 1, CV_64FC1, (double*)&B.data()[0]);
 
-	for (size_t i = 0; i < A.size1(); i++)
-	{
-		for (size_t j = 0; j < A.size2(); j++)
-		{
-			dA[i][j] = A.at_element(i, j);
-		}
-	}
-	for (size_t i = 0; i < B.size(); i++)
-	{
-		dB[i] = B[i];
-	}
+	//std::cout << "A" << std::endl;
+	//std::cout << matA << std::endl;
+	//std::cout << "B" << std::endl;
+	//std::cout << matB << std::endl;
 
-	dA.solve_sv(dB, dX);
+	cv::Mat matX;
+	cv::solve(matA, matB, matX, cv::DECOMP_SVD);
+
 	model = boost::numeric::ublas::matrix<double>(3, 4);
-	for (size_t i = 0; i < dX.size(); i++)
+	for (size_t i = 0; i < 12; i++)
 	{
-		model.data()[i] = dX[i];
+		model.data()[i] = ((double*)matX.data)[i];
 	}
+	//std::cout << "Model:" << std::endl;
+	//std::cout << model << std::endl;
 	return 1;
 }
 

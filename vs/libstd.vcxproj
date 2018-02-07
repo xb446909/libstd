@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;LIBSTD_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\inc;D:\boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\src\opencv;$(ProjectDir)..\inc;D:\boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -124,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;LIBSTD_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\inc;D:\boost\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\inc;$(ProjectDir)..\src\opencv;D:\boost\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -162,7 +162,6 @@
     <ClInclude Include="..\inc\stdafx.h" />
     <ClInclude Include="..\src\coordtransform\ccoordtransform.h" />
     <ClInclude Include="..\src\coordtransform\ccoordtransform3dmultipt.h" />
-    <ClInclude Include="..\src\coordtransform\matrix.h" />
     <ClInclude Include="..\src\serialport\cserialport.h" />
     <ClInclude Include="..\src\socket\csocket.h" />
     <ClInclude Include="..\src\socket\ctcpclient.h" />
@@ -174,8 +173,34 @@
     <ClCompile Include="..\src\coordtransform\ccoordtransform.cpp" />
     <ClCompile Include="..\src\coordtransform\ccoordtransform3dmultipt.cpp" />
     <ClCompile Include="..\src\coordtransform\coordtransform.cpp" />
-    <ClCompile Include="..\src\coordtransform\matrix.cpp" />
     <ClCompile Include="..\src\iniconfig\iniconfig.cpp" />
+    <ClCompile Include="..\src\opencv\algorithm.cpp" />
+    <ClCompile Include="..\src\opencv\alloc.cpp" />
+    <ClCompile Include="..\src\opencv\arithm.cpp" />
+    <ClCompile Include="..\src\opencv\array.cpp" />
+    <ClCompile Include="..\src\opencv\cmdparser.cpp" />
+    <ClCompile Include="..\src\opencv\convert.cpp" />
+    <ClCompile Include="..\src\opencv\copy.cpp" />
+    <ClCompile Include="..\src\opencv\datastructs.cpp" />
+    <ClCompile Include="..\src\opencv\drawing.cpp" />
+    <ClCompile Include="..\src\opencv\dxt.cpp" />
+    <ClCompile Include="..\src\opencv\glob.cpp" />
+    <ClCompile Include="..\src\opencv\gl_core_3_1.cpp" />
+    <ClCompile Include="..\src\opencv\gpumat.cpp" />
+    <ClCompile Include="..\src\opencv\lapack.cpp" />
+    <ClCompile Include="..\src\opencv\mathfuncs.cpp" />
+    <ClCompile Include="..\src\opencv\matmul.cpp" />
+    <ClCompile Include="..\src\opencv\matop.cpp" />
+    <ClCompile Include="..\src\opencv\matrix.cpp" />
+    <ClCompile Include="..\src\opencv\opengl_interop.cpp" />
+    <ClCompile Include="..\src\opencv\opengl_interop_deprecated.cpp" />
+    <ClCompile Include="..\src\opencv\out.cpp" />
+    <ClCompile Include="..\src\opencv\parallel.cpp" />
+    <ClCompile Include="..\src\opencv\persistence.cpp" />
+    <ClCompile Include="..\src\opencv\rand.cpp" />
+    <ClCompile Include="..\src\opencv\stat.cpp" />
+    <ClCompile Include="..\src\opencv\system.cpp" />
+    <ClCompile Include="..\src\opencv\tables.cpp" />
     <ClCompile Include="..\src\serialport\cserialport.cpp" />
     <ClCompile Include="..\src\serialport\serialport.cpp" />
     <ClCompile Include="..\src\socket\csocket.cpp" />

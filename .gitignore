@@ -46,3 +46,5 @@ x64/
 [Rr]elease/
 
 obj/
+*.txt
+*.csv
