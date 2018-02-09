@@ -1,5 +1,6 @@
 #pragma once
 #include "ccoordtransform.h"
+#include <opencv2/core.hpp>
 
 class CCoordTransform3DMultiPt :
 	public CCoordTransform
@@ -53,5 +54,6 @@ private:
 	boost::numeric::ublas::matrix<double> m_mat;
 	int modelPoints;
 	bool checkPartialSubsets;
+	CvRNG rng;
 };
 

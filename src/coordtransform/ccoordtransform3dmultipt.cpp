@@ -4,12 +4,12 @@
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/triangular.hpp>
 #include <algorithm>
-#include <opencv2/core.hpp>
 
 CCoordTransform3DMultiPt::CCoordTransform3DMultiPt()
 	: modelPoints(4)
 	, checkPartialSubsets(true)
 {
+	rng = cvRNG(-1);
 }
 
 
@@ -169,7 +169,7 @@ bool CCoordTransform3DMultiPt::getSubset(const boost::numeric::ublas::matrix<dou
 	{
 		for (i = 0; i < modelPoints && iters < maxAttempts; )
 		{
-			idx[i] = idx_i = rand() % count;
+			idx[i] = idx_i = cvRandInt(&rng) % count;
 
 			for (j = 0; j < i; j++)
 				if (idx_i == idx[j])

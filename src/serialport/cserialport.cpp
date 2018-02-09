@@ -27,7 +27,7 @@ int CSerialPort::Open()
 	std::stringstream ssSection;
 	ssSection << "SerialPort" << m_nId;
 
-	m_szPort = ReadIniStdString(ssSection.str().c_str(), "Name", "COM1", m_szIniPath.c_str());
+	m_szPort = ReadIniStdString(ssSection.str().c_str(), "PortName", "COM1", m_szIniPath.c_str());
 	int nBaudRate = ReadIniInt(ssSection.str().c_str(), "BaudRate", 115200, m_szIniPath.c_str());
 	int nDataBits = ReadIniInt(ssSection.str().c_str(), "DataBits", 8, m_szIniPath.c_str());
 	int nStopBits = ReadIniInt(ssSection.str().c_str(), "StopBits", 1, m_szIniPath.c_str());
@@ -102,10 +102,11 @@ int CSerialPort::Read(char * szBuf, int nBufLen, int nTimeoutMs)
 	{
 		return COM_ERROR;
 	}
+	m_read_mutex.lock();
 	boost::mutex::scoped_lock lock(m_io_mutex);
 
 	m_nReadRet = 0;
-	m_serialPort.async_read_some(boost::asio::buffer(szBuf, nBufLen),
+	m_serialPort.async_read_some(boost::asio::buffer(m_readBuf, readBufSize),
 		boost::bind(&CSerialPort::read_handler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
 
 	m_timer.expires_from_now(boost::posix_time::milliseconds(nTimeoutMs));
@@ -114,6 +115,8 @@ int CSerialPort::Read(char * szBuf, int nBufLen, int nTimeoutMs)
 	m_io_service.reset();
 	boost::thread thrd(boost::bind(&boost::asio::io_service::run, &m_io_service));
 	m_condition.wait(m_io_mutex);
+	memcpy(szBuf, m_readBuf, min(nBufLen, m_nReadRet));
+	m_read_mutex.unlock();
 	return m_nReadRet;
 }
 
@@ -123,7 +126,7 @@ void CSerialPort::handle_timer(const boost::system::error_code & error)
 	{
 		std::cout << "Timeout" << std::endl;
 	}
-	else
+	else if (error.value() != boost::asio::error::operation_aborted)
 	{
 		std::cerr << "Timer error: " << error.message() << std::endl;
 	}
