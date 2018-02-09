@@ -60,7 +60,7 @@ int CTcpClient::Send(const char * szSendBuf, int nlen, const char * szDstIP, int
 int CTcpClient::Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort)
 {
 	boost::mutex::scoped_lock lock(m_io_mutex);
-	if (!m_socket.available())
+	if (!is_connect(m_socket))
 	{
 		return SOCKET_ERROR;
 	}

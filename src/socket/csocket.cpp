@@ -9,6 +9,7 @@ CSocket::CSocket()
 
 CSocket::~CSocket()
 {
+	Close();
 	m_io_service.stop();
 	boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 }
