@@ -102,7 +102,6 @@ int CSerialPort::Read(char * szBuf, int nBufLen, int nTimeoutMs)
 	{
 		return COM_ERROR;
 	}
-	m_read_mutex.lock();
 	boost::mutex::scoped_lock lock(m_io_mutex);
 
 	m_nReadRet = 0;
@@ -115,8 +114,11 @@ int CSerialPort::Read(char * szBuf, int nBufLen, int nTimeoutMs)
 	m_io_service.reset();
 	boost::thread thrd(boost::bind(&boost::asio::io_service::run, &m_io_service));
 	m_condition.wait(m_io_mutex);
-	memcpy(szBuf, m_readBuf, min(nBufLen, m_nReadRet));
-	m_read_mutex.unlock();
+	if (m_nReadRet > 0)
+	{
+		memcpy(szBuf, m_readBuf, min(nBufLen, m_nReadRet));
+	}
+	m_serialPort.cancel();
 	return m_nReadRet;
 }
 

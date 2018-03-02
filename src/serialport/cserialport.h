@@ -37,7 +37,6 @@ private:
 	boost::mutex m_io_mutex;
 	boost::asio::deadline_timer m_timer;
 	boost::condition_variable_any m_condition;
-	boost::mutex m_read_mutex;
 	int m_nReadRet;
 };
 
