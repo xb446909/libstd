@@ -75,7 +75,10 @@ int CTcpClient::Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char *
 	boost::thread thrd(boost::bind(&boost::asio::io_service::run, &m_io_service));
 
 	m_condition.wait(m_io_mutex);
-	m_socket.cancel();
+	if (m_nReadBytes > 0)
+	{
+		m_socket.cancel();
+	}
 	return m_nReadBytes;
 }
 

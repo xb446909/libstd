@@ -117,8 +117,8 @@ int CSerialPort::Read(char * szBuf, int nBufLen, int nTimeoutMs)
 	if (m_nReadRet > 0)
 	{
 		memcpy(szBuf, m_readBuf, min(nBufLen, m_nReadRet));
+		m_serialPort.cancel();
 	}
-	m_serialPort.cancel();
 	return m_nReadRet;
 }
 
