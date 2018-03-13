@@ -6,6 +6,7 @@
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 
+
 CSerialPort::CSerialPort(int nId, const std::string & szIniPath, SerialPortRecvCallback pCallback)
 	: m_nId(nId)
 	, m_szIniPath(szIniPath)
@@ -103,7 +104,6 @@ int CSerialPort::Read(char * szBuf, int nBufLen, int nTimeoutMs)
 		return COM_ERROR;
 	}
 	boost::mutex::scoped_lock lock(m_io_mutex);
-
 	m_nReadRet = 0;
 	m_serialPort.async_read_some(boost::asio::buffer(m_readBuf, readBufSize),
 		boost::bind(&CSerialPort::read_handler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
@@ -114,11 +114,13 @@ int CSerialPort::Read(char * szBuf, int nBufLen, int nTimeoutMs)
 	m_io_service.reset();
 	boost::thread thrd(boost::bind(&boost::asio::io_service::run, &m_io_service));
 	m_condition.wait(m_io_mutex);
+	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 	if (m_nReadRet > 0)
 	{
 		memcpy(szBuf, m_readBuf, min(nBufLen, m_nReadRet));
 		m_serialPort.cancel();
 	}
+
 	return m_nReadRet;
 }
 
@@ -127,6 +129,7 @@ void CSerialPort::handle_timer(const boost::system::error_code & error)
 	if (!error)
 	{
 		std::cout << "Timeout" << std::endl;
+		m_nReadRet = COM_ERROR;
 	}
 	else if (error.value() != boost::asio::error::operation_aborted)
 	{
@@ -155,9 +158,10 @@ void CSerialPort::read_handler(
 		}
 		return;
 	}
+	m_nReadRet = bytes_transferred;
 	if (!m_pCallback)
 	{
-		m_nReadRet = bytes_transferred;
+		//std::cout << "Transformed: " << m_nReadRet << std::endl;
 		m_timer.cancel();
 		m_condition.notify_one();
 	}

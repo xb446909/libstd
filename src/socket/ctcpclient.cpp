@@ -84,8 +84,11 @@ int CTcpClient::Recv(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char *
 
 void CTcpClient::Close()
 {
-	m_socket.shutdown(tcp::socket::shutdown_both);
-	m_socket.close();
+	if (is_connect(m_socket))
+	{
+		m_socket.shutdown(tcp::socket::shutdown_both);
+		m_socket.close();
+	}
 }
 
 void CTcpClient::handle_timer(const boost::system::error_code & error)

@@ -9,6 +9,7 @@ std::map<int, serialport_ptr> g_mapSerialPort;
 int __stdcall InitCOM(int nID, const char * szIniPath, SerialPortRecvCallback pCallback)
 {
 	g_mapSerialPort.erase(nID);
+	boost::this_thread::sleep(boost::posix_time::milliseconds(500));
 	std::string szIni;
 	if ((!szIniPath) || (!strcmp(szIniPath, "")))
 	{

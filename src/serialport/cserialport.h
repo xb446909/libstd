@@ -31,13 +31,13 @@ private:
 	std::string m_szPort;
 
 	uint8_t m_readBuf[readBufSize];
+	int m_nReadRet;
 
 	boost::asio::io_service m_io_service;
 	boost::asio::serial_port m_serialPort;
 	boost::mutex m_io_mutex;
 	boost::asio::deadline_timer m_timer;
 	boost::condition_variable_any m_condition;
-	int m_nReadRet;
 };
 
 typedef boost::shared_ptr<CSerialPort> serialport_ptr;
