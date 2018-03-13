@@ -37,7 +37,7 @@ private:
 	boost::asio::serial_port m_serialPort;
 	boost::mutex m_io_mutex;
 	boost::asio::deadline_timer m_timer;
-	boost::condition_variable_any m_condition;
+	bool m_bflag;
 };
 
 typedef boost::shared_ptr<CSerialPort> serialport_ptr;

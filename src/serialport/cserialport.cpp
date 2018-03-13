@@ -103,7 +103,9 @@ int CSerialPort::Read(char * szBuf, int nBufLen, int nTimeoutMs)
 	{
 		return COM_ERROR;
 	}
+	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 	boost::mutex::scoped_lock lock(m_io_mutex);
+	m_bflag = true;
 	m_nReadRet = 0;
 	m_serialPort.async_read_some(boost::asio::buffer(m_readBuf, readBufSize),
 		boost::bind(&CSerialPort::read_handler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
@@ -113,14 +115,23 @@ int CSerialPort::Read(char * szBuf, int nBufLen, int nTimeoutMs)
 
 	m_io_service.reset();
 	boost::thread thrd(boost::bind(&boost::asio::io_service::run, &m_io_service));
-	m_condition.wait(m_io_mutex);
-	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+	while (m_bflag)
+	{
+		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
+	}
 	if (m_nReadRet > 0)
 	{
 		memcpy(szBuf, m_readBuf, min(nBufLen, m_nReadRet));
+	}
+	if (m_serialPort.is_open())
+	{
 		m_serialPort.cancel();
 	}
-
+	if (m_nReadRet == 0)
+	{
+		printf("5555555555555\n");
+		system("pause");
+	}
 	return m_nReadRet;
 }
 
@@ -135,7 +146,7 @@ void CSerialPort::handle_timer(const boost::system::error_code & error)
 	{
 		std::cerr << "Timer error: " << error.message() << std::endl;
 	}
-	m_condition.notify_one();
+	m_bflag = false;
 }
 
 void CSerialPort::read_handler(
@@ -145,7 +156,10 @@ void CSerialPort::read_handler(
 {
 	if (error)
 	{
-		std::cerr << "Read error: " << error.message() << std::endl;
+		if (error.value() != boost::asio::error::operation_aborted)
+		{
+			std::cerr << "Read error: " << error.message() << std::endl;
+		}
 		if (m_pCallback)
 		{
 			m_pCallback(m_szPort.c_str(), COM_ERROR, 0);
@@ -154,16 +168,15 @@ void CSerialPort::read_handler(
 		{
 			m_nReadRet = COM_ERROR;
 			m_timer.cancel();
-			m_condition.notify_one();
+			m_bflag = false;
 		}
 		return;
 	}
 	m_nReadRet = bytes_transferred;
 	if (!m_pCallback)
 	{
-		//std::cout << "Transformed: " << m_nReadRet << std::endl;
 		m_timer.cancel();
-		m_condition.notify_one();
+		m_bflag = false;
 	}
 	else
 	{
