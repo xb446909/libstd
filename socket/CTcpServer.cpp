@@ -64,17 +64,52 @@ void CTcpServer::SetParam(boost::shared_ptr<CSocketLib::SocketParam> param)
 
 int CTcpServer::Send(const char* szSendBuf, int nLen, const char* szDstIP, int nDstPort)
 {
-	return 0;
+	int nIndex = FindSocket(szDstIP, nDstPort);
+	if (nIndex == -1) return SOCK_ERROR_ID;
+	int nRet = send(m_vecClients[nIndex].AcceptSocket, szSendBuf, nLen, 0);
+	if (nRet == SOCKET_ERROR)
+	{
+		cerr << "Send error: " << WSAGetLastError() << endl;
+		return SOCK_ERROR;
+	}
+	return nRet;
 }
 
 int CTcpServer::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort)
 {
-	return 0;
+	if (RecvCallback() != NULL) return SOCK_ERROR_ID;
+	
+	int nIndex = FindSocket(szDstIP, nDstPort);
+	if (nIndex == -1) return SOCK_ERROR_ID;
+
+	fd_set r;
+	FD_ZERO(&r);
+	FD_SET(m_vecClients[nIndex].AcceptSocket, &r);
+
+	struct timeval timeout;
+	timeout.tv_sec = nTimeoutMs / 1000;
+	timeout.tv_usec = (nTimeoutMs % 1000) * 1000;
+	int ret = select(0, &r, 0, 0, &timeout);
+
+	int nRet = 0;
+
+	if (ret <= 0)
+	{
+		cerr << "Receive timeout!" << endl;
+		return SOCK_TIMEOUT;
+	}
+	nRet = recv(m_socket, szRecvBuf, nBufLen, 0);
+	if (nRet == SOCKET_ERROR)
+	{
+		nRet = SOCK_ERROR;
+	}
+	else if (nRet == 0)
+	{
+		nRet = SOCK_CLOSED;
+	}
+	return nRet;
 }
 
-void CTcpServer::EraseClient(RecvSocket client)
-{
-}
 
 void CTcpServer::EraseClient(sockaddr_in client)
 {
@@ -93,6 +128,17 @@ bool CTcpServer::IsSame(sockaddr_in addr1, sockaddr_in addr2)
 	return ((addr1.sin_addr.S_un.S_addr == addr2.sin_addr.S_un.S_addr) &&
 		(addr1.sin_family == addr2.sin_family) &&
 		(addr1.sin_port == addr2.sin_port));
+}
+
+int CTcpServer::FindSocket(const char * szDstIP, int nDstPort)
+{
+	for (size_t i = 0; i < m_vecClients.size(); i++)
+	{
+		if ((inet_addr(szDstIP) == m_vecClients[i].addr.sin_addr.S_un.S_addr) &&
+			(ntohs(m_vecClients[i].addr.sin_port) == nDstPort))
+			return i;
+	}
+	return -1;
 }
 
 bool CTcpServer::BindSocket()

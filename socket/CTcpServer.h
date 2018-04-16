@@ -28,12 +28,12 @@ public:
 	virtual int Send(const char* szSendBuf, int nLen, const char* szDstIP, int nDstPort);
 	virtual int Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort);
 	void AddClient(RecvSocket client) { m_vecClients.push_back(client); }
-	void EraseClient(RecvSocket client);
 	void EraseClient(sockaddr_in client);
 
 private:
 	bool BindSocket();
 	bool IsSame(sockaddr_in addr1, sockaddr_in addr2);
+	int FindSocket(const char* szDstIP, int nDstPort);
 	HANDLE m_hThread;
 	vector<RecvSocket> m_vecClients;
 };
