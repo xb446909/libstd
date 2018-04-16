@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="源文件\socket">
+      <UniqueIdentifier>{8223aadd-df3e-4379-ae59-7fcd78d77bbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\socket">
+      <UniqueIdentifier>{fe65a1fe-30ce-4dc2-8002-982986df53fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\iniconfig">
+      <UniqueIdentifier>{1da17dea-257f-4df0-9602-7161bc5db955}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\iniconfig">
+      <UniqueIdentifier>{e338f99f-967b-4fea-b763-8116fd39879b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\serialport">
+      <UniqueIdentifier>{1a5b86c8-9834-4cd2-84f5-086cf28849f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\serialport">
+      <UniqueIdentifier>{13bc9974-e1a0-41eb-bc5f-61c1af9d07b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\common">
+      <UniqueIdentifier>{3cad4962-42bc-4c73-a9c4-812b94fd0ae3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\common">
+      <UniqueIdentifier>{08656a29-c6b9-4031-b51f-e410ef0f220c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\coordtransform">
+      <UniqueIdentifier>{bb8016f8-bd42-44b4-a38c-fe693929793f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\coordtransform">
+      <UniqueIdentifier>{d7b04c18-33b1-47cd-b03e-11bcd19576c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\opencv">
+      <UniqueIdentifier>{950f18ea-64ff-4c13-8b04-9db9f416a6d4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="socket\CSocketLib.h">
+      <Filter>头文件\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="socket\CTcpClient.h">
+      <Filter>头文件\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="socket\CTcpServer.h">
+      <Filter>头文件\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\iniconfig.h">
+      <Filter>头文件\iniconfig</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\socket.h">
+      <Filter>头文件\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="serialport\CSerialPort.h">
+      <Filter>头文件\serialport</Filter>
+    </ClInclude>
+    <ClInclude Include="serialport\CSerialPortProc_win.h">
+      <Filter>头文件\serialport</Filter>
+    </ClInclude>
+    <ClInclude Include="common\CriticalLock.h">
+      <Filter>头文件\common</Filter>
+    </ClInclude>
+    <ClInclude Include="coordtransform\ccoordtransform.h">
+      <Filter>头文件\coordtransform</Filter>
+    </ClInclude>
+    <ClInclude Include="coordtransform\ccoordtransform3dmultipt.h">
+      <Filter>头文件\coordtransform</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\coordtransform.h">
+      <Filter>头文件\coordtransform</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="socket\CSocketLib.cpp">
+      <Filter>源文件\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="socket\CTcpClient.cpp">
+      <Filter>源文件\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="socket\CTcpServer.cpp">
+      <Filter>源文件\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="socket\socket.cpp">
+      <Filter>源文件\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="iniconfig\iniconfig.cpp">
+      <Filter>源文件\iniconfig</Filter>
+    </ClCompile>
+    <ClCompile Include="serialport\CSerialPort.cpp">
+      <Filter>源文件\serialport</Filter>
+    </ClCompile>
+    <ClCompile Include="serialport\CSerialPortProc_win.cpp">
+      <Filter>源文件\serialport</Filter>
+    </ClCompile>
+    <ClCompile Include="serialport\serialport.cpp">
+      <Filter>源文件\serialport</Filter>
+    </ClCompile>
+    <ClCompile Include="common\CriticalLock.cpp">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
+    <ClCompile Include="coordtransform\ccoordtransform.cpp">
+      <Filter>源文件\coordtransform</Filter>
+    </ClCompile>
+    <ClCompile Include="coordtransform\ccoordtransform3dmultipt.cpp">
+      <Filter>源文件\coordtransform</Filter>
+    </ClCompile>
+    <ClCompile Include="coordtransform\coordtransform.cpp">
+      <Filter>源文件\coordtransform</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\algorithm.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\alloc.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\arithm.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\array.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\cmdparser.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\convert.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\copy.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\datastructs.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\drawing.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\dxt.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\gl_core_3_1.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\glob.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\gpumat.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\lapack.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\mathfuncs.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\matmul.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\matop.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\matrix.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\opengl_interop.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\opengl_interop_deprecated.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\out.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\parallel.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\persistence.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\rand.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\stat.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\system.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv\tables.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libstd.def">
+      <Filter>源文件</Filter>
+    </None>
+  </ItemGroup>
+</Project>
