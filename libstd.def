@@ -25,3 +25,10 @@ TCPRecv
 InitTransform
 SetPoints
 Transform
+
+OpenCSVFile
+GetAllData
+GetStdStringData
+GetDoubleData
+GetIntData
+GetStrData

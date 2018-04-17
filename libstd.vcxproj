@@ -158,8 +158,11 @@
     <ClInclude Include="common\CriticalLock.h" />
     <ClInclude Include="coordtransform\ccoordtransform.h" />
     <ClInclude Include="coordtransform\ccoordtransform3dmultipt.h" />
+    <ClInclude Include="csv\CSVManager.h" />
     <ClInclude Include="inc\coordtransform.h" />
+    <ClInclude Include="inc\csv.h" />
     <ClInclude Include="inc\iniconfig.h" />
+    <ClInclude Include="inc\serialport.h" />
     <ClInclude Include="inc\socket.h" />
     <ClInclude Include="serialport\CSerialPort.h" />
     <ClInclude Include="serialport\CSerialPortProc_win.h" />
@@ -174,6 +177,8 @@
     <ClCompile Include="coordtransform\ccoordtransform.cpp" />
     <ClCompile Include="coordtransform\ccoordtransform3dmultipt.cpp" />
     <ClCompile Include="coordtransform\coordtransform.cpp" />
+    <ClCompile Include="csv\csv.cpp" />
+    <ClCompile Include="csv\CSVManager.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="iniconfig\iniconfig.cpp" />
     <ClCompile Include="opencv\algorithm.cpp" />

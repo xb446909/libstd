@@ -46,6 +46,12 @@
     <Filter Include="源文件\opencv">
       <UniqueIdentifier>{950f18ea-64ff-4c13-8b04-9db9f416a6d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\csv">
+      <UniqueIdentifier>{d0e450f1-27fb-4977-b069-ad04f6c3ab2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\csv">
+      <UniqueIdentifier>{8cb87b1c-eb1d-4f47-9026-89c878bd71aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -86,6 +92,15 @@
     </ClInclude>
     <ClInclude Include="inc\coordtransform.h">
       <Filter>头文件\coordtransform</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\serialport.h">
+      <Filter>头文件\serialport</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\csv.h">
+      <Filter>头文件\csv</Filter>
+    </ClInclude>
+    <ClInclude Include="csv\CSVManager.h">
+      <Filter>头文件\csv</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +226,12 @@
     </ClCompile>
     <ClCompile Include="opencv\tables.cpp">
       <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="csv\csv.cpp">
+      <Filter>源文件\csv</Filter>
+    </ClCompile>
+    <ClCompile Include="csv\CSVManager.cpp">
+      <Filter>源文件\csv</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
