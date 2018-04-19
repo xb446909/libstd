@@ -23,18 +23,18 @@ int CSVManager::Open(const char * szPath, int nFlag)
 	}
 	if (nFlag == FLAG_OPEN_CREATE)
 	{
-		if (!PathFileExistsA(szPath))
-		{
-			stringstream ss;
-			char szDir[MAX_PATH] = { 0 };
-			strcpy(szDir, szPath);
-			char* r = strrchr(szDir, '\\');
-			if (r != NULL)
-			{
-				ss << "mkdir " << szDir;
-				system(ss.str().c_str());
-			}
-		}
+		//if (!PathFileExistsA(szPath))
+		//{
+		//	stringstream ss;
+		//	char szDir[MAX_PATH] = { 0 };
+		//	strcpy(szDir, szPath);
+		//	char* r = strrchr(szDir, '\\');
+		//	if (r != NULL)
+		//	{
+		//		ss << "mkdir " << szDir;
+		//		system(ss.str().c_str());
+		//	}
+		//}
 		m_fs.open(szPath, ios::in | ios::out | ios::trunc);
 		return CSV_SUCCESS;
 	}
@@ -63,6 +63,22 @@ int CSVManager::GetData(int nRow, int nCol, string & str)
 	if (nRow >= m_vecData.size()) return CSV_ERROR_DATA_OVERFLOW;
 	if (nCol >= m_vecData[nRow].size()) return CSV_ERROR_DATA_OVERFLOW;
 	str = m_vecData[nRow][nCol];
+	return CSV_SUCCESS;
+}
+
+int CSVManager::WriteData(std::vector<std::vector<std::string>> data)
+{
+	if (!m_fs.is_open())
+		return CSV_ERROR_FILE_NOT_OPEN;
+	for (size_t i = 0; i < data.size(); i++)
+	{
+		for (size_t j = 0; j < data[i].size(); j++)
+		{
+			m_fs << data[i][j] << ",";
+		}
+		m_fs << "\n";
+	}
+	m_fs.flush();
 	return CSV_SUCCESS;
 }
 

@@ -32,3 +32,4 @@ GetStdStringData
 GetDoubleData
 GetIntData
 GetStrData
+WriteAllData

@@ -52,3 +52,8 @@ int __stdcall GetStrData(int nRow, int nCol, char * szBuf)
 	return nRet;
 }
 
+int __stdcall WriteAllData(std::vector<std::vector<std::string>> data)
+{
+	return g_csvInst.WriteData(data);
+}
+

@@ -19,6 +19,7 @@ int __stdcall GetStdStringData(int nRow, int nCol, std::string& str);
 int __stdcall GetDoubleData(int nRow, int nCol, double& dbVal);
 int __stdcall GetIntData(int nRow, int nCol, int& nVal);
 int __stdcall GetStrData(int nRow, int nCol, char* szBuf);
+int __stdcall WriteAllData(std::vector<std::vector<std::string>> data);
 
 #endif // !__CSV_H
 
