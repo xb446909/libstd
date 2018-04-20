@@ -88,7 +88,8 @@ int CSerialPortProc::Open()
 	dcb.StopBits = (nStopBits == 2) ? 2 : 0;
 
 	COMMTIMEOUTS TimeOuts;
-	TimeOuts.ReadIntervalTimeout = 50;
+	int nReadTimeout = ReadIniInt(ssSection.str().c_str(), "ReadInterval", 50, m_procParam.strIniPath.c_str());
+	TimeOuts.ReadIntervalTimeout = nReadTimeout;
 	TimeOuts.ReadTotalTimeoutMultiplier = 0;
 	TimeOuts.ReadTotalTimeoutConstant = 0;
 	TimeOuts.WriteTotalTimeoutMultiplier = 0;
