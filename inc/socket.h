@@ -30,6 +30,5 @@ void __stdcall UninitSocket(int nID);
 int __stdcall TCPConnect(int nID, int nTimeoutMs);
 int __stdcall TCPSend(int nID, const char* szSendBuf, int nlen, const char* szDstIP = 0, int nDstPort = 0);
 int __stdcall TCPRecv(int nID, char* szRecvBuf, int nBufLen, int nTimeoutMs, const char* szDstIP = 0, int nDstPort = 0);
-//int __stdcall TCPRecv(int nID, char* szRecvBuf, int nBufLen, int nTimeoutMs);
 
 #endif

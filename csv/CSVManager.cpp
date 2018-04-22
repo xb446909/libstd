@@ -79,6 +79,7 @@ int CSVManager::WriteData(std::vector<std::vector<std::string>> data)
 		m_fs << "\n";
 	}
 	m_fs.flush();
+	m_fs.close();
 	return CSV_SUCCESS;
 }
 
@@ -86,7 +87,7 @@ int CSVManager::WriteData(std::vector<std::vector<std::string>> data)
 int CSVManager::LoadFile()
 {
 	const char delims[] = ",";
-	
+	m_vecData.clear();
 	while (!m_fs.eof())
 	{
 		string strline;
