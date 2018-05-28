@@ -7,6 +7,12 @@
 
 using namespace std;
 
+DWORD WINAPI TCPClientReceiveThread(LPVOID lpParam);
+HANDLE g_hEventClientThread;
+
+char g_szClientRecvBuf[RECV_BUF_SIZE];
+
+
 CTcpClient::CTcpClient()
 {
 	m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -25,7 +31,6 @@ CTcpClient::~CTcpClient()
 		shutdown(m_socket, SD_BOTH);
 		closesocket(m_socket);
 	}
-	WSACleanup();
 }
 
 int CTcpClient::Connect(int nTimeoutMs)
@@ -63,6 +68,13 @@ int CTcpClient::Connect(int nTimeoutMs)
 		WSACleanup();
 		return SOCK_TIMEOUT;
 	}
+
+	if (RecvCallback() != nullptr)
+	{
+		g_hEventClientThread = CreateEvent(NULL, TRUE, TRUE, NULL);
+		m_hThread = CreateThread(NULL, 0, TCPClientReceiveThread, this, 0, NULL);
+	}
+
 	return SOCK_SUCCESS;
 }
 
@@ -79,6 +91,11 @@ int CTcpClient::Send(const char* szSendBuf, int nLen, const char* szDstIP, int n
 
 int CTcpClient::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort)
 {
+	if (RecvCallback() != nullptr)
+	{
+		return SOCK_ERROR_ID;
+	}
+
 	fd_set r;
 	FD_ZERO(&r);
 	FD_SET(m_socket, &r);
@@ -90,10 +107,14 @@ int CTcpClient::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const cha
 
 	int nRet = 0;
 
-	if (ret <= 0)
+	if (ret == 0)
 	{
 		cerr << "Receive timeout!" << endl;
 		return SOCK_TIMEOUT;
+	}
+	else if (ret == SOCKET_ERROR)
+	{
+		return SOCK_ERROR;
 	}
 	nRet = recv(m_socket, szRecvBuf, nBufLen, 0);
 	if (nRet == SOCKET_ERROR)
@@ -105,4 +126,59 @@ int CTcpClient::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const cha
 		nRet = SOCK_CLOSED;
 	}
 	return nRet;
+}
+
+DWORD WINAPI TCPClientReceiveThread(LPVOID lpParam)
+{
+	CTcpClient* pClient = static_cast<CTcpClient*>(lpParam);
+
+	fd_set fd;
+	FD_ZERO(&fd);
+	FD_SET(pClient->GetSocket(), &fd);
+
+	struct timeval timeout;
+	timeout.tv_sec = 0;
+	timeout.tv_usec = 20000;
+
+	sockaddr_in  addrTemp;
+	int iTempLen = sizeof(addrTemp);
+	getpeername(pClient->GetSocket(), (sockaddr *)&addrTemp, &iTempLen);
+
+	while (pClient->ThreadEventIsSet())
+	{
+		fd_set fdOld = fd;
+
+		int iResult = select(0, &fdOld, NULL, NULL, &timeout);
+
+		if (iResult == SOCKET_ERROR)
+		{
+			cerr << "Failed to select socket, error: " << WSAGetLastError() << endl;
+			pClient->RecvCallback()(SOCK_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, nullptr);
+		}
+		else if (iResult > 0)
+		{
+			memset(g_szClientRecvBuf, 0, RECV_BUF_SIZE);
+			int iRecvSize = recv(pClient->GetSocket(), g_szClientRecvBuf, RECV_BUF_SIZE, 0);
+
+			if (SOCKET_ERROR == iRecvSize)
+			{
+				pClient->RecvCallback()(RECV_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL);
+				closesocket(pClient->GetSocket());
+				break;
+			}
+			else if (0 == iRecvSize)
+			{
+				//客户socket关闭    
+				pClient->RecvCallback()(RECV_CLOSE, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL);
+				closesocket(pClient->GetSocket());
+				break;
+			}
+			else if (0 < iRecvSize)
+			{
+				//打印接收的数据    
+				pClient->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szClientRecvBuf);
+			}
+		}
+	}
+	return 0;
 }

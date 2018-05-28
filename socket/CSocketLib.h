@@ -3,6 +3,8 @@
 #include <boost/make_shared.hpp>
 #include <WinSock2.h>
 
+const int RECV_BUF_SIZE = 1024 * 1024;
+
 class CSocketLib
 {
 public:
@@ -49,10 +51,15 @@ public:
 	virtual int Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort);
 	SOCKET GetSocket() { return m_socket; }
 	SocketRecvCallback RecvCallback() { return m_param.callback; }
+	bool ThreadEventIsSet();
+	void ResetThreadEvent();
+	void SetThreadEvent();
 
 protected:
 	SOCKET m_socket;
 	SocketParam m_param;
+	HANDLE m_hThread;
+	HANDLE m_hEvent;
 };
 
 typedef boost::shared_ptr<CSocketLib::SocketParam> socket_param_ptr;

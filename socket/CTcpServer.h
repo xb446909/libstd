@@ -34,7 +34,6 @@ private:
 	bool BindSocket();
 	bool IsSame(sockaddr_in addr1, sockaddr_in addr2);
 	int FindSocket(const char* szDstIP, int nDstPort);
-	HANDLE m_hThread;
 	vector<RecvSocket> m_vecClients;
 };
 

@@ -8,14 +8,10 @@
 using namespace std;
 
 DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam);
-HANDLE g_hEventThread;
 
-const int RECV_BUF_SIZE = 1024 * 1024;
-
-char g_szRecvBuf[RECV_BUF_SIZE];
+char g_szServerRecvBuf[RECV_BUF_SIZE];
 
 CTcpServer::CTcpServer()
-	: m_hThread(INVALID_HANDLE_VALUE)
 {
 	m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (m_socket == INVALID_SOCKET)
@@ -24,28 +20,21 @@ CTcpServer::CTcpServer()
 		WSACleanup();
 		return;
 	}
-
-	g_hEventThread = CreateEvent(NULL, TRUE, TRUE, NULL);
 }
 
 
 CTcpServer::~CTcpServer()
 {
-	ResetEvent(g_hEventThread);
+	ResetThreadEvent();
 	shutdown(m_socket, SD_BOTH);
 	closesocket(m_socket);
-	WSACleanup();
 
 	if ((m_hThread != INVALID_HANDLE_VALUE) && (WaitForSingleObject(m_hThread, 1000) != WAIT_OBJECT_0))
 	{
 		DWORD dwExitcode;
 		GetExitCodeThread(m_hThread, &dwExitcode);
 		TerminateThread(m_hThread, dwExitcode);
-		CloseHandle(m_hThread);
-		m_hThread = INVALID_HANDLE_VALUE;
 	}
-	CloseHandle(g_hEventThread);
-	g_hEventThread = INVALID_HANDLE_VALUE;
 }
 
 void CTcpServer::SetParam(boost::shared_ptr<CSocketLib::SocketParam> param)
@@ -172,6 +161,10 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 	FD_ZERO(&fd);
 	FD_SET(pServer->GetSocket(), &fd);
 
+	struct timeval timeout;
+	timeout.tv_sec = 0;
+	timeout.tv_usec = 20000;
+
 	int iResult;
 	int iRecvSize;
 	sockaddr_in addrAccept, addrTemp;
@@ -184,12 +177,10 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 	}
 
 	CTcpServer::RecvSocket RecvS;
-	while (WaitForSingleObject(g_hEventThread, 0) == WAIT_OBJECT_0)
+	while (pServer->ThreadEventIsSet())
 	{
 		fd_set fdOld = fd;
-		struct timeval timeout;
-		timeout.tv_sec = 0;
-		timeout.tv_usec = 50000;
+		
 		iResult = select(0, &fdOld, NULL, NULL, &timeout);
 		if (0 < iResult)
 		{
@@ -216,8 +207,8 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 					}
 					else //非服务器,接收数据(因为fd是读数据集)    
 					{
-						memset(g_szRecvBuf, 0, RECV_BUF_SIZE);
-						iRecvSize = recv(fd.fd_array[i], g_szRecvBuf, RECV_BUF_SIZE, 0);
+						memset(g_szServerRecvBuf, 0, RECV_BUF_SIZE);
+						iRecvSize = recv(fd.fd_array[i], g_szServerRecvBuf, RECV_BUF_SIZE, 0);
 						memset(&addrTemp, 0, sizeof(addrTemp));
 						iTempLen = sizeof(addrTemp);
 						getpeername(fd.fd_array[i], (sockaddr *)&addrTemp, &iTempLen);
@@ -245,7 +236,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 						{
 							//打印接收的数据    
 							if (pServer->RecvCallback() != NULL)
-								pServer->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szRecvBuf);
+								pServer->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szServerRecvBuf);
 						}
 					}
 				}
@@ -253,10 +244,15 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 		}
 		else if (SOCKET_ERROR == iResult)
 		{
-			WSACleanup();
 			cerr << "Failed to select socket, error: " << WSAGetLastError() << endl;
 			Sleep(100);
 		}
 	}
+
+	for (size_t i = 0; i < fd.fd_count; i++)
+	{
+		closesocket(fd.fd_array[i]);
+	}
+
 	return SOCK_SUCCESS;
 }

@@ -7,6 +7,8 @@
 using namespace std;
 
 CSocketLib::CSocketLib()
+	: m_hThread(INVALID_HANDLE_VALUE)
+	, m_socket(INVALID_SOCKET)
 {
 	WSADATA wsaData;
 	//----------------------
@@ -16,11 +18,19 @@ CSocketLib::CSocketLib()
 	{
 		cerr << "Initialize socket error: " << WSAGetLastError() << endl;
 	}
+	m_hEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
 }
 
 
 CSocketLib::~CSocketLib()
 {
+	if (m_hThread != INVALID_HANDLE_VALUE)
+	{
+		CloseHandle(m_hThread);
+		m_hThread = INVALID_HANDLE_VALUE;
+	}
+	CloseHandle(m_hEvent);
+	WSACleanup();
 }
 
 boost::shared_ptr<CSocketLib> CSocketLib::Create(int nType)
@@ -58,4 +68,19 @@ int CSocketLib::Send(const char* szSendBuf, int nLen, const char* szDstIP, int n
 int CSocketLib::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort)
 {
 	return SOCK_ERROR_ID;
+}
+
+bool CSocketLib::ThreadEventIsSet()
+{
+	return (WaitForSingleObject(m_hEvent, 0) == WAIT_OBJECT_0);
+}
+
+void CSocketLib::ResetThreadEvent()
+{
+	ResetEvent(m_hEvent);
+}
+
+void CSocketLib::SetThreadEvent()
+{
+	SetEvent(m_hEvent);
 }
