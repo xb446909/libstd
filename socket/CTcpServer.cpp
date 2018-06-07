@@ -197,7 +197,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 						if (INVALID_SOCKET != socketAccept)
 						{
 							if (pServer->RecvCallback() != NULL)
-								pServer->RecvCallback()(RECV_SOCKET, inet_ntoa(addrAccept.sin_addr), ntohs(addrAccept.sin_port), 0, nullptr);
+								pServer->RecvCallback()(RECV_SOCKET, inet_ntoa(addrAccept.sin_addr), ntohs(addrAccept.sin_port), 0, NULL, pServer->UserParam());
 							FD_SET(socketAccept, &fd);
 
 							RecvS.AcceptSocket = socketAccept;
@@ -216,7 +216,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 						if (SOCKET_ERROR == iRecvSize)
 						{
 							if (pServer->RecvCallback() != NULL)
-								pServer->RecvCallback()(RECV_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL);
+								pServer->RecvCallback()(RECV_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pServer->UserParam());
 							closesocket(fd.fd_array[i]);
 							FD_CLR(fd.fd_array[i], &fd);
 							i--;
@@ -226,7 +226,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 						{
 							//客户socket关闭    
 							if (pServer->RecvCallback() != NULL)
-								pServer->RecvCallback()(RECV_CLOSE, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL);
+								pServer->RecvCallback()(RECV_CLOSE, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pServer->UserParam());
 							closesocket(fd.fd_array[i]);
 							FD_CLR(fd.fd_array[i], &fd);
 							pServer->EraseClient(addrTemp);
@@ -236,7 +236,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 						{
 							//打印接收的数据    
 							if (pServer->RecvCallback() != NULL)
-								pServer->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szServerRecvBuf);
+								pServer->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szServerRecvBuf, pServer->UserParam());
 						}
 					}
 				}

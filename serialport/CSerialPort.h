@@ -15,7 +15,7 @@ public:
 	~CSerialPort();
 
 	void RemoveProc(int nId);
-	int AddProc(int nId, const char * szIniPath, SerialPortRecvCallback pCallback);
+	int AddProc(int nId, const char * szIniPath, SerialPortRecvCallback pCallback, void* pParam);
 	int OpenProc(int nId);
 	int WriteProc(int nId, const char* szBuf, int nLen);
 	int ReadProc(int nId, char * szBuf, int nBufLen, int nTimeout);

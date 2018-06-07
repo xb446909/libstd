@@ -47,10 +47,10 @@ int SocketRecvCallbackFun(int nType, const char* szIP, int nPort, int nSize, con
 return 0;
 }*/
 
-typedef int(*SocketRecvCallback)(int nType, const char* szIP, int nPort, int nSize, const char* szRecv);
+typedef int(*SocketRecvCallback)(int nType, const char* szIP, int nPort, int nSize, const char* szRecv, void* pParam);
 
 /*InitSocket 参数nID ：创建该端的唯一标识符调用该库时不能冲突  （以下nID以同样的使用方法）*/
-int __stdcall InitSocket(int nID, int nType, const char* szIniPath = 0, SocketRecvCallback pCallback = 0);
+int __stdcall InitSocket(int nID, int nType, const char* szIniPath = 0, SocketRecvCallback pCallback = 0, void* pParam = 0);
 void __stdcall UninitSocket(int nID);
 
 /*TCPConnect return 0 为成功

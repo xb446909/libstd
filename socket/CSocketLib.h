@@ -14,19 +14,22 @@ public:
 		int nType;
 		std::string szIniPath;
 		SocketRecvCallback callback;
+		void* pParam;
 		_tagSocketParam()
 			: nId(0)
 			, nType(0)
 			, szIniPath("")
 			, callback(0)
+			, pParam(0)
 		{
 		}
 
-		_tagSocketParam(int nId, int nType, std::string szIniPath, SocketRecvCallback callback)
+		_tagSocketParam(int nId, int nType, std::string szIniPath, SocketRecvCallback callback, void* pParam)
 			: nId(nId)
 			, nType(nType)
 			, szIniPath(szIniPath)
 			, callback(callback)
+			, pParam(pParam)
 		{
 		}
 
@@ -36,6 +39,7 @@ public:
 			nType = src.nType;
 			szIniPath = src.szIniPath;
 			callback = src.callback;
+			pParam = src.pParam;
 			return *this;
 		}
 
@@ -51,6 +55,7 @@ public:
 	virtual int Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort);
 	SOCKET GetSocket() { return m_socket; }
 	SocketRecvCallback RecvCallback() { return m_param.callback; }
+	void* UserParam() { return m_param.pParam; }
 	bool ThreadEventIsSet();
 	void ResetThreadEvent();
 	void SetThreadEvent();

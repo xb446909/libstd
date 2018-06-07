@@ -16,12 +16,13 @@ void CSerialPort::RemoveProc(int nId)
 	m_serialportProc.erase(nId);
 }
 
-int CSerialPort::AddProc(int nId, const char * szIniPath, SerialPortRecvCallback pCallback)
+int CSerialPort::AddProc(int nId, const char * szIniPath, SerialPortRecvCallback pCallback, void* pParam)
 {
 	CSerialPortProc::ProcParam param;
 	param.nId = nId;
 	param.strIniPath = std::string(szIniPath);
 	param.recvCallback = pCallback;
+	param.pParam = pParam;
 	boost::shared_ptr<CSerialPortProc> proc(new CSerialPortProc());
 	proc->SetProcParam(param);
 

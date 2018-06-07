@@ -12,11 +12,13 @@ public:
 		int nId;
 		std::string strIniPath;
 		SerialPortRecvCallback recvCallback;
+		void* pParam;
 
 		_tagProcParam()
 			: nId(0)
 			, strIniPath("")
 			, recvCallback(nullptr)
+			, pParam(nullptr)
 		{}
 
 		_tagProcParam& operator =(_tagProcParam& src)
@@ -24,6 +26,7 @@ public:
 			nId = src.nId;
 			strIniPath = src.strIniPath;
 			recvCallback = src.recvCallback;
+			pParam = src.pParam;
 			return *this;
 		}
 	}ProcParam;

@@ -197,7 +197,7 @@ DWORD WINAPI SerialPortRecvThread(__in  LPVOID lpParameter)
 		int nRet = pProc->Read(recvBuf, BUF_SIZE, 500);
 		if ((param.recvCallback) && (nRet != 0))
 		{
-			param.recvCallback(pProc->GetPortName().c_str(), nRet, recvBuf);
+			param.recvCallback(pProc->GetPortName().c_str(), nRet, recvBuf, param.pParam);
 		}
 		Sleep(10);
 	}

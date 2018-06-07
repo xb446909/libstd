@@ -10,7 +10,7 @@
 
 std::map<int, boost::shared_ptr<CSocketLib> > g_mapSockets;
 
-int __stdcall InitSocket(int nID, int nType, const char* szIniPath, SocketRecvCallback pCallback)
+int __stdcall InitSocket(int nID, int nType, const char* szIniPath, SocketRecvCallback pCallback, void* pParam)
 {
 	std::string strIni;
 	if ((!szIniPath) || (!strcmp(szIniPath, "")))
@@ -24,7 +24,7 @@ int __stdcall InitSocket(int nID, int nType, const char* szIniPath, SocketRecvCa
 	g_mapSockets.erase(nID);
 
 	boost::shared_ptr<CSocketLib> socket = CSocketLib::Create(nType);
-	socket_param_ptr param = boost::shared_ptr<CSocketLib::SocketParam>(new CSocketLib::SocketParam(nID, nType, strIni, pCallback));
+	socket_param_ptr param = boost::shared_ptr<CSocketLib::SocketParam>(new CSocketLib::SocketParam(nID, nType, strIni, pCallback, pParam));
 	g_mapSockets.insert(std::pair<int, boost::shared_ptr<CSocketLib> >(nID, socket));
 	socket->SetParam(param);
 

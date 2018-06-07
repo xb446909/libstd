@@ -153,7 +153,7 @@ DWORD WINAPI TCPClientReceiveThread(LPVOID lpParam)
 		if (iResult == SOCKET_ERROR)
 		{
 			cerr << "Failed to select socket, error: " << WSAGetLastError() << endl;
-			pClient->RecvCallback()(SOCK_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, nullptr);
+			pClient->RecvCallback()(SOCK_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pClient->UserParam());
 		}
 		else if (iResult > 0)
 		{
@@ -162,21 +162,21 @@ DWORD WINAPI TCPClientReceiveThread(LPVOID lpParam)
 
 			if (SOCKET_ERROR == iRecvSize)
 			{
-				pClient->RecvCallback()(RECV_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL);
+				pClient->RecvCallback()(RECV_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pClient->UserParam());
 				closesocket(pClient->GetSocket());
 				break;
 			}
 			else if (0 == iRecvSize)
 			{
 				//客户socket关闭    
-				pClient->RecvCallback()(RECV_CLOSE, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL);
+				pClient->RecvCallback()(RECV_CLOSE, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pClient->UserParam());
 				closesocket(pClient->GetSocket());
 				break;
 			}
 			else if (0 < iRecvSize)
 			{
 				//打印接收的数据    
-				pClient->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szClientRecvBuf);
+				pClient->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szClientRecvBuf, pClient->UserParam());
 			}
 		}
 	}
