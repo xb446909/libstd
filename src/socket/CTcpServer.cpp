@@ -37,7 +37,7 @@ CTcpServer::~CTcpServer()
 	}
 }
 
-void CTcpServer::SetParam(boost::shared_ptr<CSocketLib::SocketParam> param)
+void CTcpServer::SetParam(shared_ptr<CSocketLib::SocketParam> param)
 {
 	CSocketLib::SetParam(param);
 	BOOL bOptVal = TRUE;

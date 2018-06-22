@@ -23,10 +23,10 @@ int CSerialPort::AddProc(int nId, const char * szIniPath, SerialPortRecvCallback
 	param.strIniPath = std::string(szIniPath);
 	param.recvCallback = pCallback;
 	param.pParam = pParam;
-	boost::shared_ptr<CSerialPortProc> proc(new CSerialPortProc());
+	shared_ptr<CSerialPortProc> proc(new CSerialPortProc());
 	proc->SetProcParam(param);
 
-	m_serialportProc.insert(std::pair<int, boost::shared_ptr<CSerialPortProc>>(nId, proc));
+	m_serialportProc.insert(std::pair<int, shared_ptr<CSerialPortProc>>(nId, proc));
 	return 0;
 }
 

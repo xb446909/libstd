@@ -33,16 +33,16 @@ CSocketLib::~CSocketLib()
 	WSACleanup();
 }
 
-boost::shared_ptr<CSocketLib> CSocketLib::Create(int nType)
+shared_ptr<CSocketLib> CSocketLib::Create(int nType)
 {
-	boost::shared_ptr<CSocketLib> socket;
+	shared_ptr<CSocketLib> socket;
 	switch (nType)
 	{
 	case TCP_CLIENT:
-		socket = boost::shared_ptr<CSocketLib>(new CTcpClient());
+		socket = shared_ptr<CSocketLib>(new CTcpClient());
 		break;
 	case TCP_SERVER:
-		socket = boost::shared_ptr<CSocketLib>(new CTcpServer());
+		socket = shared_ptr<CSocketLib>(new CTcpServer());
 		break;
 	default:
 		break;
@@ -50,7 +50,7 @@ boost::shared_ptr<CSocketLib> CSocketLib::Create(int nType)
 	return socket;
 }
 
-void CSocketLib::SetParam(boost::shared_ptr<CSocketLib::SocketParam> param)
+void CSocketLib::SetParam(shared_ptr<CSocketLib::SocketParam> param)
 {
 	m_param = *param;
 }

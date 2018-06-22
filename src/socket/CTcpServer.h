@@ -1,8 +1,10 @@
 #pragma once
 #include "CSocketLib.h"
 #include <vector>
+#include <memory>
 
 using namespace std;
+using namespace std::tr1;
 
 class CTcpServer :
 	public CSocketLib
@@ -24,7 +26,7 @@ public:
 
 	CTcpServer();
 	~CTcpServer();
-	virtual void SetParam(boost::shared_ptr<CSocketLib::SocketParam> param);
+	virtual void SetParam(shared_ptr<CSocketLib::SocketParam> param);
 	virtual int Send(const char* szSendBuf, int nLen, const char* szDstIP, int nDstPort);
 	virtual int Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort);
 	void AddClient(RecvSocket client) { m_vecClients.push_back(client); }

@@ -110,128 +110,128 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="socket\CSocketLib.cpp">
-      <Filter>源文件\socket</Filter>
-    </ClCompile>
-    <ClCompile Include="socket\CTcpClient.cpp">
-      <Filter>源文件\socket</Filter>
-    </ClCompile>
-    <ClCompile Include="socket\CTcpServer.cpp">
-      <Filter>源文件\socket</Filter>
-    </ClCompile>
-    <ClCompile Include="socket\socket.cpp">
-      <Filter>源文件\socket</Filter>
-    </ClCompile>
-    <ClCompile Include="iniconfig\iniconfig.cpp">
-      <Filter>源文件\iniconfig</Filter>
-    </ClCompile>
-    <ClCompile Include="serialport\CSerialPort.cpp">
-      <Filter>源文件\serialport</Filter>
-    </ClCompile>
-    <ClCompile Include="serialport\CSerialPortProc_win.cpp">
-      <Filter>源文件\serialport</Filter>
-    </ClCompile>
-    <ClCompile Include="serialport\serialport.cpp">
-      <Filter>源文件\serialport</Filter>
-    </ClCompile>
-    <ClCompile Include="common\CriticalLock.cpp">
+    <ClCompile Include="..\src\common\CriticalLock.cpp">
       <Filter>源文件\common</Filter>
     </ClCompile>
-    <ClCompile Include="coordtransform\ccoordtransform.cpp">
+    <ClCompile Include="..\src\coordtransform\ccoordtransform.cpp">
       <Filter>源文件\coordtransform</Filter>
     </ClCompile>
-    <ClCompile Include="coordtransform\ccoordtransform3dmultipt.cpp">
+    <ClCompile Include="..\src\coordtransform\ccoordtransform3dmultipt.cpp">
       <Filter>源文件\coordtransform</Filter>
     </ClCompile>
-    <ClCompile Include="coordtransform\coordtransform.cpp">
+    <ClCompile Include="..\src\coordtransform\coordtransform.cpp">
       <Filter>源文件\coordtransform</Filter>
     </ClCompile>
-    <ClCompile Include="opencv\algorithm.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\alloc.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\arithm.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\array.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\cmdparser.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\convert.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\copy.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\datastructs.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\drawing.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\dxt.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\gl_core_3_1.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\glob.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\gpumat.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\lapack.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\mathfuncs.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\matmul.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\matop.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\matrix.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\opengl_interop.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\opengl_interop_deprecated.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\out.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\parallel.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\persistence.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\rand.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\stat.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\system.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="opencv\tables.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="csv\csv.cpp">
+    <ClCompile Include="..\src\csv\csv.cpp">
       <Filter>源文件\csv</Filter>
     </ClCompile>
-    <ClCompile Include="csv\CSVManager.cpp">
+    <ClCompile Include="..\src\csv\CSVManager.cpp">
       <Filter>源文件\csv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\iniconfig\iniconfig.cpp">
+      <Filter>源文件\iniconfig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\persistence.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\glob.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\algorithm.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\alloc.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\arithm.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\array.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\cmdparser.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\convert.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\copy.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\datastructs.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\drawing.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\dxt.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\gl_core_3_1.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\gpumat.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\lapack.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\mathfuncs.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matmul.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matop.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matrix.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\opengl_interop.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\opengl_interop_deprecated.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\out.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\parallel.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\rand.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\stat.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\system.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\tables.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\serialport\CSerialPort.cpp">
+      <Filter>源文件\serialport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\serialport\CSerialPortProc_win.cpp">
+      <Filter>源文件\serialport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\serialport\serialport.cpp">
+      <Filter>源文件\serialport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\socket\CSocketLib.cpp">
+      <Filter>源文件\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\socket\CTcpClient.cpp">
+      <Filter>源文件\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\socket\CTcpServer.cpp">
+      <Filter>源文件\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\socket\socket.cpp">
+      <Filter>源文件\socket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

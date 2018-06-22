@@ -6,9 +6,11 @@
 #include "iniconfig.h"
 #include "CSocketLib.h"
 #include <map>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
-std::map<int, boost::shared_ptr<CSocketLib> > g_mapSockets;
+using namespace std::tr1;
+
+std::map<int, shared_ptr<CSocketLib> > g_mapSockets;
 
 int __stdcall InitSocket(int nID, int nType, const char* szIniPath, SocketRecvCallback pCallback, void* pParam)
 {
@@ -23,9 +25,9 @@ int __stdcall InitSocket(int nID, int nType, const char* szIniPath, SocketRecvCa
 	}
 	g_mapSockets.erase(nID);
 
-	boost::shared_ptr<CSocketLib> socket = CSocketLib::Create(nType);
-	socket_param_ptr param = boost::shared_ptr<CSocketLib::SocketParam>(new CSocketLib::SocketParam(nID, nType, strIni, pCallback, pParam));
-	g_mapSockets.insert(std::pair<int, boost::shared_ptr<CSocketLib> >(nID, socket));
+	shared_ptr<CSocketLib> socket = CSocketLib::Create(nType);
+	socket_param_ptr param = shared_ptr<CSocketLib::SocketParam>(new CSocketLib::SocketParam(nID, nType, strIni, pCallback, pParam));
+	g_mapSockets.insert(std::pair<int, shared_ptr<CSocketLib> >(nID, socket));
 	socket->SetParam(param);
 
 	return SOCK_SUCCESS;

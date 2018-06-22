@@ -1,7 +1,9 @@
 #pragma once
 #include "serialport.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <map>
+
+using namespace std::tr1;
 
 #ifdef WIN32
 #include "CSerialPortProc_win.h"
@@ -21,6 +23,6 @@ public:
 	int ReadProc(int nId, char * szBuf, int nBufLen, int nTimeout);
 
 private:
-	std::map<int, boost::shared_ptr<CSerialPortProc> > m_serialportProc;
+	std::map<int, shared_ptr<CSerialPortProc> > m_serialportProc;
 };
 

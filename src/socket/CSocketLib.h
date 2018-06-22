@@ -1,7 +1,10 @@
 #pragma once
 #include "socket.h"
-#include <boost/make_shared.hpp>
 #include <WinSock2.h>
+#include <memory>
+#include <string>
+
+using namespace std::tr1;
 
 const int RECV_BUF_SIZE = 1024 * 1024;
 
@@ -48,8 +51,8 @@ public:
 	CSocketLib();
 	virtual ~CSocketLib();
 
-	static boost::shared_ptr<CSocketLib> Create(int nType);
-	virtual void SetParam(boost::shared_ptr<CSocketLib::SocketParam> param);
+	static shared_ptr<CSocketLib> Create(int nType);
+	virtual void SetParam(shared_ptr<CSocketLib::SocketParam> param);
 	virtual int Connect(int nTimeoutMs);
 	virtual int Send(const char* szSendBuf, int nLen, const char* szDstIP, int nDstPort);
 	virtual int Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort);
@@ -67,4 +70,4 @@ protected:
 	HANDLE m_hEvent;
 };
 
-typedef boost::shared_ptr<CSocketLib::SocketParam> socket_param_ptr;
+typedef shared_ptr<CSocketLib::SocketParam> socket_param_ptr;

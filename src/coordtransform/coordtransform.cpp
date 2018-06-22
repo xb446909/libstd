@@ -2,6 +2,7 @@
 #include "coordtransform.h"
 #include "ccoordtransform.h"
 #include <map>
+#include <iostream>
 
 std::map<int, coord_transform_ptr> g_mapTransforms;
 
@@ -20,17 +21,17 @@ int __stdcall SetPoints(int nID, double * srcX, double * srcY, double * srcZ, do
 		return TRANSFORM_ERROR;
 	}
 
-	std::vector<boost::numeric::ublas::vector<double> > srcVec, dstVec;
+	std::vector<cv::Point3d> srcVec, dstVec;
 	for (int i = 0; i < nSize; i++)
 	{
-		boost::numeric::ublas::vector<double> src(3);
-		boost::numeric::ublas::vector<double> dst(3);
-		src[0] = srcX[i];
-		src[1] = srcY[i];
-		src[2] = srcZ[i];
-		dst[0] = dstX[i];
-		dst[1] = dstY[i];
-		dst[2] = dstZ[i];
+		cv::Point3d src;
+		cv::Point3d dst;
+		src.x = srcX[i];
+		src.y = srcY[i];
+		src.z = srcZ[i];
+		dst.x = dstX[i];
+		dst.y = dstY[i];
+		dst.z = dstZ[i];
 		srcVec.push_back(src);
 		dstVec.push_back(dst);
 	}
@@ -43,18 +44,18 @@ int __stdcall Transform(int nID, double srcX, double srcY, double srcZ, double *
 	if (g_mapTransforms.find(nID) == g_mapTransforms.end())
 		return TRANSFORM_ERROR;
 
-	boost::numeric::ublas::vector<double> src(3);
-	boost::numeric::ublas::vector<double> dst;
-	src[0] = srcX;
-	src[1] = srcY;
-	src[2] = srcZ;
+	cv::Point3d src;
+	cv::Point3d dst;
+	src.x = srcX;
+	src.y = srcY;
+	src.z = srcZ;
 	
 	int nRet = g_mapTransforms[nID]->TransformPoint(src, dst);
-	if ((nRet == TRANSFORM_SUCCESS) && (dst.size() == 3))
+	if (nRet == TRANSFORM_SUCCESS)
 	{
-		*dstX = dst[0];
-		*dstY = dst[1];
-		*dstZ = dst[2];
+		*dstX = dst.x;
+		*dstY = dst.y;
+		*dstZ = dst.z;
 	}
 	return nRet;
 }

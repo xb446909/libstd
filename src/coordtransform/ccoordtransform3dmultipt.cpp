@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "ccoordtransform3dmultipt.h"
-#include <boost/math/special_functions/round.hpp>
-#include <boost/numeric/ublas/io.hpp>
-#include <boost/numeric/ublas/triangular.hpp>
 #include <algorithm>
+#include <iostream>
 
 CCoordTransform3DMultiPt::CCoordTransform3DMultiPt()
 	: modelPoints(4)
@@ -17,7 +15,7 @@ CCoordTransform3DMultiPt::~CCoordTransform3DMultiPt()
 {
 }
 
-int CCoordTransform3DMultiPt::SetTransPoints(std::vector<boost::numeric::ublas::vector<double> > src, std::vector<boost::numeric::ublas::vector<double> > dst)
+int CCoordTransform3DMultiPt::SetTransPoints(std::vector<cv::Point3d> src, std::vector<cv::Point3d> dst)
 {
 	if (src.size() != dst.size())
 	{
@@ -25,65 +23,50 @@ int CCoordTransform3DMultiPt::SetTransPoints(std::vector<boost::numeric::ublas::
 			<< src.size() << " destination points number: " << dst.size() << std::endl;
 		return TRANSFORM_ERROR;
 	}
+
+	cv::Mat from(1, src.size() * 3, CV_64F);
+	cv::Mat to(1, src.size() * 3, CV_64F);
+
+	cv::Mat mask(1, src.size(), CV_8U);
+	mask = cv::Scalar::all(1);
+
 	for (size_t i = 0; i < src.size(); i++)
 	{
-		if ((src[i].size() != 3) || (dst[i].size() != 3))
-		{
-			std::cerr << "Error points dimension, points dimension must be 3 " << std::endl;
-			return TRANSFORM_ERROR;
-		}
-	}
-
-	boost::numeric::ublas::matrix<double> from(1, src.size() * 3);
-	boost::numeric::ublas::matrix<double> to(1, src.size() * 3);
-	boost::numeric::ublas::matrix<double> mask(1, src.size(), 1);
-
-	int k = 0;
-	for (size_t i = 0; i < src.size(); i++)
-	{
-		for (size_t j = 0; j < 3; j++)
-		{
-			from.insert_element(0, k, src[i][j]);
-			to.insert_element(0, k, dst[i][j]);
-			k++;
-		}
+		from.at<double>(0, 3 * i) = src[i].x;
+		from.at<double>(0, 3 * i + 1) = src[i].y;
+		from.at<double>(0, 3 * i + 2) = src[i].z;
+		to.at<double>(0, 3 * i) = dst[i].x;
+		to.at<double>(0, 3 * i + 1) = dst[i].y;
+		to.at<double>(0, 3 * i + 2) = dst[i].z;
 	}
 	return runRANSAC(from, to, m_mat, mask) ? TRANSFORM_SUCCESS : TRANSFORM_ERROR;
 }
 
-int CCoordTransform3DMultiPt::TransformPoint(boost::numeric::ublas::vector<double> src, boost::numeric::ublas::vector<double>& dst)
+int CCoordTransform3DMultiPt::TransformPoint(cv::Point3d src, cv::Point3d& dst)
 {
-	if (src.size() != 3)
-	{
-		std::cerr << "Error points dimension, points dimension must be 3 " << std::endl;
-		return TRANSFORM_ERROR;
-	}
+	cv::Mat _src(4, 1, CV_64F);
+	_src.at<double>(0, 0) = src.x;
+	_src.at<double>(1, 0) = src.y;
+	_src.at<double>(2, 0) = src.z;
+	_src.at<double>(3, 0) = 1.0;
 
-	boost::numeric::ublas::vector<double> _src(4);
-	for (size_t i = 0; i < src.size(); i++)
-	{
-		_src[i] = src[i];
-	}
-	_src[3] = 1;
-
-	dst = boost::numeric::ublas::prod(m_mat, _src);
+	cv::Mat _dst = m_mat * _src;
+	dst.x = _dst.at<double>(0, 0);
+	dst.y = _dst.at<double>(1, 0);
+	dst.z = _dst.at<double>(2, 0);
 	return TRANSFORM_SUCCESS;
 }
 
-bool CCoordTransform3DMultiPt::runRANSAC(
-	const boost::numeric::ublas::matrix<double>& m1, 
-	const boost::numeric::ublas::matrix<double>& m2, 
-	boost::numeric::ublas::matrix<double>& model, 
-	boost::numeric::ublas::matrix<double>& mask0, 
+bool CCoordTransform3DMultiPt::runRANSAC(const cv::Mat& m1, const cv::Mat& m2, cv::Mat& model, cv::Mat& mask0,
 	double reprojThreshold, double confidence, int maxIters)
 {
 	bool result = false;
-	boost::numeric::ublas::matrix<double> ms1, ms2;
+	cv::Mat ms1, ms2;
 
 	int iter, niters = maxIters;
-	int count = m1.size1() * m1.size2() / 3, maxGoodCount = 0;
+	int count = m1.cols * m1.rows / 3, maxGoodCount = 0;
 
-	boost::numeric::ublas::matrix<double> models(3, 4);
+	cv::Mat models(3, 4, CV_64F);
 	boost::numeric::ublas::matrix<double> err(1, count);
 	boost::numeric::ublas::matrix<unsigned char> tmask(1, count);
 	boost::numeric::ublas::matrix<double> mask(mask0);
@@ -160,10 +143,6 @@ bool CCoordTransform3DMultiPt::getSubset(const boost::numeric::ublas::matrix<dou
 	int count = m1.size1() * m1.size2() / 3;
 	int elemSize = sizeof(double) * 3;
 	elemSize /= sizeof(int);
-
-	srand((unsigned)time(0));
-
-	int a[] = { 5, 4, 0, 6 };
 
 	for (; iters < maxAttempts; iters++)
 	{

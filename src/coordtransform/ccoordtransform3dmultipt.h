@@ -8,15 +8,11 @@ class CCoordTransform3DMultiPt :
 public:
 	CCoordTransform3DMultiPt();
 	virtual ~CCoordTransform3DMultiPt();
-	virtual int SetTransPoints(std::vector<boost::numeric::ublas::vector<double> > src, 
-		std::vector<boost::numeric::ublas::vector<double> > dst);
-	virtual int TransformPoint(boost::numeric::ublas::vector<double> src, boost::numeric::ublas::vector<double>& dst);
+	virtual int SetTransPoints(std::vector<cv::Point3d> src, std::vector<cv::Point3d> dst);
+	virtual int TransformPoint(cv::Point3d src, cv::Point3d& dst);
 
 private:
-	bool runRANSAC(const boost::numeric::ublas::matrix<double>& m1,
-		const boost::numeric::ublas::matrix<double>& m2,
-		boost::numeric::ublas::matrix<double>& model,
-		boost::numeric::ublas::matrix<double>& mask0, 
+	bool runRANSAC(const cv::Mat& m1, const cv::Mat& m2, cv::Mat& model, cv::Mat& mask0,
 		double reprojThreshold = 3.0, double confidence = 0.99, int maxIters = 2000);
 
 	bool getSubset(const boost::numeric::ublas::matrix<double>& m1,
@@ -51,7 +47,7 @@ private:
 
 
 
-	boost::numeric::ublas::matrix<double> m_mat;
+	cv::Mat m_mat;
 	int modelPoints;
 	bool checkPartialSubsets;
 	CvRNG rng;
