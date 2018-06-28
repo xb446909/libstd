@@ -3,11 +3,12 @@
 #include <algorithm>
 #include <iostream>
 
+using namespace cv;
+
 CCoordTransform3DMultiPt::CCoordTransform3DMultiPt()
 	: modelPoints(4)
 	, checkPartialSubsets(true)
 {
-	rng = cvRNG(-1);
 }
 
 
@@ -24,22 +25,10 @@ int CCoordTransform3DMultiPt::SetTransPoints(std::vector<cv::Point3d> src, std::
 		return TRANSFORM_ERROR;
 	}
 
-	cv::Mat from(1, src.size() * 3, CV_64F);
-	cv::Mat to(1, src.size() * 3, CV_64F);
-
 	cv::Mat mask(1, src.size(), CV_8U);
 	mask = cv::Scalar::all(1);
 
-	for (size_t i = 0; i < src.size(); i++)
-	{
-		from.at<double>(0, 3 * i) = src[i].x;
-		from.at<double>(0, 3 * i + 1) = src[i].y;
-		from.at<double>(0, 3 * i + 2) = src[i].z;
-		to.at<double>(0, 3 * i) = dst[i].x;
-		to.at<double>(0, 3 * i + 1) = dst[i].y;
-		to.at<double>(0, 3 * i + 2) = dst[i].z;
-	}
-	return runRANSAC(from, to, m_mat, mask) ? TRANSFORM_SUCCESS : TRANSFORM_ERROR;
+	return runRANSAC(src, dst, m_mat, mask) ? TRANSFORM_SUCCESS : TRANSFORM_ERROR;
 }
 
 int CCoordTransform3DMultiPt::TransformPoint(cv::Point3d src, cv::Point3d& dst)
@@ -57,38 +46,60 @@ int CCoordTransform3DMultiPt::TransformPoint(cv::Point3d src, cv::Point3d& dst)
 	return TRANSFORM_SUCCESS;
 }
 
-bool CCoordTransform3DMultiPt::runRANSAC(const cv::Mat& m1, const cv::Mat& m2, cv::Mat& model, cv::Mat& mask0,
+bool CCoordTransform3DMultiPt::runRANSAC(InputArray _m1, InputArray _m2, OutputArray _model, OutputArray _mask,
 	double reprojThreshold, double confidence, int maxIters)
 {
+	const double outlierRatio = 0.45;
 	bool result = false;
-	cv::Mat ms1, ms2;
+	Mat from = _m1.getMat();
+	Mat to = _m2.getMat();
+	int count = from.checkVector(3);
+	CV_Assert(count >= 0 && to.checkVector(3) == count);
+	Mat m1, m2;
+	from.convertTo(m1, CV_32F);
+	to.convertTo(m2, CV_32F);
+	m1 = m1.reshape(3, count);
+	m2 = m2.reshape(3, count);
 
-	int iter, niters = maxIters;
-	int count = m1.cols * m1.rows / 3, maxGoodCount = 0;
+	Mat ms1, ms2, err, errf, model, bestModel, mask, mask0;
 
-	cv::Mat models(3, 4, CV_64F);
-	boost::numeric::ublas::matrix<double> err(1, count);
-	boost::numeric::ublas::matrix<unsigned char> tmask(1, count);
-	boost::numeric::ublas::matrix<double> mask(mask0);
+	int d2 = m2.channels() > 1 ? m2.channels() : m2.cols;
+	int count2 = m2.checkVector(d2);
+	double minMedian = DBL_MAX;
 
-	if (count > modelPoints)
+	RNG rng((uint64)-1);
+
+	CV_Assert(confidence > 0 && confidence < 1);
+
+	CV_Assert(count >= 0 && count2 == count);
+	if (count < modelPoints)
+		return false;
+
+	if (_mask.needed())
 	{
-		ms1 = boost::numeric::ublas::matrix<double>(1, modelPoints * 3);
-		ms2 = boost::numeric::ublas::matrix<double>(1, modelPoints * 3);
+		_mask.create(count, 1, CV_8U, -1, true);
+		mask0 = mask = _mask.getMat();
+		CV_Assert((mask.cols == 1 || mask.rows == 1) && (int)mask.total() == count);
 	}
-	else
+
+	if (count == modelPoints)
 	{
-		niters = 1;
-		ms1 = m1;
-		ms2 = m2;
+		if (runKernel(m1, m2, bestModel) <= 0)
+			return false;
+		bestModel.copyTo(_model);
+		mask.setTo(Scalar::all(1));
+		return true;
 	}
+
+	int iter, niters = RANSACUpdateNumIters(confidence, outlierRatio, modelPoints, maxIters);
+	niters = MAX(niters, 3);
 
 	for (iter = 0; iter < niters; iter++)
 	{
-		int i, goodCount, nmodels;
+		int i, nmodels;
 		if (count > modelPoints)
 		{
-			bool found = getSubset(m1, m2, ms1, ms2, 300);
+			bool found = getSubset(m1, m2, ms1, ms2, rng);
 			if (!found)
 			{
 				if (iter == 0)
@@ -97,196 +108,186 @@ bool CCoordTransform3DMultiPt::runRANSAC(const cv::Mat& m1, const cv::Mat& m2, c
 			}
 		}
 
-		nmodels = runKernel(ms1, ms2, models);
-
+		nmodels = runKernel(ms1, ms2, model);
 		if (nmodels <= 0)
 			continue;
+
+		CV_Assert(model.rows % nmodels == 0);
+		Size modelSize(model.cols, model.rows / nmodels);
+
 		for (i = 0; i < nmodels; i++)
 		{
-			boost::numeric::ublas::matrix<double> model_i = 
-				getRows(models, i * 3, (i + 1) * 3);
+			Mat model_i = model.rowRange(i*modelSize.height, (i + 1)*modelSize.height);
+			computeReprojError(m1, m2, model_i, err);
+			if (err.depth() != CV_32F)
+				err.convertTo(errf, CV_32F);
+			else
+				errf = err;
+			CV_Assert(errf.isContinuous() && errf.type() == CV_32F && (int)errf.total() == count);
+			std::nth_element(errf.ptr<int>(), errf.ptr<int>() + count / 2, errf.ptr<int>() + count);
+			double median = errf.at<float>(count / 2);
 
-			goodCount = findInliers(m1, m2, model_i, err, tmask, reprojThreshold);
-
-			if (goodCount > std::max<int>(maxGoodCount, modelPoints - 1))
+			if (median < minMedian)
 			{
-				boost::numeric::ublas::matrix<double> temp(tmask);
-				tmask = mask;
-				mask = temp;
-				model = model_i;
-				maxGoodCount = goodCount;
-				niters = RANSACUpdateNumIters(confidence,
-					(double)(count - goodCount) / count, modelPoints, niters);
+				minMedian = median;
+				model_i.copyTo(bestModel);
 			}
 		}
 	}
 
-	if (maxGoodCount > 0)
+	if (minMedian < DBL_MAX)
 	{
-		mask0 = mask;
-		result = true;
+		double sigma = 2.5*1.4826*(1 + 5. / (count - modelPoints))*std::sqrt(minMedian);
+		sigma = MAX(sigma, 0.001);
+
+		count = findInliers(m1, m2, bestModel, err, mask, sigma);
+		if (_mask.needed() && mask0.data != mask.data)
+		{
+			if (mask0.size() == mask.size())
+				mask.copyTo(mask0);
+			else
+				transpose(mask, mask0);
+		}
+		bestModel.copyTo(_model);
+		result = count >= modelPoints;
 	}
+	else
+		_model.release();
 
 	return result;
 }
 
 
-bool CCoordTransform3DMultiPt::getSubset(const boost::numeric::ublas::matrix<double>& m1,
-	const boost::numeric::ublas::matrix<double>& m2,
-	boost::numeric::ublas::matrix<double>& ms1,
-	boost::numeric::ublas::matrix<double>& ms2, int maxAttempts)
+bool CCoordTransform3DMultiPt::getSubset(const Mat& m1, const Mat& m2,
+	Mat& ms1, Mat& ms2, RNG& rng,
+	int maxAttempts)
 {
-	std::vector<int> idx(modelPoints, -1000);
-	int i = 0, j, k, idx_i, iters = 0;
-	const int *m1ptr = (int*)&m1.data()[0], *m2ptr = (int*)&m2.data()[0];
-	int *ms1ptr = (int*)&ms1.data()[0], *ms2ptr = (int*)&ms2.data()[0];
-	int count = m1.size1() * m1.size2() / 3;
-	int elemSize = sizeof(double) * 3;
-	elemSize /= sizeof(int);
+	cv::AutoBuffer<int> _idx(modelPoints);
+	int* idx = _idx;
+	int i = 0, j, k, iters = 0;
+	int d1 = m1.channels() > 1 ? m1.channels() : m1.cols;
+	int d2 = m2.channels() > 1 ? m2.channels() : m2.cols;
+	int esz1 = (int)m1.elemSize1()*d1, esz2 = (int)m2.elemSize1()*d2;
+	int count = m1.checkVector(d1), count2 = m2.checkVector(d2);
+	const int *m1ptr = m1.ptr<int>(), *m2ptr = m2.ptr<int>();
+
+	ms1.create(modelPoints, 1, CV_MAKETYPE(m1.depth(), d1));
+	ms2.create(modelPoints, 1, CV_MAKETYPE(m2.depth(), d2));
+
+	int *ms1ptr = ms1.ptr<int>(), *ms2ptr = ms2.ptr<int>();
+
+	CV_Assert(count >= modelPoints && count == count2);
+	CV_Assert((esz1 % sizeof(int)) == 0 && (esz2 % sizeof(int)) == 0);
+	esz1 /= sizeof(int);
+	esz2 /= sizeof(int);
 
 	for (; iters < maxAttempts; iters++)
 	{
 		for (i = 0; i < modelPoints && iters < maxAttempts; )
 		{
-			idx[i] = idx_i = cvRandInt(&rng) % count;
-
-			for (j = 0; j < i; j++)
-				if (idx_i == idx[j])
-				{
+			int idx_i = 0;
+			for (;;)
+			{
+				idx_i = idx[i] = rng.uniform(0, count);
+				for (j = 0; j < i; j++)
+					if (idx_i == idx[j])
+						break;
+				if (j == i)
 					break;
-				}
-			if (j < i)
-			{
-				continue;
 			}
-			for (k = 0; k < elemSize; k++)
+			for (k = 0; k < esz1; k++)
+				ms1ptr[i*esz1 + k] = m1ptr[idx_i*esz1 + k];
+			for (k = 0; k < esz2; k++)
+				ms2ptr[i*esz2 + k] = m2ptr[idx_i*esz2 + k];
+			if (checkPartialSubsets && !checkSubset(ms1, ms2, i + 1))
 			{
-				ms1ptr[i*elemSize + k] = m1ptr[idx_i*elemSize + k];
-				ms2ptr[i*elemSize + k] = m2ptr[idx_i*elemSize + k];
-			}
-			if (checkPartialSubsets && (!checkSubset(ms1, i + 1) || !checkSubset(ms2, i + 1)))
-			{
+				// we may have selected some bad points;
+				// so, let's remove some of them randomly
+				i = rng.uniform(0, i + 1);
 				iters++;
 				continue;
 			}
 			i++;
 		}
-
-		if (!checkPartialSubsets && i == modelPoints &&
-			(!checkSubset(ms1, i) || !checkSubset(ms2, i)))
+		if (!checkPartialSubsets && i == modelPoints && !checkSubset(ms1, ms2, i))
 			continue;
 		break;
 	}
 
-
 	return i == modelPoints && iters < maxAttempts;
 }
 
-bool CCoordTransform3DMultiPt::checkSubset(const boost::numeric::ublas::matrix<double>& ms1, int count)
+bool CCoordTransform3DMultiPt::checkSubset(const cv::Mat& ms1, const cv::Mat& ms2, int count)
 {
-	int j, k, i = count - 1;
-	std::vector< boost::numeric::ublas::vector<double> > vecs;
-	
-	boost::numeric::ublas::vector<double> v(3);
+	const float threshold = 0.996f;
 
-	for (size_t index = 0; index < ms1.size1() * ms1.size2(); index += 3)
+	for (int inp = 1; inp <= 2; inp++)
 	{
-		v[0] = ms1.data()[index];
-		v[1] = ms1.data()[index + 1];
-		v[2] = ms1.data()[index + 2];
-		vecs.push_back(v);
-	}
+		int j, k, i = count - 1;
+		const Mat* msi = inp == 1 ? &ms1 : &ms2;
+		const Point3f* ptr = msi->ptr<Point3f>();
 
-	// check that the i-th selected point does not belong
-	// to a line connecting some previously selected points
+		CV_Assert(count <= msi->rows);
 
-	for (j = 0; j < i; ++j)
-	{
-		boost::numeric::ublas::vector<double> d1 = vecs[j] - vecs[i];
-		double n1 = norm_2(d1);
-
-		for (k = 0; k < j; ++k)
+		// check that the i-th selected point does not belong
+		// to a line connecting some previously selected points
+		for (j = 0; j < i; ++j)
 		{
-			boost::numeric::ublas::vector<double> d2 = vecs[k] - vecs[i];
-			double n = norm_2(d2) * n1;
+			Point3f d1 = ptr[j] - ptr[i];
+			float n1 = d1.x*d1.x + d1.y*d1.y;
 
-			if (fabs(boost::numeric::ublas::inner_prod(d1, d2) / n) > 0.996)
-				break;
+			for (k = 0; k < j; ++k)
+			{
+				Point3f d2 = ptr[k] - ptr[i];
+				float denom = (d2.x*d2.x + d2.y*d2.y)*n1;
+				float num = d1.x*d2.x + d1.y*d2.y;
+
+				if (num*num > threshold*threshold*denom)
+					return false;
+			}
 		}
-		if (k < j)
-			break;
 	}
-
-	return j == i;
+	return true;
 }
 
+
 int CCoordTransform3DMultiPt::runKernel(
-	const boost::numeric::ublas::matrix<double>& m1, 
-	const boost::numeric::ublas::matrix<double>& m2, 
-	boost::numeric::ublas::matrix<double>& model)
+	const cv::Mat& m1, 
+	const cv::Mat& m2, 
+	cv::Mat& model)
 {
-	//std::cout << "M1" << std::endl;
-	//std::cout << m1 << std::endl;
-	//std::cout << "M2" << std::endl;
-	//std::cout << m2 << std::endl;
+	const Point3f* from = m1.ptr<Point3f>();
+	const Point3f* to = m2.ptr<Point3f>();
 
-	std::vector< boost::numeric::ublas::vector<double> > vecsFrom;
-	std::vector< boost::numeric::ublas::vector<double> > vecsTo;
+	const int N = 12;
+	double buf[N*N + N + N];
+	Mat A(N, N, CV_64F, &buf[0]);
+	Mat B(N, 1, CV_64F, &buf[0] + N * N);
+	Mat X(N, 1, CV_64F, &buf[0] + N * N + N);
+	double* Adata = A.ptr<double>();
+	double* Bdata = B.ptr<double>();
+	A = Scalar::all(0);
 
-	boost::numeric::ublas::vector<double> vf(3);
-	boost::numeric::ublas::vector<double> vt(3);
-
-	for (size_t index = 0; index < m1.size1() * m1.size2(); index += 3)
+	for (int i = 0; i < (N / 3); i++)
 	{
-		vf[0] = m1.data()[index];
-		vt[0] = m2.data()[index];
-		vf[1] = m1.data()[index + 1];
-		vt[1] = m2.data()[index + 1];
-		vf[2] = m1.data()[index + 2];
-		vt[2] = m2.data()[index + 2];
-		vecsFrom.push_back(vf);
-		vecsTo.push_back(vt);
-	}
+		Bdata[i * 3] = to[i].x;
+		Bdata[i * 3 + 1] = to[i].y;
+		Bdata[i * 3 + 2] = to[i].z;
 
-
-	boost::numeric::ublas::matrix<double> A(12, 12, 0);
-	boost::numeric::ublas::vector<double> B(12);
-
-	for (int i = 0; i < modelPoints; ++i)
-	{
-		B[3 * i] = vecsTo[i][0];
-		B[3 * i + 1] = vecsTo[i][1];
-		B[3 * i + 2] = vecsTo[i][2];
-
-		double *aptr = (double*)&A.data()[3 * i * A.size2()];
+		double *aptr = Adata + i * 3 * N;
 		for (int k = 0; k < 3; ++k)
 		{
+			aptr[0] = from[i].x;
+			aptr[1] = from[i].y;
+			aptr[2] = from[i].z;
 			aptr[3] = 1.0;
-			aptr[0] = vecsFrom[i][0];
-			aptr[1] = vecsFrom[i][1];
-			aptr[2] = vecsFrom[i][2];
 			aptr += 16;
 		}
 	}
 
-	cv::Mat matA(12, 12, CV_64FC1, (double*)&A.data()[0]);
-	cv::Mat matB(12, 1, CV_64FC1, (double*)&B.data()[0]);
+	solve(A, B, X, DECOMP_SVD);
+	X.reshape(1, 3).copyTo(model);
 
-	//std::cout << "A" << std::endl;
-	//std::cout << matA << std::endl;
-	//std::cout << "B" << std::endl;
-	//std::cout << matB << std::endl;
-
-	cv::Mat matX;
-	cv::solve(matA, matB, matX, cv::DECOMP_SVD);
-
-	model = boost::numeric::ublas::matrix<double>(3, 4);
-	for (size_t i = 0; i < 12; i++)
-	{
-		model.data()[i] = ((double*)matX.data)[i];
-	}
-	//std::cout << "Model:" << std::endl;
-	//std::cout << model << std::endl;
 	return 1;
 }
 
@@ -294,96 +295,70 @@ int CCoordTransform3DMultiPt::runKernel(
 int CCoordTransform3DMultiPt::RANSACUpdateNumIters(double p, double ep,
 	int model_points, int max_iters)
 {
-	if (model_points <= 0)
-	{
+	if (modelPoints <= 0)
 		std::cerr << "the number of model points should be positive" << std::endl;
-	}
 
-	p = std::max<double>(p, 0.);
-	p = std::min<double>(p, 1.);
-	ep = std::max<double>(ep, 0.);
-	ep = std::min<double>(ep, 1.);
+	p = MAX(p, 0.);
+	p = MIN(p, 1.);
+	ep = MAX(ep, 0.);
+	ep = MIN(ep, 1.);
 
 	// avoid inf's & nan's
-	double num = std::max<double>(1. - p, DBL_MIN);
-	double denom = 1. - std::pow(1. - ep, model_points);
+	double num = MAX(1. - p, DBL_MIN);
+	double denom = 1. - std::pow(1. - ep, modelPoints);
 	if (denom < DBL_MIN)
 		return 0;
 
-	num = log(num);
-	denom = log(denom);
+	num = std::log(num);
+	denom = std::log(denom);
 
-	return denom >= 0 || -num >= max_iters * (-denom) ?
-		max_iters : boost::math::round(num / denom);
+	return denom >= 0 || -num >= max_iters * (-denom) ? max_iters : cvRound(num / denom);
 }
 
-boost::numeric::ublas::matrix<double> CCoordTransform3DMultiPt::getRows(
-	boost::numeric::ublas::matrix<double> src, size_t start, size_t end)
+
+int CCoordTransform3DMultiPt::findInliers(const Mat& m1, const Mat& m2, const Mat& model, Mat& err, Mat& mask, double thresh)
 {
-	boost::numeric::ublas::matrix<double> mat(end - start, src.size2());
-	for (size_t i = 0; i < end - start; i++)
+	computeReprojError(m1, m2, model, err);
+	mask.create(err.size(), CV_8U);
+
+	CV_Assert(err.isContinuous() && err.type() == CV_32F && mask.isContinuous() && mask.type() == CV_8U);
+	const float* errptr = err.ptr<float>();
+	uchar* maskptr = mask.ptr<uchar>();
+	float t = (float)(thresh*thresh);
+	int i, n = (int)err.total(), nz = 0;
+	for (i = 0; i < n; i++)
 	{
-		for (size_t j = 0; j < src.size2(); j++)
-		{
-			mat.insert_element(i, j, src(start + i, j));
-		}
+		int f = errptr[i] <= t;
+		maskptr[i] = (uchar)f;
+		nz += f;
 	}
-	return mat;
-}
-
-
-int CCoordTransform3DMultiPt::findInliers(const boost::numeric::ublas::matrix<double>& m1, 
-	const boost::numeric::ublas::matrix<double>& m2,
-	const boost::numeric::ublas::matrix<double>& model, 
-	boost::numeric::ublas::matrix<double>& _err,
-	boost::numeric::ublas::matrix<unsigned char>& _mask, double threshold)
-{
-	int i, count = _err.size1() * _err.size2(), goodCount = 0;
-	double* err = (double*)&_err.data()[0];
-	unsigned char* mask = (unsigned char*)&_mask.data()[0];
-
-	computeReprojError(m1, m2, model, _err);
-	threshold *= threshold;
-	for (i = 0; i < count; i++)
-		goodCount += mask[i] = err[i] <= threshold;
-	return goodCount;
+	return nz;
 }
 
 void CCoordTransform3DMultiPt::computeReprojError(
-	const boost::numeric::ublas::matrix<double>& m1, 
-	const boost::numeric::ublas::matrix<double>& m2, 
-	const boost::numeric::ublas::matrix<double>& model, 
-	boost::numeric::ublas::matrix<double>& error)
+	const cv::Mat& m1, 
+	const cv::Mat& m2, 
+	const cv::Mat& model, 
+	cv::Mat& err)
 {
-	int count = m1.size1() * m1.size2() / 3;
+	const Point3f* from = m1.ptr<Point3f>();
+	const Point3f* to = m2.ptr<Point3f>();
+	const double* F = model.ptr<double>();
 
-	std::vector< boost::numeric::ublas::vector<double> > vecsFrom;
-	std::vector< boost::numeric::ublas::vector<double> > vecsTo;
+	int count = m1.checkVector(3);
+	CV_Assert(count > 0);
 
-	boost::numeric::ublas::vector<double> vf(3);
-	boost::numeric::ublas::vector<double> vt(3);
-
-	for (size_t index = 0; index < m1.size1() * m1.size2(); index += 3)
-	{
-		vf[0] = m1.data()[index];
-		vt[0] = m2.data()[index];
-		vf[1] = m1.data()[index + 1];
-		vt[1] = m2.data()[index + 1];
-		vf[2] = m1.data()[index + 2];
-		vt[2] = m2.data()[index + 2];
-		vecsFrom.push_back(vf);
-		vecsTo.push_back(vt);
-	}
+	float* errptr = err.ptr<float>();
 
 	for (int i = 0; i < count; i++)
 	{
-		boost::numeric::ublas::vector<double> f = vecsFrom[i];
-		boost::numeric::ublas::vector<double> t = vecsTo[i];
+		const Point3f& f = from[i];
+		const Point3f& t = to[i];
 
-		double a = model(0, 0) * f[0] + model(0, 1) * f[1] + model(0, 2) * f[2] + model(0, 3) - t[0];
-		double b = model(1, 0) * f[0] + model(1, 1) * f[1] + model(1, 2) * f[2] + model(1, 3) - t[1];
-		double c = model(2, 0) * f[0] + model(2, 1) * f[1] + model(2, 2) * f[2] + model(2, 3) - t[2];
+		double a = F[0] * f.x + F[1] * f.y + F[2] * f.z + F[3] - t.x;
+		double b = F[4] * f.x + F[5] * f.y + F[6] * f.z + F[7] - t.y;
+		double c = F[8] * f.x + F[9] * f.y + F[10] * f.z + F[11] - t.z;
 
-		error(0, i) = sqrt(a*a + b * b + c * c);
+		errptr[i] = (float)(a*a + b * b + c * c);
 	}
 }

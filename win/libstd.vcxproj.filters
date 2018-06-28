@@ -52,6 +52,9 @@
     <Filter Include="源文件\csv">
       <UniqueIdentifier>{8cb87b1c-eb1d-4f47-9026-89c878bd71aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\zlib">
+      <UniqueIdentifier>{f85461ec-c6b1-45bf-b792-93f0db63d27d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -84,15 +87,6 @@
     <ClInclude Include="common\CriticalLock.h">
       <Filter>头文件\common</Filter>
     </ClInclude>
-    <ClInclude Include="coordtransform\ccoordtransform.h">
-      <Filter>头文件\coordtransform</Filter>
-    </ClInclude>
-    <ClInclude Include="coordtransform\ccoordtransform3dmultipt.h">
-      <Filter>头文件\coordtransform</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\coordtransform.h">
-      <Filter>头文件\coordtransform</Filter>
-    </ClInclude>
     <ClInclude Include="inc\serialport.h">
       <Filter>头文件\serialport</Filter>
     </ClInclude>
@@ -101,6 +95,15 @@
     </ClInclude>
     <ClInclude Include="csv\CSVManager.h">
       <Filter>头文件\csv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\coordtransform.h">
+      <Filter>头文件\coordtransform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\coordtransform\ccoordtransform.h">
+      <Filter>头文件\coordtransform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\coordtransform\ccoordtransform3dmultipt.h">
+      <Filter>头文件\coordtransform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -116,9 +119,6 @@
     <ClCompile Include="..\src\coordtransform\ccoordtransform.cpp">
       <Filter>源文件\coordtransform</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\coordtransform\ccoordtransform3dmultipt.cpp">
-      <Filter>源文件\coordtransform</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\coordtransform\coordtransform.cpp">
       <Filter>源文件\coordtransform</Filter>
     </ClCompile>
@@ -130,87 +130,6 @@
     </ClCompile>
     <ClCompile Include="..\src\iniconfig\iniconfig.cpp">
       <Filter>源文件\iniconfig</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\persistence.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\glob.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\algorithm.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\alloc.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\arithm.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\array.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\cmdparser.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\convert.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\copy.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\datastructs.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\drawing.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\dxt.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\gl_core_3_1.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\gpumat.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\lapack.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\mathfuncs.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\matmul.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\matop.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\matrix.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\opengl_interop.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\opengl_interop_deprecated.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\out.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\parallel.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\rand.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\stat.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\system.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opencv\tables.cpp">
-      <Filter>源文件\opencv</Filter>
     </ClCompile>
     <ClCompile Include="..\src\serialport\CSerialPort.cpp">
       <Filter>源文件\serialport</Filter>
@@ -232,6 +151,195 @@
     </ClCompile>
     <ClCompile Include="..\src\socket\socket.cpp">
       <Filter>源文件\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\coordtransform\ccoordtransform3dmultipt.cpp">
+      <Filter>源文件\coordtransform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\alloc.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matrix.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matrix_sparse.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\array.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\datastructs.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\copy.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matrix_expressions.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\system.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\stl.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matmul.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matrix_operations.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matrix_wrap.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\convert.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\lapack.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matrix_c.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\umatrix.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\arithm.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matrix_iterator.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\ocl.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\trace.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\out.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\tables.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\persistence_c.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\adler32.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\compress.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\crc32.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\deflate.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\gzclose.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\gzlib.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\gzread.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\gzwrite.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\infback.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\inffast.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\inflate.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\inftrees.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\trees.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\uncompr.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zlib\zutil.cpp">
+      <Filter>源文件\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\convert_scale.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\persistence_json.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\persistence_xml.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\persistence.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\persistence_base64.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\convert.sse4_1.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\matrix_decomp.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\persistence_yml.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\persistence_cpp.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\cuda_gpu_mat.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\norm.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\minmax.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\channels.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\stat.dispatch.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\cuda_host_mem.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\pca.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\logger.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\kmeans.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\sum.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\parallel.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\rand.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\opengl.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\cuda_stream.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opencv\persistence_types.cpp">
+      <Filter>源文件\opencv</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -88,9 +88,9 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;LIBSTD_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;LIBSTD_EXPORTS;_WINDOWS;_USRDLL;__OPENCV_BUILD;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../inc;../src/opencv</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../inc;../src/opencv;../src/zlib</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,11 +155,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\inc\coordtransform.h" />
+    <ClInclude Include="..\src\coordtransform\ccoordtransform.h" />
+    <ClInclude Include="..\src\coordtransform\ccoordtransform3dmultipt.h" />
     <ClInclude Include="common\CriticalLock.h" />
-    <ClInclude Include="coordtransform\ccoordtransform.h" />
-    <ClInclude Include="coordtransform\ccoordtransform3dmultipt.h" />
     <ClInclude Include="csv\CSVManager.h" />
-    <ClInclude Include="inc\coordtransform.h" />
     <ClInclude Include="inc\csv.h" />
     <ClInclude Include="inc\iniconfig.h" />
     <ClInclude Include="inc\serialport.h" />
@@ -180,33 +180,53 @@
     <ClCompile Include="..\src\csv\csv.cpp" />
     <ClCompile Include="..\src\csv\CSVManager.cpp" />
     <ClCompile Include="..\src\iniconfig\iniconfig.cpp" />
-    <ClCompile Include="..\src\opencv\algorithm.cpp" />
     <ClCompile Include="..\src\opencv\alloc.cpp" />
     <ClCompile Include="..\src\opencv\arithm.cpp" />
     <ClCompile Include="..\src\opencv\array.cpp" />
-    <ClCompile Include="..\src\opencv\cmdparser.cpp" />
+    <ClCompile Include="..\src\opencv\channels.cpp" />
     <ClCompile Include="..\src\opencv\convert.cpp" />
+    <ClCompile Include="..\src\opencv\convert.sse4_1.cpp" />
+    <ClCompile Include="..\src\opencv\convert_scale.cpp" />
     <ClCompile Include="..\src\opencv\copy.cpp" />
+    <ClCompile Include="..\src\opencv\cuda_gpu_mat.cpp" />
+    <ClCompile Include="..\src\opencv\cuda_host_mem.cpp" />
+    <ClCompile Include="..\src\opencv\cuda_stream.cpp" />
     <ClCompile Include="..\src\opencv\datastructs.cpp" />
-    <ClCompile Include="..\src\opencv\drawing.cpp" />
-    <ClCompile Include="..\src\opencv\dxt.cpp" />
-    <ClCompile Include="..\src\opencv\glob.cpp" />
-    <ClCompile Include="..\src\opencv\gl_core_3_1.cpp" />
-    <ClCompile Include="..\src\opencv\gpumat.cpp" />
+    <ClCompile Include="..\src\opencv\kmeans.cpp" />
     <ClCompile Include="..\src\opencv\lapack.cpp" />
-    <ClCompile Include="..\src\opencv\mathfuncs.cpp" />
+    <ClCompile Include="..\src\opencv\logger.cpp" />
     <ClCompile Include="..\src\opencv\matmul.cpp" />
-    <ClCompile Include="..\src\opencv\matop.cpp" />
     <ClCompile Include="..\src\opencv\matrix.cpp" />
-    <ClCompile Include="..\src\opencv\opengl_interop.cpp" />
-    <ClCompile Include="..\src\opencv\opengl_interop_deprecated.cpp" />
+    <ClCompile Include="..\src\opencv\matrix_c.cpp" />
+    <ClCompile Include="..\src\opencv\matrix_decomp.cpp" />
+    <ClCompile Include="..\src\opencv\matrix_expressions.cpp" />
+    <ClCompile Include="..\src\opencv\matrix_iterator.cpp" />
+    <ClCompile Include="..\src\opencv\matrix_operations.cpp" />
+    <ClCompile Include="..\src\opencv\matrix_sparse.cpp" />
+    <ClCompile Include="..\src\opencv\matrix_wrap.cpp" />
+    <ClCompile Include="..\src\opencv\minmax.cpp" />
+    <ClCompile Include="..\src\opencv\norm.cpp" />
+    <ClCompile Include="..\src\opencv\ocl.cpp" />
+    <ClCompile Include="..\src\opencv\opengl.cpp" />
     <ClCompile Include="..\src\opencv\out.cpp" />
     <ClCompile Include="..\src\opencv\parallel.cpp" />
+    <ClCompile Include="..\src\opencv\pca.cpp" />
     <ClCompile Include="..\src\opencv\persistence.cpp" />
+    <ClCompile Include="..\src\opencv\persistence_base64.cpp" />
+    <ClCompile Include="..\src\opencv\persistence_c.cpp" />
+    <ClCompile Include="..\src\opencv\persistence_cpp.cpp" />
+    <ClCompile Include="..\src\opencv\persistence_json.cpp" />
+    <ClCompile Include="..\src\opencv\persistence_types.cpp" />
+    <ClCompile Include="..\src\opencv\persistence_xml.cpp" />
+    <ClCompile Include="..\src\opencv\persistence_yml.cpp" />
     <ClCompile Include="..\src\opencv\rand.cpp" />
-    <ClCompile Include="..\src\opencv\stat.cpp" />
+    <ClCompile Include="..\src\opencv\stat.dispatch.cpp" />
+    <ClCompile Include="..\src\opencv\stl.cpp" />
+    <ClCompile Include="..\src\opencv\sum.cpp" />
     <ClCompile Include="..\src\opencv\system.cpp" />
     <ClCompile Include="..\src\opencv\tables.cpp" />
+    <ClCompile Include="..\src\opencv\trace.cpp" />
+    <ClCompile Include="..\src\opencv\umatrix.cpp" />
     <ClCompile Include="..\src\serialport\CSerialPort.cpp" />
     <ClCompile Include="..\src\serialport\CSerialPortProc_win.cpp" />
     <ClCompile Include="..\src\serialport\serialport.cpp" />
@@ -214,6 +234,21 @@
     <ClCompile Include="..\src\socket\CTcpClient.cpp" />
     <ClCompile Include="..\src\socket\CTcpServer.cpp" />
     <ClCompile Include="..\src\socket\socket.cpp" />
+    <ClCompile Include="..\src\zlib\adler32.cpp" />
+    <ClCompile Include="..\src\zlib\compress.cpp" />
+    <ClCompile Include="..\src\zlib\crc32.cpp" />
+    <ClCompile Include="..\src\zlib\deflate.cpp" />
+    <ClCompile Include="..\src\zlib\gzclose.cpp" />
+    <ClCompile Include="..\src\zlib\gzlib.cpp" />
+    <ClCompile Include="..\src\zlib\gzread.cpp" />
+    <ClCompile Include="..\src\zlib\gzwrite.cpp" />
+    <ClCompile Include="..\src\zlib\infback.cpp" />
+    <ClCompile Include="..\src\zlib\inffast.cpp" />
+    <ClCompile Include="..\src\zlib\inflate.cpp" />
+    <ClCompile Include="..\src\zlib\inftrees.cpp" />
+    <ClCompile Include="..\src\zlib\trees.cpp" />
+    <ClCompile Include="..\src\zlib\uncompr.cpp" />
+    <ClCompile Include="..\src\zlib\zutil.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
