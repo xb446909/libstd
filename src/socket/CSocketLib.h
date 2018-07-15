@@ -5,9 +5,13 @@
 #ifdef WIN32
 #include <WinSock2.h>
 #else
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <netinet/in.h> 
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/select.h>
+#include <sys/ioctl.h>
 #endif
 
 #if __cplusplus >= 201103L
@@ -18,6 +22,7 @@ using namespace std::tr1;
 
 #ifndef WIN32
 #define SOCKET int
+#define INVALID_SOCKET -1
 #endif
 
 const int RECV_BUF_SIZE = 1024 * 1024;

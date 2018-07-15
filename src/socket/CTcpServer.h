@@ -22,7 +22,11 @@ public:
 		bool operator==(const _tagRecvSocket& src)
 		{
 			return ((AcceptSocket == src.AcceptSocket) &&
+#ifdef WIN32
 				(addr.sin_addr.S_un.S_addr == src.addr.sin_addr.S_un.S_addr) &&
+#else
+                                (addr.sin_addr.s_addr == src.addr.sin_addr.s_addr) &&
+#endif
 				(addr.sin_family == src.addr.sin_family) &&
 				(addr.sin_port == src.addr.sin_port));
 		}

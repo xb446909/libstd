@@ -1,7 +1,16 @@
 CXX := g++
-CXX_FLAGS := -O3 -Wall -fPIC -shared -std=gnu++11 -D__OPENCV_BUILD
+
+ifeq ($(shell uname), Linux)
 LD_FLAGS	:= -fPIC -shared
 TARGET := libstd.so
+endif
+
+ifeq ($(shell uname), Darwin)
+LD_FLAGS	:= -fPIC -dynamiclib
+TARGET := libstd.dylib
+endif
+
+CXX_FLAGS := -O3 -Wall $(LD_FLAGS) -std=gnu++11 -D__OPENCV_BUILD
 
 SRC_DIR := src
 INC_FLAGS := -Iinc -Iwin -Isrc/opencv -Isrc/zlib

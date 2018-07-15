@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+#include "stdafx.h"
 #include "CTcpClient.h"
 #include <iostream>
 #include <sstream>
@@ -21,9 +21,13 @@ CTcpClient::CTcpClient()
 {
 	m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (m_socket == INVALID_SOCKET)
-	{
+        {
+#ifdef WIN32
 		cerr << "Create socket error: " << WSAGetLastError() << endl;
-		WSACleanup();
+                WSACleanup();
+#else
+                cerr << "Create socket error: " << errno << endl;
+#endif
 	}
 }
 
@@ -31,10 +35,15 @@ CTcpClient::CTcpClient()
 CTcpClient::~CTcpClient()
 {
 	if (m_socket != INVALID_SOCKET)
-	{
+        {
+#ifdef WIN32
 		shutdown(m_socket, SD_BOTH);
-		closesocket(m_socket);
-	}
+                closesocket(m_socket);
+#else
+                shutdown(m_socket, SHUT_RDWR);
+                close(m_socket);
+#endif
+        }
 }
 
 int CTcpClient::Connect(int nTimeoutMs)
@@ -51,11 +60,15 @@ int CTcpClient::Connect(int nTimeoutMs)
 	clientService.sin_port = htons(nPort);
 
 	u_long iMode = 1;
-	ioctlsocket(m_socket, FIONBIO, &iMode);
+#ifdef WIN32
+        ioctlsocket(m_socket, FIONBIO, &iMode);
+#else
+        ioctl(m_socket, FIONBIO, &iMode);
+#endif
 
 	//----------------------
 	// Connect to server.
-	connect(m_socket, (SOCKADDR*)&clientService, sizeof(clientService));
+        connect(m_socket, (struct sockaddr*)&clientService, sizeof(clientService));
 
 	fd_set r;
 	FD_ZERO(&r);
@@ -67,16 +80,22 @@ int CTcpClient::Connect(int nTimeoutMs)
 
 	if (ret <= 0)
 	{
-		cerr << "Connect server timeout!" << endl;
+                cerr << "Connect server timeout!" << endl;
+#ifdef WIN32
 		closesocket(m_socket);
-		WSACleanup();
+                WSACleanup();
+#else
+                close(m_socket);
+#endif
 		return SOCK_TIMEOUT;
 	}
 
 	if (RecvCallback() != nullptr)
-	{
+        {
+#ifdef WIN32
 		g_hEventClientThread = CreateEvent(NULL, TRUE, TRUE, NULL);
-		m_hThread = CreateThread(NULL, 0, TCPClientReceiveThread, this, 0, NULL);
+                m_hThread = CreateThread(NULL, 0, TCPClientReceiveThread, this, 0, NULL);
+#endif
 	}
 
 	return SOCK_SUCCESS;
@@ -86,8 +105,12 @@ int CTcpClient::Send(const char* szSendBuf, int nLen, const char* szDstIP, int n
 {
 	int iResult = send(m_socket, szSendBuf, nLen, 0);
 	if (iResult == SOCKET_ERROR)
-	{
-		cerr << "Send error: " << WSAGetLastError() << endl;
+        {
+#ifdef WIN32
+                cerr << "Send error: " << WSAGetLastError() << endl;
+#else
+                cerr << "Send error: " << errno << endl;
+#endif
 		iResult = SOCK_ERROR;
 	}
 	return iResult;
@@ -173,14 +196,14 @@ DWORD WINAPI TCPClientReceiveThread(LPVOID lpParam)
 			}
 			else if (0 == iRecvSize)
 			{
-				//¿Í»§socket¹Ø±Õ    
+				//å®¢æˆ·socketå…³é—­    
 				pClient->RecvCallback()(RECV_CLOSE, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pClient->UserParam());
 				closesocket(pClient->GetSocket());
 				break;
 			}
 			else if (0 < iRecvSize)
 			{
-				//´òÓ¡½ÓÊÕµÄÊý¾Ý    
+				//æ‰“å°æŽ¥æ”¶çš„æ•°æ®    
 				pClient->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szClientRecvBuf, pClient->UserParam());
 			}
 		}

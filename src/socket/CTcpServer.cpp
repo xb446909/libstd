@@ -3,9 +3,6 @@
 #include "iniconfig.h"
 #include <sstream>
 #include <iostream>
-#ifdef WIN32
-#include <Winsock2.h>
-#endif
 
 using namespace std;
 
@@ -34,27 +31,33 @@ CTcpServer::CTcpServer()
 CTcpServer::~CTcpServer()
 {
 	ResetThreadEvent();
-	shutdown(m_socket, SD_BOTH);
-	closesocket(m_socket);
-
+#ifdef WIN32
+        shutdown(m_socket, SD_BOTH);
+        closesocket(m_socket);
 	if ((m_hThread != INVALID_HANDLE_VALUE) && (WaitForSingleObject(m_hThread, 1000) != WAIT_OBJECT_0))
 	{
 		DWORD dwExitcode;
 		GetExitCodeThread(m_hThread, &dwExitcode);
 		TerminateThread(m_hThread, dwExitcode);
-	}
+        }
+#else
+        shutdown(m_socket, SHUT_RDWR);
+        close(m_socket);
+#endif
 }
 
 void CTcpServer::SetParam(shared_ptr<CSocketLib::SocketParam> param)
 {
 	CSocketLib::SetParam(param);
-	BOOL bOptVal = TRUE;
+        int bOptVal = 1;
 	setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&bOptVal, sizeof(bOptVal));
 	if (BindSocket())
 	{
 		if (param->callback != nullptr)
-		{
-			m_hThread = CreateThread(NULL, 0, TCPListenReceiveThread, this, 0, NULL);
+                {
+#ifdef WIN32
+                        m_hThread = CreateThread(NULL, 0, TCPListenReceiveThread, this, 0, NULL);
+#endif
 		}
 	}
 }
@@ -126,7 +129,11 @@ void CTcpServer::EraseClient(sockaddr_in client)
 
 bool CTcpServer::IsSame(sockaddr_in addr1, sockaddr_in addr2)
 {
+#ifdef WIN32
 	return ((addr1.sin_addr.S_un.S_addr == addr2.sin_addr.S_un.S_addr) &&
+#else
+        return ((addr1.sin_addr.s_addr == addr2.sin_addr.s_addr) &&
+#endif
 		(addr1.sin_family == addr2.sin_family) &&
 		(addr1.sin_port == addr2.sin_port));
 }
@@ -135,7 +142,11 @@ int CTcpServer::FindSocket(const char * szDstIP, int nDstPort)
 {
 	for (size_t i = 0; i < m_vecClients.size(); i++)
 	{
+#ifdef WIN32
 		if ((inet_addr(szDstIP) == m_vecClients[i].addr.sin_addr.S_un.S_addr) &&
+#else
+                if ((inet_addr(szDstIP) == m_vecClients[i].addr.sin_addr.s_addr) &&
+#endif
 			(ntohs(m_vecClients[i].addr.sin_port) == nDstPort))
 			return i;
 	}
@@ -155,7 +166,7 @@ bool CTcpServer::BindSocket()
 	clientService.sin_addr.s_addr = inet_addr(strIp.c_str());
 	clientService.sin_port = htons(nPort);
 
-	if (::bind(m_socket, (SOCKADDR*)&clientService, sizeof(clientService)) == SOCKET_ERROR)
+        if (::bind(m_socket, (struct sockaddr*)&clientService, sizeof(clientService)) == SOCKET_ERROR)
 	{
 #ifdef WIN32
 		cerr << "Bind socket error: " << WSAGetLastError() << endl;
@@ -205,7 +216,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 			{
 				if (FD_ISSET(fd.fd_array[i], &fdOld))
 				{
-					//Èç¹ûsocketÊÇ·þÎñÆ÷£¬Ôò½ÓÊÕÁ¬½Ó  
+					//å¦‚æžœsocketæ˜¯æœåŠ¡å™¨ï¼Œåˆ™æŽ¥æ”¶è¿žæŽ¥  
 					if (fd.fd_array[i] == pServer->GetSocket())
 					{
 						memset(&addrAccept, 0, sizeof(addrAccept));
@@ -222,7 +233,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 							pServer->AddClient(RecvS);
 						}
 					}
-					else //·Ç·þÎñÆ÷,½ÓÊÕÊý¾Ý(ÒòÎªfdÊÇ¶ÁÊý¾Ý¼¯)    
+					else //éžæœåŠ¡å™¨,æŽ¥æ”¶æ•°æ®(å› ä¸ºfdæ˜¯è¯»æ•°æ®é›†)    
 					{
 						memset(g_szServerRecvBuf, 0, RECV_BUF_SIZE);
 						iRecvSize = recv(fd.fd_array[i], g_szServerRecvBuf, RECV_BUF_SIZE, 0);
@@ -241,7 +252,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 						}
 						else if (0 == iRecvSize)
 						{
-							//¿Í»§socket¹Ø±Õ    
+							//å®¢æˆ·socketå…³é—­    
 							if (pServer->RecvCallback() != NULL)
 								pServer->RecvCallback()(RECV_CLOSE, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pServer->UserParam());
 							closesocket(fd.fd_array[i]);
@@ -251,7 +262,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 						}
 						else if (0 < iRecvSize)
 						{
-							//´òÓ¡½ÓÊÕµÄÊý¾Ý    
+							//æ‰“å°æŽ¥æ”¶çš„æ•°æ®    
 							if (pServer->RecvCallback() != NULL)
 								pServer->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szServerRecvBuf, pServer->UserParam());
 						}

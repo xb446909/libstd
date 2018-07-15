@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+#include "stdafx.h"
 #include <iostream>
 #include "CSocketLib.h"
 #include "CTcpServer.h"
@@ -7,9 +7,12 @@
 using namespace std;
 
 CSocketLib::CSocketLib()
+#ifdef WIN32
 	: m_hThread(INVALID_HANDLE_VALUE)
 	, m_socket(INVALID_SOCKET)
+#endif
 {
+#ifdef WIN32
 	WSADATA wsaData;
 	//----------------------
 	// Initialize Winsock
@@ -19,11 +22,13 @@ CSocketLib::CSocketLib()
 		cerr << "Initialize socket error: " << WSAGetLastError() << endl;
 	}
 	m_hEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
+#endif
 }
 
 
 CSocketLib::~CSocketLib()
 {
+#ifdef WIN32
 	if (m_hThread != INVALID_HANDLE_VALUE)
 	{
 		CloseHandle(m_hThread);
@@ -31,6 +36,7 @@ CSocketLib::~CSocketLib()
 	}
 	CloseHandle(m_hEvent);
 	WSACleanup();
+#endif
 }
 
 shared_ptr<CSocketLib> CSocketLib::Create(int nType)
@@ -72,15 +78,21 @@ int CSocketLib::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const cha
 
 bool CSocketLib::ThreadEventIsSet()
 {
+#ifdef WIN32
 	return (WaitForSingleObject(m_hEvent, 0) == WAIT_OBJECT_0);
+#endif
 }
 
 void CSocketLib::ResetThreadEvent()
 {
+#ifdef WIN32
 	ResetEvent(m_hEvent);
+#endif
 }
 
 void CSocketLib::SetThreadEvent()
 {
+#ifdef WIN32
 	SetEvent(m_hEvent);
+#endif
 }
