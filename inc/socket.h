@@ -11,7 +11,7 @@
 
 #define TCP_SERVER		0
 #define TCP_CLIENT		1
-#define UDP             2
+#define UDP             	2
 
 #define RECV_ERROR		0
 #define RECV_CLOSE		1
@@ -19,13 +19,13 @@
 #define RECV_SOCKET		3
 
 #define SOCK_SUCCESS		0
-#define SOCK_ERROR			-1
+#define SOCK_ERROR		-1
 #define SOCK_TIMEOUT		-2
-#define SOCK_CLOSED			-3
+#define SOCK_CLOSED		-3
 #define SOCK_ERROR_ID		-4
 
-/*    ÓÃÓÚServerµÄ»Øµ÷º¯Êı
-Çë²ÎÕÕÒÔÏÂÀı×ÓÊ¹ÓÃ£º
+/*    ç”¨äºServerçš„å›è°ƒå‡½æ•°
+è¯·å‚ç…§ä»¥ä¸‹ä¾‹å­ä½¿ç”¨ï¼š
 int SocketRecvCallbackFun(int nType, const char* szIP, int nPort, int nSize, const char* szRecv)
 {
 	int nCnt = 0;
@@ -51,24 +51,24 @@ return 0;
 
 typedef int(*SocketRecvCallback)(int nType, const char* szIP, int nPort, int nSize, const char* szRecv, void* pParam);
 
-/*InitSocket ²ÎÊınID £º´´½¨¸Ã¶ËµÄÎ¨Ò»±êÊ¶·ûµ÷ÓÃ¸Ã¿âÊ±²»ÄÜ³åÍ»  £¨ÒÔÏÂnIDÒÔÍ¬ÑùµÄÊ¹ÓÃ·½·¨£©*/
+/*InitSocket å‚æ•°nID ï¼šåˆ›å»ºè¯¥ç«¯çš„å”¯ä¸€æ ‡è¯†ç¬¦è°ƒç”¨è¯¥åº“æ—¶ä¸èƒ½å†²çª  ï¼ˆä»¥ä¸‹nIDä»¥åŒæ ·çš„ä½¿ç”¨æ–¹æ³•ï¼‰*/
 int __stdcall InitSocket(int nID, int nType, const char* szIniPath = 0, SocketRecvCallback pCallback = 0, void* pParam = 0);
 void __stdcall UninitSocket(int nID);
 
-/*TCPConnect return 0 Îª³É¹¦
--1 Ã»ÓĞfInitSocket
--2 connectÊ§°Ü£¬¿ÉÄÜÊÇÃ»ÓĞÕÒµ½ÏàÓ¦IP¶Ë¿ÚµÄ·şÎñÆ÷¶ø³¬Ê±  */
+/*TCPConnect return 0 ä¸ºæˆåŠŸ
+-1 æ²¡æœ‰fInitSocket
+-2 connectå¤±è´¥ï¼Œå¯èƒ½æ˜¯æ²¡æœ‰æ‰¾åˆ°ç›¸åº”IPç«¯å£çš„æœåŠ¡å™¨è€Œè¶…æ—¶  */
 int __stdcall TCPConnect(int nID, int nTimeoutMs);
 
-/*TCPSend return >0 Îª³É¹¦·¢ËÍÊı¾İµÄ³¤¶È
--1 Ã»ÓĞConnect
-µ±×÷Îª¿Í»§¶Ë·¢ËÍÊı¾İµÄÊ±ºòszDstIPºÍnDstPortÎªnull
-¿É·¢ËÍµÄ³¤¶ÈÖÁÉÙ´óÓÚ15000£¨²âÊÔµÄ³¤¶È£¬ºÃÏñÃ»ÓĞ³¤¶È£©*/
+/*TCPSend return >0 ä¸ºæˆåŠŸå‘é€æ•°æ®çš„é•¿åº¦
+-1 æ²¡æœ‰Connect
+å½“ä½œä¸ºå®¢æˆ·ç«¯å‘é€æ•°æ®çš„æ—¶å€™szDstIPå’ŒnDstPortä¸ºnull
+å¯å‘é€çš„é•¿åº¦è‡³å°‘å¤§äº15000ï¼ˆæµ‹è¯•çš„é•¿åº¦ï¼Œå¥½åƒæ²¡æœ‰é•¿åº¦ï¼‰*/
 int __stdcall TCPSend(int nID, const char* szSendBuf, int nlen, const char* szDstIP = 0, int nDstPort = 0);
 
-/*    TCPRecv  ×î´óÒ»´ÎĞÔ½ÓÊÕ4096
-return -2 ³¬Ê±£¨1¡¢Ã»ÓĞÊı¾İ¿ÉÒÔ½ÓÊÜ 2¡¢Ã»ÓĞconnect£©
->0 µÄÊıÎª½ÓÊÕÊı¾İ³¤¶È  */
+/*    TCPRecv  æœ€å¤§ä¸€æ¬¡æ€§æ¥æ”¶4096
+return -2 è¶…æ—¶ï¼ˆ1ã€æ²¡æœ‰æ•°æ®å¯ä»¥æ¥å— 2ã€æ²¡æœ‰connectï¼‰
+>0 çš„æ•°ä¸ºæ¥æ”¶æ•°æ®é•¿åº¦  */
 int __stdcall TCPRecv(int nID, char* szRecvBuf, int nBufLen, int nTimeoutMs, const char* szDstIP = 0, int nDstPort = 0);
 
 #endif
