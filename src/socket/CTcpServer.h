@@ -3,8 +3,12 @@
 #include <vector>
 #include <memory>
 
+#if __cplusplus >= 201103L
+using namespace std;
+#else
 using namespace std;
 using namespace std::tr1;
+#endif
 
 class CTcpServer :
 	public CSocketLib

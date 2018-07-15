@@ -3,10 +3,16 @@
 #include <memory>
 #include <map>
 
+#if __cplusplus >= 201103L
+using namespace std;
+#else
 using namespace std::tr1;
+#endif
 
 #ifdef WIN32
 #include "CSerialPortProc_win.h"
+#else
+#include "CSerialPortProc_unix.h"
 #endif // WIN32
 
 

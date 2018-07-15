@@ -1,10 +1,12 @@
 #ifndef __SOCKET_H
 #define __SOCKET_H
 
-#ifdef __GNUC__
+#ifndef WIN32
 #ifndef __stdcall
 #define __stdcall
 #endif
+
+#define SOCKET_ERROR    -1
 #endif
 
 #define TCP_SERVER		0

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "csv.h"
 #include "CSVManager.h"
+#include <string.h>
 
 CSVManager g_csvInst;
 

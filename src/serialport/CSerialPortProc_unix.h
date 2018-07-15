@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CSERAIL_PORT_PROC_H
+#define CSERAIL_PORT_PROC_H
+
 #include <string>
 #include "serialport.h"
 
@@ -40,15 +42,10 @@ public:
 	std::string GetPortName() { return m_szPortName; }
 
 	ProcParam m_procParam;
-	HANDLE m_hThreadEvent;
 
 private:
 	std::string m_szPortName;
-	HANDLE m_hSerialPort;
-
-	OVERLAPPED m_wrOverlapped;
-	OVERLAPPED m_rdOverlapped;
-
-	HANDLE m_hThread;
 };
 
+
+#endif /* CSERAIL_PORT_PROC_H */

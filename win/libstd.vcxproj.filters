@@ -72,29 +72,8 @@
     <ClInclude Include="socket\CTcpServer.h">
       <Filter>头文件\socket</Filter>
     </ClInclude>
-    <ClInclude Include="inc\iniconfig.h">
-      <Filter>头文件\iniconfig</Filter>
-    </ClInclude>
     <ClInclude Include="inc\socket.h">
       <Filter>头文件\socket</Filter>
-    </ClInclude>
-    <ClInclude Include="serialport\CSerialPort.h">
-      <Filter>头文件\serialport</Filter>
-    </ClInclude>
-    <ClInclude Include="serialport\CSerialPortProc_win.h">
-      <Filter>头文件\serialport</Filter>
-    </ClInclude>
-    <ClInclude Include="common\CriticalLock.h">
-      <Filter>头文件\common</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\serialport.h">
-      <Filter>头文件\serialport</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\csv.h">
-      <Filter>头文件\csv</Filter>
-    </ClInclude>
-    <ClInclude Include="csv\CSVManager.h">
-      <Filter>头文件\csv</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\coordtransform.h">
       <Filter>头文件\coordtransform</Filter>
@@ -104,6 +83,30 @@
     </ClInclude>
     <ClInclude Include="..\src\coordtransform\ccoordtransform3dmultipt.h">
       <Filter>头文件\coordtransform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\iniconfig.h">
+      <Filter>头文件\iniconfig</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\iniconfig\iniparser.h">
+      <Filter>头文件\iniconfig</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\serialport.h">
+      <Filter>头文件\serialport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\serialport\CSerialPort.h">
+      <Filter>头文件\serialport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\serialport\CSerialPortProc_win.h">
+      <Filter>头文件\serialport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\csv\CSVManager.h">
+      <Filter>头文件\csv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\csv.h">
+      <Filter>头文件\csv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\CriticalLock.h">
+      <Filter>头文件\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -284,9 +287,6 @@
     <ClCompile Include="..\src\opencv\persistence_base64.cpp">
       <Filter>源文件\opencv</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\opencv\convert.sse4_1.cpp">
-      <Filter>源文件\opencv</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\opencv\matrix_decomp.cpp">
       <Filter>源文件\opencv</Filter>
     </ClCompile>
@@ -340,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="..\src\opencv\persistence_types.cpp">
       <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\iniconfig\iniparser.cpp">
+      <Filter>源文件\iniconfig</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

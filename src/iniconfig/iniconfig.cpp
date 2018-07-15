@@ -3,55 +3,54 @@
 #include <iostream>
 #include <sstream>
 #include <string.h>
+#include "iniparser.h"
 
 int __stdcall ReadIniInt(const char* szSection, const char* szKey, int nDefault, const char* szFile)
 {
-	std::stringstream ss;
-	ss << nDefault;
-    return atoi(ReadIniStdString(szSection, szKey, ss.str(), szFile).c_str());
+	iniparser parser(szFile);
+    return parser.ReadInt(szSection, szKey, nDefault);
 }
 
 void __stdcall WriteIniInt(const char* szSection, const char* szKey, int nVal, const char* szFile)
 {
-	std::stringstream ss;
-	ss << nVal;
-    WriteIniStdString(szSection, szKey, ss.str(), szFile);
+	iniparser parser(szFile);
+	parser.WriteInt(szSection, szKey, nVal); 
 }
 
 double __stdcall ReadIniDouble(const char* szSection, const char* szKey, double dbDefault, const char* szFile)
 {
-	std::stringstream ss;
-	ss << dbDefault;
-	return atof(ReadIniStdString(szSection, szKey, ss.str(), szFile).c_str());
+	iniparser parser(szFile);
+	return parser.ReadDouble(szSection, szKey, dbDefault);
 }
 
 void __stdcall WriteIniDouble(const char* szSection, const char* szKey, double dbVal, const char* szFile)
 {
-	std::stringstream ss;
-	ss << dbVal;
-	WriteIniStdString(szSection, szKey, ss.str(), szFile);
+	iniparser parser(szFile);
+	parser.WriteDouble(szSection, szKey, dbVal);
 }
 
 std::string __stdcall ReadIniStdString(const char* szSection, const char* szKey, std::string strDefault, const char* szFile)
 {
-	char szTemp[MAX_PATH];
-	ReadIniString(szSection, szKey, strDefault.c_str(), szTemp, szFile);
-	return std::string(szTemp);
+	iniparser parser(szFile);
+	return parser.ReadString(szSection, szKey, strDefault);
 }
 
 void __stdcall WriteIniStdString(const char* szSection, const char* szKey, std::string str, const char* szFile)
 {
-	WriteIniString(szSection, szKey, str.c_str(), szFile);
+	iniparser parser(szFile);
+	parser.WriteString(szSection, szKey, str);
 }
 
 void __stdcall ReadIniString(const char* szSection, const char* szKey, const char* szDefault, char* szOut, const char* szFile)
 {
-	GetPrivateProfileStringA(szSection, szKey, szDefault, szOut, MAX_PATH, szFile);
-	WritePrivateProfileStringA(szSection, szKey, szOut, szFile);
+	iniparser parser(szFile);
+	string val = parser.ReadString(szSection, szKey, szDefault);
+	strcpy(szOut, val.c_str());
 }
 
 void __stdcall WriteIniString(const char* szSection, const char* szKey, const char* szVal, const char* szFile)
 {
-	WritePrivateProfileStringA(szSection, szKey, szVal, szFile);
+	iniparser parser(szFile);
+	parser.WriteString(szSection, szKey, szVal);
 }
 

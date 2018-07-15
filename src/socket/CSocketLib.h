@@ -1,10 +1,24 @@
 #pragma once
 #include "socket.h"
-#include <WinSock2.h>
 #include <memory>
 #include <string>
+#ifdef WIN32
+#include <WinSock2.h>
+#else
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h> 
+#endif
 
+#if __cplusplus >= 201103L
+using namespace std;
+#else
 using namespace std::tr1;
+#endif
+
+#ifndef WIN32
+#define SOCKET int
+#endif
 
 const int RECV_BUF_SIZE = 1024 * 1024;
 
@@ -64,10 +78,13 @@ public:
 	void SetThreadEvent();
 
 protected:
-	SOCKET m_socket;
 	SocketParam m_param;
+
+	SOCKET m_socket;
+#ifdef WIN32
 	HANDLE m_hThread;
 	HANDLE m_hEvent;
+#endif
 };
 
 typedef shared_ptr<CSocketLib::SocketParam> socket_param_ptr;

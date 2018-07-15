@@ -1,10 +1,13 @@
 #include "StdAfx.h"
 #include "CSVManager.h"
 #include "csv.h"
-#include "Shlwapi.h"
 #include <sstream>
+#include <string.h>
+#ifdef WIN32
+#include "Shlwapi.h"
 
 #pragma comment(lib, "Shlwapi.lib")
+#endif
 
 CSVManager::CSVManager()
 {

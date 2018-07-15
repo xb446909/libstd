@@ -156,16 +156,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\coordtransform.h" />
+    <ClInclude Include="..\inc\csv.h" />
+    <ClInclude Include="..\inc\iniconfig.h" />
+    <ClInclude Include="..\inc\serialport.h" />
+    <ClInclude Include="..\src\common\CriticalLock.h" />
     <ClInclude Include="..\src\coordtransform\ccoordtransform.h" />
     <ClInclude Include="..\src\coordtransform\ccoordtransform3dmultipt.h" />
-    <ClInclude Include="common\CriticalLock.h" />
-    <ClInclude Include="csv\CSVManager.h" />
-    <ClInclude Include="inc\csv.h" />
-    <ClInclude Include="inc\iniconfig.h" />
-    <ClInclude Include="inc\serialport.h" />
+    <ClInclude Include="..\src\csv\CSVManager.h" />
+    <ClInclude Include="..\src\iniconfig\iniparser.h" />
+    <ClInclude Include="..\src\serialport\CSerialPort.h" />
+    <ClInclude Include="..\src\serialport\CSerialPortProc_win.h" />
     <ClInclude Include="inc\socket.h" />
-    <ClInclude Include="serialport\CSerialPort.h" />
-    <ClInclude Include="serialport\CSerialPortProc_win.h" />
     <ClInclude Include="socket\CSocketLib.h" />
     <ClInclude Include="socket\CTcpClient.h" />
     <ClInclude Include="socket\CTcpServer.h" />
@@ -180,12 +181,12 @@
     <ClCompile Include="..\src\csv\csv.cpp" />
     <ClCompile Include="..\src\csv\CSVManager.cpp" />
     <ClCompile Include="..\src\iniconfig\iniconfig.cpp" />
+    <ClCompile Include="..\src\iniconfig\iniparser.cpp" />
     <ClCompile Include="..\src\opencv\alloc.cpp" />
     <ClCompile Include="..\src\opencv\arithm.cpp" />
     <ClCompile Include="..\src\opencv\array.cpp" />
     <ClCompile Include="..\src\opencv\channels.cpp" />
     <ClCompile Include="..\src\opencv\convert.cpp" />
-    <ClCompile Include="..\src\opencv\convert.sse4_1.cpp" />
     <ClCompile Include="..\src\opencv\convert_scale.cpp" />
     <ClCompile Include="..\src\opencv\copy.cpp" />
     <ClCompile Include="..\src\opencv\cuda_gpu_mat.cpp" />

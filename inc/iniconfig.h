@@ -3,6 +3,10 @@
 
 #include <string>
 
+#ifndef WIN32
+#define __stdcall
+#endif
+
 int __stdcall ReadIniInt(const char* szSection, const char* szKey, int nDefault, const char* szFile);
 void __stdcall WriteIniInt(const char* szSection, const char* szKey, int nVal, const char* szFile);
 

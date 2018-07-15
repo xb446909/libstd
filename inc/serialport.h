@@ -1,6 +1,10 @@
 #ifndef __SERIALPORT_H
 #define __SERIALPORT_H
 
+#ifndef WIN32
+#define __stdcall
+#endif
+
 #define COM_SUCCESS         (0)
 #define COM_ERROR           (-1)
 #define COM_ERROR_ID        (-2)

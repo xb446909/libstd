@@ -7,7 +7,11 @@
 #include <vector>
 #include <opencv2/core.hpp>
 
+#if __cplusplus >= 201103L
+using namespace std;
+#else
 using namespace std::tr1;
+#endif
 
 class CCoordTransform;
 

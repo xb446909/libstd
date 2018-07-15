@@ -1,14 +1,18 @@
 #include "StdAfx.h"
 #include "CTcpClient.h"
-#include <Winsock2.h>
 #include <iostream>
 #include <sstream>
 #include "iniconfig.h"
+#ifdef WIN32
+#include <Winsock2.h>
+#endif
 
 using namespace std;
 
+#ifdef WIN32
 DWORD WINAPI TCPClientReceiveThread(LPVOID lpParam);
 HANDLE g_hEventClientThread;
+#endif
 
 char g_szClientRecvBuf[RECV_BUF_SIZE];
 
@@ -128,6 +132,7 @@ int CTcpClient::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const cha
 	return nRet;
 }
 
+#ifdef WIN32
 DWORD WINAPI TCPClientReceiveThread(LPVOID lpParam)
 {
 	CTcpClient* pClient = static_cast<CTcpClient*>(lpParam);
@@ -182,3 +187,4 @@ DWORD WINAPI TCPClientReceiveThread(LPVOID lpParam)
 	}
 	return 0;
 }
+#endif

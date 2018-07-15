@@ -8,7 +8,15 @@
 #include <map>
 #include <memory>
 
+#if __cplusplus >= 201103L
+using namespace std;
+#else
 using namespace std::tr1;
+#endif
+
+#ifndef WIN32
+#define __stdcall 
+#endif
 
 std::map<int, shared_ptr<CSocketLib> > g_mapSockets;
 

@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#ifdef WIN32
+
 #include "CSerialPortProc_win.h"
 #include "iniconfig.h"
 #include <sstream>
@@ -203,3 +205,5 @@ DWORD WINAPI SerialPortRecvThread(__in  LPVOID lpParameter)
 	}
 	return 0;
 }
+
+#endif // WIN32

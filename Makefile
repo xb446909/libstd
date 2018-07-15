@@ -1,10 +1,10 @@
 CXX := g++
-CXX_FLAGS := -O3 -Wall -fPIC -shared -std=gnu++11
+CXX_FLAGS := -O3 -Wall -fPIC -shared -std=gnu++11 -D__OPENCV_BUILD
 LD_FLAGS	:= -fPIC -shared
 TARGET := libstd.so
 
 SRC_DIR := src
-INC_DIR := inc
+INC_FLAGS := -Iinc -Iwin -Isrc/opencv -Isrc/zlib
 SRC := $(patsubst ./%,%,$(shell find $(SRC_DIR) -type f -name "*.cpp"))
 OBJ_DIR := obj
 AR := ar
@@ -23,10 +23,11 @@ ifneq ($(MAKECMDGOALS),clean)
 endif
 
 $(obj):%.o:%.cpp
-	$(CXX) -c $(CXX_FLAGS) $< -I$(INC_DIR) -o $(OBJ_DIR)/$@ -MMD -MF $(OBJ_DIR)/$*.d -MP
+	$(CXX) -c $(CXX_FLAGS) $< $(INC_FLAGS) -o $(OBJ_DIR)/$@ -MMD -MF $(OBJ_DIR)/$*.d -MP
 
 $(TARGET):$(obj)
 	$(CXX) $(LD_FLAGS) -o $@ $(patsubst %,$(OBJ_DIR)/%,$^)
 
 clean:
 	rm -rf *.o *.d $(OBJ_DIR) $(TARGET)
+

@@ -65,20 +65,20 @@
 /* #undef HAVE_DC1394_2 */
 
 /* DirectX */
-#define HAVE_DIRECTX
+/* #undef HAVE_DIRECTX */
 /* #undef HAVE_DIRECTX_NV12 */
-#define HAVE_D3D11
-#define HAVE_D3D10
-#define HAVE_D3D9
+/* #undef HAVE_D3D11 */
+/* #undef HAVE_D3D10 */
+/* #undef HAVE_D3D9 */
 
 /* DirectShow Video Capture library */
-#define HAVE_DSHOW
+/* #undef HAVE_DSHOW */
 
 /* Eigen Matrix & Linear Algebra Library */
 /* #undef HAVE_EIGEN */
 
 /* FFMpeg video library */
-#define HAVE_FFMPEG
+/* #undef HAVE_FFMPEG */
 
 /* Geospatial Data Abstraction Library */
 /* #undef HAVE_GDAL */
@@ -102,15 +102,15 @@
 /* #undef HAVE_INTELPERC */
 
 /* Intel Integrated Performance Primitives */
-//#define HAVE_IPP
-//#define HAVE_IPP_ICV
-//#define HAVE_IPP_IW
+/* #undef HAVE_IPP */
+/* #undef HAVE_IPP_ICV */
+/* #undef HAVE_IPP_IW */
 
 /* Intel IPP Async */
 /* #undef HAVE_IPP_A */
 
 /* JPEG-2000 codec */
-#define HAVE_JASPER
+/* #undef HAVE_JASPER */
 
 /* IJG JPEG codec */
 #define HAVE_JPEG
@@ -134,12 +134,12 @@
 /* #undef HAVE_NVCUVENC */
 
 /* OpenCL Support */
-/* #define HAVE_OPENCL */
+/* #undef HAVE_OPENCL */
 /* #undef HAVE_OPENCL_STATIC */
 /* #undef HAVE_OPENCL_SVM */
 
 /* OpenEXR codec */
-#define HAVE_OPENEXR
+/* #undef HAVE_OPENEXR */
 
 /* OpenGL support*/
 /* #undef HAVE_OPENGL */
@@ -175,19 +175,19 @@
 /* #undef HAVE_TBB */
 
 /* TIFF codec */
-#define HAVE_TIFF
+/* #undef HAVE_TIFF */
 
 /* Unicap video capture library */
 /* #undef HAVE_UNICAP */
 
 /* Video for Windows support */
-#define HAVE_VFW
+/* #undef HAVE_VFW */
 
 /* V4L2 capturing support in videoio.h */
 /* #undef HAVE_VIDEOIO */
 
 /* Win32 UI */
-#define HAVE_WIN32UI
+/* #undef HAVE_WIN32UI */
 
 /* XIMEA camera support */
 /* #undef HAVE_XIMEA */
@@ -196,7 +196,7 @@
 /* #undef HAVE_XINE */
 
 /* Define if your processor stores words with the most significant byte
-   first (like Motorola and SPARC, unlike Intel and VAX). */
+first (like Motorola and SPARC, unlike Intel and VAX). */
 /* #undef WORDS_BIGENDIAN */
 
 /* gPhoto2 library */
@@ -244,6 +244,5 @@
 /* OpenCV trace utilities */
 #define OPENCV_TRACE
 
-#define DISABLE_OPENCV_24_COMPATIBILITY
 
 #endif // OPENCV_CVCONFIG_H_INCLUDED

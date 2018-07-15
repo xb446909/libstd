@@ -2,12 +2,16 @@
 #include "CTcpServer.h"
 #include "iniconfig.h"
 #include <sstream>
-#include <Winsock2.h>
 #include <iostream>
+#ifdef WIN32
+#include <Winsock2.h>
+#endif
 
 using namespace std;
 
+#ifdef WIN32
 DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam);
+#endif
 
 char g_szServerRecvBuf[RECV_BUF_SIZE];
 
@@ -16,8 +20,12 @@ CTcpServer::CTcpServer()
 	m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (m_socket == INVALID_SOCKET)
 	{
+#ifdef WIN32
 		cerr << "Create socket error: " << WSAGetLastError() << endl;
 		WSACleanup();
+#else
+		cerr << "Create socket error: " << errno << endl;
+#endif
 		return;
 	}
 }
@@ -58,7 +66,11 @@ int CTcpServer::Send(const char* szSendBuf, int nLen, const char* szDstIP, int n
 	int nRet = send(m_vecClients[nIndex].AcceptSocket, szSendBuf, nLen, 0);
 	if (nRet == SOCKET_ERROR)
 	{
+#ifdef WIN32
 		cerr << "Send error: " << WSAGetLastError() << endl;
+#else
+		cerr << "Send error: " << errno << endl;
+#endif
 		return SOCK_ERROR;
 	}
 	return nRet;
@@ -145,7 +157,11 @@ bool CTcpServer::BindSocket()
 
 	if (::bind(m_socket, (SOCKADDR*)&clientService, sizeof(clientService)) == SOCKET_ERROR)
 	{
+#ifdef WIN32
 		cerr << "Bind socket error: " << WSAGetLastError() << endl;
+#else
+		cerr << "Bind socket error: " << errno << endl;
+#endif
 		return false;
 	}
 
@@ -153,6 +169,7 @@ bool CTcpServer::BindSocket()
 }
 
 
+#ifdef WIN32
 DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 {
 	CTcpServer* pServer = static_cast<CTcpServer*>(lpParam);
@@ -244,7 +261,11 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 		}
 		else if (SOCKET_ERROR == iResult)
 		{
+#ifdef WIN32
 			cerr << "Failed to select socket, error: " << WSAGetLastError() << endl;
+#else
+			cerr << "Failed to select socket, error: " << errno << endl;
+#endif
 			Sleep(100);
 		}
 	}
@@ -256,3 +277,4 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 
 	return SOCK_SUCCESS;
 }
+#endif

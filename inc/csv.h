@@ -1,6 +1,10 @@
 #ifndef __CSV_H
 #define __CSV_H
 
+#ifndef WIN32
+#define __stdcall
+#endif
+
 #include <vector>
 #include <string>
 
