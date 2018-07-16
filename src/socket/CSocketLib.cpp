@@ -10,6 +10,8 @@ CSocketLib::CSocketLib()
 #ifdef WIN32
 : m_hThread(INVALID_HANDLE_VALUE)
 , m_socket(INVALID_SOCKET)
+#else
+: m_socket(-1)
 #endif
 {
 #ifdef WIN32
@@ -24,6 +26,7 @@ CSocketLib::CSocketLib()
 	m_hEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
 #else
 	pthread_mutex_init(&m_mutex, NULL);
+	pthread_mutex_lock(&m_mutex);
 #endif
 }
 
