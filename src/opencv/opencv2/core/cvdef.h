@@ -1,46 +1,46 @@
 /*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                          License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
-// Copyright (C) 2015, Itseez Inc., all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
+ //
+ //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+ //
+ //  By downloading, copying, installing or using the software you agree to this license.
+ //  If you do not agree to this license, do not download, install,
+ //  copy or use the software.
+ //
+ //
+ //                          License Agreement
+ //                For Open Source Computer Vision Library
+ //
+ // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+ // Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+ // Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+ // Copyright (C) 2015, Itseez Inc., all rights reserved.
+ // Third party copyrights are property of their respective owners.
+ //
+ // Redistribution and use in source and binary forms, with or without modification,
+ // are permitted provided that the following conditions are met:
+ //
+ //   * Redistribution's of source code must retain the above copyright notice,
+ //     this list of conditions and the following disclaimer.
+ //
+ //   * Redistribution's in binary form must reproduce the above copyright notice,
+ //     this list of conditions and the following disclaimer in the documentation
+ //     and/or other materials provided with the distribution.
+ //
+ //   * The name of the copyright holders may not be used to endorse or promote products
+ //     derived from this software without specific prior written permission.
+ //
+ // This software is provided by the copyright holders and contributors "as is" and
+ // any express or implied warranties, including, but not limited to, the implied
+ // warranties of merchantability and fitness for a particular purpose are disclaimed.
+ // In no event shall the Intel Corporation or contributors be liable for any direct,
+ // indirect, incidental, special, exemplary, or consequential damages
+ // (including, but not limited to, procurement of substitute goods or services;
+ // loss of use, data, or profits; or business interruption) however caused
+ // and on any theory of liability, whether in contract, strict liability,
+ // or tort (including negligence or otherwise) arising in any way out of
+ // the use of this software, even if advised of the possibility of such damage.
+ //
+ //M*/
 
 #ifndef OPENCV_CORE_CVDEF_H
 #define OPENCV_CORE_CVDEF_H
@@ -55,7 +55,9 @@
 // https://github.com/opencv/opencv/pull/9161
 #define CV__DEBUG_NS_BEGIN namespace debug_build_guard {
 #define CV__DEBUG_NS_END }
-namespace cv { namespace debug_build_guard { } using namespace debug_build_guard; }
+namespace cv
+{	namespace debug_build_guard
+	{}using namespace debug_build_guard;}
 #endif
 #endif
 
@@ -63,7 +65,6 @@ namespace cv { namespace debug_build_guard { } using namespace debug_build_guard
 #define CV__DEBUG_NS_BEGIN
 #define CV__DEBUG_NS_END
 #endif
-
 
 #ifdef __OPENCV_BUILD
 #include "cvconfig.h"
@@ -78,7 +79,6 @@ namespace cv { namespace debug_build_guard { } using namespace debug_build_guard
 #define __CV_CAT_(x, y) __CV_CAT__(x, y)
 #define __CV_CAT(x, y) __CV_CAT_(x, y)
 #endif
-
 
 // undef problematic defines sometimes defined by system headers (windows.h in particular)
 #undef small
@@ -163,44 +163,43 @@ namespace cv { namespace debug_build_guard { } using namespace debug_build_guard
 #define CV_HARDWARE_MAX_FEATURE 512
 
 /** @brief Available CPU features.
-*/
-enum CpuFeatures {
-    CPU_MMX             = 1,
-    CPU_SSE             = 2,
-    CPU_SSE2            = 3,
-    CPU_SSE3            = 4,
-    CPU_SSSE3           = 5,
-    CPU_SSE4_1          = 6,
-    CPU_SSE4_2          = 7,
-    CPU_POPCNT          = 8,
-    CPU_FP16            = 9,
-    CPU_AVX             = 10,
-    CPU_AVX2            = 11,
-    CPU_FMA3            = 12,
+ */
+enum CpuFeatures
+{
+	CPU_MMX = 1,
+	CPU_SSE = 2,
+	CPU_SSE2 = 3,
+	CPU_SSE3 = 4,
+	CPU_SSSE3 = 5,
+	CPU_SSE4_1 = 6,
+	CPU_SSE4_2 = 7,
+	CPU_POPCNT = 8,
+	CPU_FP16 = 9,
+	CPU_AVX = 10,
+	CPU_AVX2 = 11,
+	CPU_FMA3 = 12,
 
-    CPU_AVX_512F        = 13,
-    CPU_AVX_512BW       = 14,
-    CPU_AVX_512CD       = 15,
-    CPU_AVX_512DQ       = 16,
-    CPU_AVX_512ER       = 17,
-    CPU_AVX_512IFMA512  = 18, // deprecated
-    CPU_AVX_512IFMA     = 18,
-    CPU_AVX_512PF       = 19,
-    CPU_AVX_512VBMI     = 20,
-    CPU_AVX_512VL       = 21,
+	CPU_AVX_512F = 13,
+	CPU_AVX_512BW = 14,
+	CPU_AVX_512CD = 15,
+	CPU_AVX_512DQ = 16,
+	CPU_AVX_512ER = 17,
+	CPU_AVX_512IFMA512 = 18, // deprecated
+	CPU_AVX_512IFMA = 18,
+	CPU_AVX_512PF = 19,
+	CPU_AVX_512VBMI = 20,
+	CPU_AVX_512VL = 21,
 
-    CPU_NEON            = 100,
+	CPU_NEON = 100,
 
-    CPU_VSX             = 200,
+	CPU_VSX = 200,
 
-    CPU_AVX512_SKX      = 256, //!< Skylake-X with AVX-512F/CD/BW/DQ/VL
+	CPU_AVX512_SKX = 256, //!< Skylake-X with AVX-512F/CD/BW/DQ/VL
 
-    CPU_MAX_FEATURE     = 512  // see CV_HARDWARE_MAX_FEATURE
+	CPU_MAX_FEATURE = 512  // see CV_HARDWARE_MAX_FEATURE
 };
 
-
 #include "cv_cpu_dispatch.h"
-
 
 /* fundamental constants */
 #define CV_PI   3.1415926535897932384626433832795
@@ -216,40 +215,37 @@ enum CpuFeatures {
 
 typedef union Cv16suf
 {
-    short i;
+	short i;
 #if CV_FP16_TYPE
-    __fp16 h;
+	__fp16 h;
 #endif
-    struct _fp16Format
-    {
-        unsigned int significand : 10;
-        unsigned int exponent    : 5;
-        unsigned int sign        : 1;
-    } fmt;
-}
-Cv16suf;
+	struct _fp16Format
+	{
+		unsigned int significand :10;
+		unsigned int exponent :5;
+		unsigned int sign :1;
+	} fmt;
+} Cv16suf;
 
 typedef union Cv32suf
 {
-    int i;
-    unsigned u;
-    float f;
-    struct _fp32Format
-    {
-        unsigned int significand : 23;
-        unsigned int exponent    : 8;
-        unsigned int sign        : 1;
-    } fmt;
-}
-Cv32suf;
+	int i;
+	unsigned u;
+	float f;
+	struct _fp32Format
+	{
+		unsigned int significand :23;
+		unsigned int exponent :8;
+		unsigned int sign :1;
+	} fmt;
+} Cv32suf;
 
 typedef union Cv64suf
 {
-    int64 i;
-    uint64 u;
-    double f;
-}
-Cv64suf;
+	int64 i;
+	uint64 u;
+	double f;
+} Cv64suf;
 
 #define OPENCV_ABI_COMPATIBILITY 300
 
@@ -307,7 +303,7 @@ Cv64suf;
 
 /****************************************************************************************\
 *                                  Matrix type (Mat)                                     *
-\****************************************************************************************/
+ \****************************************************************************************/
 
 #define CV_MAT_CN_MASK          ((CV_CN_MAX - 1) << CV_CN_SHIFT)
 #define CV_MAT_CN(flags)        ((((flags) & CV_MAT_CN_MASK) >> CV_CN_SHIFT) + 1)
@@ -322,7 +318,7 @@ Cv64suf;
 #define CV_IS_SUBMAT(flags)     ((flags) & CV_MAT_SUBMAT_FLAG)
 
 /** Size of each channel item,
-   0x8442211 = 1000 0100 0100 0010 0010 0001 0001 ~ array of sizeof(arr_type_elem) */
+ 0x8442211 = 1000 0100 0100 0010 0010 0001 0001 ~ array of sizeof(arr_type_elem) */
 #define CV_ELEM_SIZE1(type) \
     ((((sizeof(size_t)<<28)|0x8442211) >> CV_MAT_DEPTH(type)*4) & 15)
 
@@ -340,7 +336,7 @@ Cv64suf;
 
 /****************************************************************************************\
 *                                    static analysys                                     *
-\****************************************************************************************/
+ \****************************************************************************************/
 
 // In practice, some macro are not processed correctly (noreturn is not detected).
 // We need to use simplified definition for them.
@@ -352,7 +348,7 @@ Cv64suf;
 
 /****************************************************************************************\
 *                                    Thread sanitizer                                    *
-\****************************************************************************************/
+ \****************************************************************************************/
 #ifndef CV_THREAD_SANITIZER
 # if defined(__has_feature)
 #   if __has_feature(thread_sanitizer)
@@ -363,10 +359,10 @@ Cv64suf;
 
 /****************************************************************************************\
 *          exchange-add operation for atomic operations on reference counters            *
-\****************************************************************************************/
+ \****************************************************************************************/
 
 #ifdef CV_XADD
-  // allow to use user-defined macro
+// allow to use user-defined macro
 #elif defined __GNUC__ || defined __clang__
 #  if defined __clang__ && __clang_major__ >= 3 && !defined __ANDROID__ && !defined __EMSCRIPTEN__ && !defined(__CUDACC__)
 #    ifdef __ATOMIC_ACQ_REL
@@ -376,7 +372,7 @@ Cv64suf;
 #    endif
 #  else
 #    if defined __ATOMIC_ACQ_REL && !defined __clang__
-       // version for gcc >= 4.7
+// version for gcc >= 4.7
 #      define CV_XADD(addr, delta) (int)__atomic_fetch_add((unsigned*)(addr), (unsigned)(delta), __ATOMIC_ACQ_REL)
 #    else
 #      define CV_XADD(addr, delta) (int)__sync_fetch_and_add((unsigned*)(addr), (unsigned)(delta))
@@ -386,13 +382,13 @@ Cv64suf;
 #  include <intrin.h>
 #  define CV_XADD(addr, delta) (int)_InterlockedExchangeAdd((long volatile*)addr, delta)
 #else
-   CV_INLINE CV_XADD(int* addr, int delta) { int tmp = *addr; *addr += delta; return tmp; }
+CV_INLINE CV_XADD(int* addr, int delta)
+{	int tmp = *addr; *addr += delta; return tmp;}
 #endif
-
 
 /****************************************************************************************\
 *                                  CV_NORETURN attribute                                 *
-\****************************************************************************************/
+ \****************************************************************************************/
 
 #ifndef CV_NORETURN
 #  if defined(__GNUC__)
@@ -404,10 +400,9 @@ Cv64suf;
 #  endif
 #endif
 
-
 /****************************************************************************************\
 *                                    C++ 11                                              *
-\****************************************************************************************/
+ \****************************************************************************************/
 #ifndef CV_CXX11
 #  if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
 #    define CV_CXX11 1
@@ -418,10 +413,9 @@ Cv64suf;
 #  endif
 #endif
 
-
 /****************************************************************************************\
 *                                    C++ Move semantics                                  *
-\****************************************************************************************/
+ \****************************************************************************************/
 
 #ifndef CV_CXX_MOVE_SEMANTICS
 #  if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__) || (defined(_MSC_VER) && _MSC_VER >= 1600)
@@ -439,7 +433,7 @@ Cv64suf;
 
 /****************************************************************************************\
 *                                    C++11 std::array                                    *
-\****************************************************************************************/
+ \****************************************************************************************/
 
 #ifndef CV_CXX_STD_ARRAY
 #  if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900/*MSVS 2015*/)
@@ -452,25 +446,26 @@ Cv64suf;
 #  endif
 #endif
 
-
 // Integer types portatibility
 #ifdef OPENCV_STDINT_HEADER
 #include OPENCV_STDINT_HEADER
 #else
 #if defined(_MSC_VER) && _MSC_VER < 1600 /* MSVS 2010 */
-namespace cv {
-typedef signed char int8_t;
-typedef unsigned char uint8_t;
-typedef signed short int16_t;
-typedef unsigned short uint16_t;
-typedef signed int int32_t;
-typedef unsigned int uint32_t;
-typedef signed __int64 int64_t;
-typedef unsigned __int64 uint64_t;
+namespace cv
+{
+	typedef signed char int8_t;
+	typedef unsigned char uint8_t;
+	typedef signed short int16_t;
+	typedef unsigned short uint16_t;
+	typedef signed int int32_t;
+	typedef unsigned int uint32_t;
+	typedef signed __int64 int64_t;
+	typedef unsigned __int64 uint64_t;
 }
 #elif defined(_MSC_VER) || __cplusplus >= 201103L
 #include <cstdint>
-namespace cv {
+namespace cv
+{
 using std::int8_t;
 using std::uint8_t;
 using std::int16_t;
@@ -482,19 +477,19 @@ using std::uint64_t;
 }
 #else
 #include <stdint.h>
-namespace cv {
-typedef ::int8_t int8_t;
-typedef ::uint8_t uint8_t;
-typedef ::int16_t int16_t;
-typedef ::uint16_t uint16_t;
-typedef ::int32_t int32_t;
-typedef ::uint32_t uint32_t;
-typedef ::int64_t int64_t;
-typedef ::uint64_t uint64_t;
+namespace cv
+{
+	typedef ::int8_t int8_t;
+	typedef ::uint8_t uint8_t;
+	typedef ::int16_t int16_t;
+	typedef ::uint16_t uint16_t;
+	typedef ::int32_t int32_t;
+	typedef ::uint32_t uint32_t;
+	typedef ::int64_t int64_t;
+	typedef ::uint64_t uint64_t;
 }
 #endif
 #endif
-
 
 //! @}
 

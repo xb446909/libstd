@@ -8,9 +8,9 @@
 // TODO Move to CMake?
 #ifndef OPENCV_HAVE_FILESYSTEM_SUPPORT
 #  if defined(__EMSCRIPTEN__) || defined(__native_client__)
-     /* no support */
+/* no support */
 #  elif defined WINRT
-     /* not supported */
+/* not supported */
 #  elif defined __ANDROID__ || defined __linux__ || defined _WIN32 || \
         defined __FreeBSD__ || defined __bsdi__
 #      define OPENCV_HAVE_FILESYSTEM_SUPPORT 1
@@ -20,7 +20,7 @@
 #      define OPENCV_HAVE_FILESYSTEM_SUPPORT 1 // OSX only
 #    endif
 #  else
-     /* unknown */
+/* unknown */
 #  endif
 #  ifndef OPENCV_HAVE_FILESYSTEM_SUPPORT
 #    define OPENCV_HAVE_FILESYSTEM_SUPPORT 0
@@ -28,7 +28,12 @@
 #endif
 
 #if OPENCV_HAVE_FILESYSTEM_SUPPORT
-namespace cv { namespace utils { namespace fs {
+namespace cv
+{
+namespace utils
+{
+namespace fs
+{
 
 /**
  * File-based lock object.
@@ -41,26 +46,29 @@ namespace cv { namespace utils { namespace fs {
  * File must exist.
  * File can't be re-used (for example, I/O operations via std::fstream is not safe)
  */
-class CV_EXPORTS FileLock {
+class CV_EXPORTS FileLock
+{
 public:
-    explicit FileLock(const char* fname);
-    ~FileLock();
+	explicit FileLock(const char* fname);
+	~FileLock();
 
-    void lock(); //< acquire exclusive (writer) lock
-    void unlock(); //< release exclusive (writer) lock
+	void lock(); //< acquire exclusive (writer) lock
+	void unlock();//< release exclusive (writer) lock
 
-    void lock_shared(); //< acquire sharable (reader) lock
-    void unlock_shared(); //< release sharable (reader) lock
+	void lock_shared();//< acquire sharable (reader) lock
+	void unlock_shared();//< release sharable (reader) lock
 
-    struct Impl;
+	struct Impl;
 protected:
-    Impl* pImpl;
+	Impl* pImpl;
 
 private:
-    FileLock(const FileLock&); // disabled
-    FileLock& operator=(const FileLock&); // disabled
+	FileLock(const FileLock&);// disabled
+	FileLock& operator=(const FileLock&);// disabled
 };
 
-}}} // namespace
+}
+}
+} // namespace
 #endif
 #endif // OPENCV_UTILS_FILESYSTEM_PRIVATE_HPP

@@ -1,15 +1,13 @@
-#include "StdAfx.h"
+#include "stdafx.h"
 #include "iniparser.h"
 #include <fstream>
 #include <sstream>
 
-
-iniparser::iniparser(string inipath)
-	: m_szIniPath(inipath)
+iniparser::iniparser(string inipath) :
+		m_szIniPath(inipath)
 {
 	parse(m_szIniPath);
 }
-
 
 iniparser::~iniparser()
 {
@@ -105,7 +103,7 @@ void iniparser::trim(string& str)
 			str.erase(0, index);
 		}
 		index = str.find_last_not_of(' ');
-  		if (index > 0)
+		if (index > 0)
 		{
 			str.erase(index + 1);
 		}

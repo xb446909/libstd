@@ -7,12 +7,11 @@
 #include "../common/CriticalLock.h"
 #include <iostream>
 
-
-DWORD WINAPI SerialPortRecvThread(__in  LPVOID lpParameter);
+DWORD WINAPI SerialPortRecvThread(__in LPVOID lpParameter);
 
 CSerialPortProc::CSerialPortProc()
-	: m_hThread(INVALID_HANDLE_VALUE)
-	, m_hSerialPort(INVALID_HANDLE_VALUE)
+: m_hThread(INVALID_HANDLE_VALUE)
+, m_hSerialPort(INVALID_HANDLE_VALUE)
 {
 	ZeroMemory(&m_wrOverlapped, sizeof(OVERLAPPED));
 	ZeroMemory(&m_rdOverlapped, sizeof(OVERLAPPED));
@@ -22,7 +21,6 @@ CSerialPortProc::CSerialPortProc()
 
 	m_hThreadEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 }
-
 
 CSerialPortProc::~CSerialPortProc()
 {
@@ -66,12 +64,12 @@ int CSerialPortProc::Open()
 	int nFlowControl = ReadIniInt(ssSection.str().c_str(), "FlowControl", 0, m_procParam.strIniPath.c_str());
 
 	m_hSerialPort = CreateFileA(m_szPortName.c_str(),
-		GENERIC_READ | GENERIC_WRITE,
-		0,
-		NULL,
-		OPEN_EXISTING,
-		FILE_FLAG_OVERLAPPED | FILE_ATTRIBUTE_NORMAL,
-		NULL);
+			GENERIC_READ | GENERIC_WRITE,
+			0,
+			NULL,
+			OPEN_EXISTING,
+			FILE_FLAG_OVERLAPPED | FILE_ATTRIBUTE_NORMAL,
+			NULL);
 
 	if (m_hSerialPort == INVALID_HANDLE_VALUE)
 	{
@@ -99,7 +97,7 @@ int CSerialPortProc::Open()
 
 	SetCommTimeouts(m_hSerialPort, &TimeOuts);
 	SetCommState(m_hSerialPort, &dcb);
-	PurgeComm(m_hSerialPort, PURGE_TXCLEAR | PURGE_RXCLEAR | PURGE_RXABORT | PURGE_TXABORT);//Çå³ýÒ»ÏÂ»º³åÇø
+	PurgeComm(m_hSerialPort, PURGE_TXCLEAR | PURGE_RXCLEAR | PURGE_RXABORT | PURGE_TXABORT); //ï¿½ï¿½ï¿½Ò»ï¿½Â»ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	if (m_procParam.recvCallback != nullptr)
 	{
@@ -115,12 +113,10 @@ int CSerialPortProc::Write(const char * szBuf, int nLen)
 	CriticalLock lock;
 
 	DWORD nWritten = 0;
-	
+
 	DWORD error;
-	if (ClearCommError(m_hSerialPort, &error, NULL) && error > 0) //Çå³ý´íÎó
-		PurgeComm(m_hSerialPort, PURGE_TXABORT | PURGE_TXCLEAR);
-
-
+	if (ClearCommError(m_hSerialPort, &error, NULL) && error > 0) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	PurgeComm(m_hSerialPort, PURGE_TXABORT | PURGE_TXCLEAR);
 
 	if (!WriteFile(m_hSerialPort, szBuf, nLen, &nWritten, &m_wrOverlapped))
 	{
@@ -141,7 +137,6 @@ int CSerialPortProc::Write(const char * szBuf, int nLen)
 			}
 		}
 	}
-
 
 	return nWritten;
 }
@@ -165,7 +160,7 @@ int CSerialPortProc::Read(char * szBuf, int nBufLen, int nTimeout)
 				if (!GetOverlappedResult(m_hSerialPort, &m_rdOverlapped, &dwRealRead, FALSE))
 				{
 					dwError = GetLastError();
-					if (dwError != ERROR_IO_INCOMPLETE)//ÆäËû´íÎó
+					if (dwError != ERROR_IO_INCOMPLETE) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					{
 						std::cout << "nRet: " << nRet << std::endl;
 						nRet = COM_ERROR;
@@ -185,12 +180,13 @@ int CSerialPortProc::Read(char * szBuf, int nBufLen, int nTimeout)
 	return nRet;
 }
 
-DWORD WINAPI SerialPortRecvThread(__in  LPVOID lpParameter)
+DWORD WINAPI SerialPortRecvThread(__in LPVOID lpParameter)
 {
 	CSerialPortProc* pProc = (CSerialPortProc*)lpParameter;
 	CSerialPortProc::ProcParam param = pProc->m_procParam;
 
-	char recvBuf[BUF_SIZE] = { 0 };
+	char recvBuf[BUF_SIZE] =
+	{	0};
 
 	while (true)
 	{

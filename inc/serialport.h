@@ -10,9 +10,11 @@
 #define COM_ERROR_ID        (-2)
 #define COM_ERROR_TIMEOUT	(-3)
 
-typedef int(*SerialPortRecvCallback)(const char* szPort, int nSize, const char* szRecv, void* pParam);
+typedef int (*SerialPortRecvCallback)(const char* szPort, int nSize,
+		const char* szRecv, void* pParam);
 
-int __stdcall InitCOM(int nID, const char* szIniPath = 0, SerialPortRecvCallback pCallback = 0, void* pParam = 0);
+int __stdcall InitCOM(int nID, const char* szIniPath = 0,
+		SerialPortRecvCallback pCallback = 0, void* pParam = 0);
 int __stdcall UninitCOM(int nID);
 int __stdcall OpenCOM(int nID);
 int __stdcall WriteCOM(int nID, const char* szSend, int nLen);

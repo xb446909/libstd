@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+#include "stdafx.h"
 #include "CTcpServer.h"
 #include "iniconfig.h"
 #include <sstream>
@@ -23,7 +23,6 @@ CTcpServer::CTcpServer()
 	}
 }
 
-
 CTcpServer::~CTcpServer()
 {
 	ResetThreadEvent();
@@ -35,30 +34,33 @@ CTcpServer::~CTcpServer()
 		DWORD dwExitcode;
 		GetExitCodeThread(m_hThread, &dwExitcode);
 		TerminateThread(m_hThread, dwExitcode);
-        }
+	}
 #endif
 }
 
 void CTcpServer::SetParam(shared_ptr<CSocketLib::SocketParam> param)
 {
 	CSocketLib::SetParam(param);
-        int bOptVal = 1;
-	setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&bOptVal, sizeof(bOptVal));
+	int bOptVal = 1;
+	setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, (char *) &bOptVal,
+			sizeof(bOptVal));
 	if (BindSocket())
 	{
 		if (param->callback != nullptr)
-                {
+		{
 #ifdef WIN32
-                        m_hThread = CreateThread(NULL, 0, TCPListenReceiveThread, this, 0, NULL);
+			m_hThread = CreateThread(NULL, 0, TCPListenReceiveThread, this, 0, NULL);
 #endif
 		}
 	}
 }
 
-int CTcpServer::Send(const char* szSendBuf, int nLen, const char* szDstIP, int nDstPort)
+int CTcpServer::Send(const char* szSendBuf, int nLen, const char* szDstIP,
+		int nDstPort)
 {
 	int nIndex = FindSocket(szDstIP, nDstPort);
-	if (nIndex == -1) return SOCK_ERROR_ID;
+	if (nIndex == -1)
+		return SOCK_ERROR_ID;
 	int nRet = send(m_vecClients[nIndex].AcceptSocket, szSendBuf, nLen, 0);
 	if (nRet == SOCKET_ERROR)
 	{
@@ -68,12 +70,15 @@ int CTcpServer::Send(const char* szSendBuf, int nLen, const char* szDstIP, int n
 	return nRet;
 }
 
-int CTcpServer::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort)
+int CTcpServer::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs,
+		const char * szDstIP, int nDstPort)
 {
-	if (RecvCallback() != NULL) return SOCK_ERROR_ID;
-	
+	if (RecvCallback() != NULL)
+		return SOCK_ERROR_ID;
+
 	int nIndex = FindSocket(szDstIP, nDstPort);
-	if (nIndex == -1) return SOCK_ERROR_ID;
+	if (nIndex == -1)
+		return SOCK_ERROR_ID;
 
 	fd_set r;
 	FD_ZERO(&r);
@@ -103,7 +108,6 @@ int CTcpServer::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const cha
 	return nRet;
 }
 
-
 void CTcpServer::EraseClient(sockaddr_in client)
 {
 	for (size_t i = 0; i < m_vecClients.size(); i++)
@@ -121,10 +125,10 @@ bool CTcpServer::IsSame(sockaddr_in addr1, sockaddr_in addr2)
 #ifdef WIN32
 	return ((addr1.sin_addr.S_un.S_addr == addr2.sin_addr.S_un.S_addr) &&
 #else
-        return ((addr1.sin_addr.s_addr == addr2.sin_addr.s_addr) &&
+	return ((addr1.sin_addr.s_addr == addr2.sin_addr.s_addr) &&
 #endif
-		(addr1.sin_family == addr2.sin_family) &&
-		(addr1.sin_port == addr2.sin_port));
+			(addr1.sin_family == addr2.sin_family)
+			&& (addr1.sin_port == addr2.sin_port));
 }
 
 int CTcpServer::FindSocket(const char * szDstIP, int nDstPort)
@@ -134,9 +138,9 @@ int CTcpServer::FindSocket(const char * szDstIP, int nDstPort)
 #ifdef WIN32
 		if ((inet_addr(szDstIP) == m_vecClients[i].addr.sin_addr.S_un.S_addr) &&
 #else
-                if ((inet_addr(szDstIP) == m_vecClients[i].addr.sin_addr.s_addr) &&
+		if ((inet_addr(szDstIP) == m_vecClients[i].addr.sin_addr.s_addr) &&
 #endif
-			(ntohs(m_vecClients[i].addr.sin_port) == nDstPort))
+				(ntohs(m_vecClients[i].addr.sin_port) == nDstPort))
 			return i;
 	}
 	return -1;
@@ -146,8 +150,10 @@ bool CTcpServer::BindSocket()
 {
 	std::stringstream section;
 	section << "TcpServer" << m_param.nId;
-	string strIp = ReadIniStdString(section.str().c_str(), "Address", "0.0.0.0", m_param.szIniPath.c_str());
-	int nPort = ReadIniInt(section.str().c_str(), "Port", 10000, m_param.szIniPath.c_str());
+	string strIp = ReadIniStdString(section.str().c_str(), "Address", "0.0.0.0",
+			m_param.szIniPath.c_str());
+	int nPort = ReadIniInt(section.str().c_str(), "Port", 10000,
+			m_param.szIniPath.c_str());
 
 	struct sockaddr_in clientService;
 
@@ -155,7 +161,8 @@ bool CTcpServer::BindSocket()
 	clientService.sin_addr.s_addr = inet_addr(strIp.c_str());
 	clientService.sin_port = htons(nPort);
 
-        if (::bind(m_socket, (struct sockaddr*)&clientService, sizeof(clientService)) == SOCKET_ERROR)
+	if (::bind(m_socket, (struct sockaddr*) &clientService,
+			sizeof(clientService)) == SOCKET_ERROR)
 	{
 		cerr << "Bind socket error: " << WSAGetLastError() << endl;
 		return false;
@@ -163,7 +170,6 @@ bool CTcpServer::BindSocket()
 
 	return true;
 }
-
 
 #ifdef WIN32
 DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
@@ -193,7 +199,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 	while (pServer->ThreadEventIsSet())
 	{
 		fd_set fdOld = fd;
-		
+
 		iResult = select(0, &fdOld, NULL, NULL, &timeout);
 		if (0 < iResult)
 		{
@@ -210,7 +216,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 						if (INVALID_SOCKET != socketAccept)
 						{
 							if (pServer->RecvCallback() != NULL)
-								pServer->RecvCallback()(RECV_SOCKET, inet_ntoa(addrAccept.sin_addr), ntohs(addrAccept.sin_port), 0, NULL, pServer->UserParam());
+							pServer->RecvCallback()(RECV_SOCKET, inet_ntoa(addrAccept.sin_addr), ntohs(addrAccept.sin_port), 0, NULL, pServer->UserParam());
 							FD_SET(socketAccept, &fd);
 
 							RecvS.AcceptSocket = socketAccept;
@@ -229,7 +235,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 						if (SOCKET_ERROR == iRecvSize)
 						{
 							if (pServer->RecvCallback() != NULL)
-								pServer->RecvCallback()(RECV_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pServer->UserParam());
+							pServer->RecvCallback()(RECV_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pServer->UserParam());
 							closesocket(fd.fd_array[i]);
 							FD_CLR(fd.fd_array[i], &fd);
 							i--;
@@ -239,7 +245,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 						{
 							//客户socket关闭    
 							if (pServer->RecvCallback() != NULL)
-								pServer->RecvCallback()(RECV_CLOSE, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pServer->UserParam());
+							pServer->RecvCallback()(RECV_CLOSE, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pServer->UserParam());
 							closesocket(fd.fd_array[i]);
 							FD_CLR(fd.fd_array[i], &fd);
 							pServer->EraseClient(addrTemp);
@@ -249,7 +255,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 						{
 							//打印接收的数据    
 							if (pServer->RecvCallback() != NULL)
-								pServer->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szServerRecvBuf, pServer->UserParam());
+							pServer->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szServerRecvBuf, pServer->UserParam());
 						}
 					}
 				}

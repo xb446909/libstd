@@ -5,30 +5,32 @@
 
 using namespace cv;
 
-CCoordTransform3DMultiPt::CCoordTransform3DMultiPt()
-	: modelPoints(4)
-	, checkPartialSubsets(true)
+CCoordTransform3DMultiPt::CCoordTransform3DMultiPt() :
+		modelPoints(4), checkPartialSubsets(true)
 {
 }
-
 
 CCoordTransform3DMultiPt::~CCoordTransform3DMultiPt()
 {
 }
 
-int CCoordTransform3DMultiPt::SetTransPoints(std::vector<cv::Point3d> src, std::vector<cv::Point3d> dst)
+int CCoordTransform3DMultiPt::SetTransPoints(std::vector<cv::Point3d> src,
+		std::vector<cv::Point3d> dst)
 {
 	if (src.size() != dst.size())
 	{
 		std::cerr << "Error size is not same, source points number: "
-			<< src.size() << " destination points number: " << dst.size() << std::endl;
+				<< src.size() << " destination points number: " << dst.size()
+				<< std::endl;
 		return TRANSFORM_ERROR;
 	}
 
 	cv::Mat mask(1, src.size(), CV_8U);
 	mask = cv::Scalar::all(1);
 
-	return runRANSAC(src, dst, m_mat, mask) ? TRANSFORM_SUCCESS : TRANSFORM_ERROR;
+	return runRANSAC(src, dst, m_mat, mask) ?
+	TRANSFORM_SUCCESS :
+												TRANSFORM_ERROR;
 }
 
 int CCoordTransform3DMultiPt::TransformPoint(cv::Point3d src, cv::Point3d& dst)
@@ -46,8 +48,9 @@ int CCoordTransform3DMultiPt::TransformPoint(cv::Point3d src, cv::Point3d& dst)
 	return TRANSFORM_SUCCESS;
 }
 
-bool CCoordTransform3DMultiPt::runRANSAC(InputArray _m1, InputArray _m2, OutputArray _model, OutputArray _mask,
-	double reprojThreshold, double confidence, int maxIters)
+bool CCoordTransform3DMultiPt::runRANSAC(InputArray _m1, InputArray _m2,
+		OutputArray _model, OutputArray _mask, double reprojThreshold,
+		double confidence, int maxIters)
 {
 	const double outlierRatio = 0.45;
 	bool result = false;
@@ -67,7 +70,7 @@ bool CCoordTransform3DMultiPt::runRANSAC(InputArray _m1, InputArray _m2, OutputA
 	int count2 = m2.checkVector(d2);
 	double minMedian = DBL_MAX;
 
-	RNG rng((uint64)-1);
+	RNG rng((uint64) -1);
 
 	CV_Assert(confidence > 0 && confidence < 1);
 
@@ -79,7 +82,9 @@ bool CCoordTransform3DMultiPt::runRANSAC(InputArray _m1, InputArray _m2, OutputA
 	{
 		_mask.create(count, 1, CV_8U, -1, true);
 		mask0 = mask = _mask.getMat();
-		CV_Assert((mask.cols == 1 || mask.rows == 1) && (int)mask.total() == count);
+		CV_Assert(
+				(mask.cols == 1 || mask.rows == 1)
+						&& (int )mask.total() == count);
 	}
 
 	if (count == modelPoints)
@@ -91,7 +96,8 @@ bool CCoordTransform3DMultiPt::runRANSAC(InputArray _m1, InputArray _m2, OutputA
 		return true;
 	}
 
-	int iter, niters = RANSACUpdateNumIters(confidence, outlierRatio, modelPoints, maxIters);
+	int iter, niters = RANSACUpdateNumIters(confidence, outlierRatio,
+			modelPoints, maxIters);
 	niters = MAX(niters, 3);
 
 	for (iter = 0; iter < niters; iter++)
@@ -117,14 +123,17 @@ bool CCoordTransform3DMultiPt::runRANSAC(InputArray _m1, InputArray _m2, OutputA
 
 		for (i = 0; i < nmodels; i++)
 		{
-			Mat model_i = model.rowRange(i*modelSize.height, (i + 1)*modelSize.height);
+			Mat model_i = model.rowRange(i * modelSize.height,
+					(i + 1) * modelSize.height);
 			computeReprojError(m1, m2, model_i, err);
 			if (err.depth() != CV_32F)
 				err.convertTo(errf, CV_32F);
 			else
 				errf = err;
-			CV_Assert(errf.isContinuous() && errf.type() == CV_32F && (int)errf.total() == count);
-			std::nth_element(errf.ptr<int>(), errf.ptr<int>() + count / 2, errf.ptr<int>() + count);
+			CV_Assert(
+					errf.isContinuous() && errf.type() == CV_32F && (int)errf.total() == count);
+			std::nth_element(errf.ptr<int>(), errf.ptr<int>() + count / 2,
+					errf.ptr<int>() + count);
 			double median = errf.at<float>(count / 2);
 
 			if (median < minMedian)
@@ -137,7 +146,8 @@ bool CCoordTransform3DMultiPt::runRANSAC(InputArray _m1, InputArray _m2, OutputA
 
 	if (minMedian < DBL_MAX)
 	{
-		double sigma = 2.5*1.4826*(1 + 5. / (count - modelPoints))*std::sqrt(minMedian);
+		double sigma = 2.5 * 1.4826 * (1 + 5. / (count - modelPoints))
+				* std::sqrt(minMedian);
 		sigma = MAX(sigma, 0.001);
 
 		count = findInliers(m1, m2, bestModel, err, mask, sigma);
@@ -157,17 +167,15 @@ bool CCoordTransform3DMultiPt::runRANSAC(InputArray _m1, InputArray _m2, OutputA
 	return result;
 }
 
-
-bool CCoordTransform3DMultiPt::getSubset(const Mat& m1, const Mat& m2,
-	Mat& ms1, Mat& ms2, RNG& rng,
-	int maxAttempts)
+bool CCoordTransform3DMultiPt::getSubset(const Mat& m1, const Mat& m2, Mat& ms1,
+		Mat& ms2, RNG& rng, int maxAttempts)
 {
 	cv::AutoBuffer<int> _idx(modelPoints);
 	int* idx = _idx;
 	int i = 0, j, k, iters = 0;
 	int d1 = m1.channels() > 1 ? m1.channels() : m1.cols;
 	int d2 = m2.channels() > 1 ? m2.channels() : m2.cols;
-	int esz1 = (int)m1.elemSize1()*d1, esz2 = (int)m2.elemSize1()*d2;
+	int esz1 = (int) m1.elemSize1() * d1, esz2 = (int) m2.elemSize1() * d2;
 	int count = m1.checkVector(d1), count2 = m2.checkVector(d2);
 	const int *m1ptr = m1.ptr<int>(), *m2ptr = m2.ptr<int>();
 
@@ -183,7 +191,7 @@ bool CCoordTransform3DMultiPt::getSubset(const Mat& m1, const Mat& m2,
 
 	for (; iters < maxAttempts; iters++)
 	{
-		for (i = 0; i < modelPoints && iters < maxAttempts; )
+		for (i = 0; i < modelPoints && iters < maxAttempts;)
 		{
 			int idx_i = 0;
 			for (;;)
@@ -196,9 +204,9 @@ bool CCoordTransform3DMultiPt::getSubset(const Mat& m1, const Mat& m2,
 					break;
 			}
 			for (k = 0; k < esz1; k++)
-				ms1ptr[i*esz1 + k] = m1ptr[idx_i*esz1 + k];
+				ms1ptr[i * esz1 + k] = m1ptr[idx_i * esz1 + k];
 			for (k = 0; k < esz2; k++)
-				ms2ptr[i*esz2 + k] = m2ptr[idx_i*esz2 + k];
+				ms2ptr[i * esz2 + k] = m2ptr[idx_i * esz2 + k];
 			if (checkPartialSubsets && !checkSubset(ms1, ms2, i + 1))
 			{
 				// we may have selected some bad points;
@@ -209,7 +217,8 @@ bool CCoordTransform3DMultiPt::getSubset(const Mat& m1, const Mat& m2,
 			}
 			i++;
 		}
-		if (!checkPartialSubsets && i == modelPoints && !checkSubset(ms1, ms2, i))
+		if (!checkPartialSubsets && i == modelPoints
+				&& !checkSubset(ms1, ms2, i))
 			continue;
 		break;
 	}
@@ -217,7 +226,8 @@ bool CCoordTransform3DMultiPt::getSubset(const Mat& m1, const Mat& m2,
 	return i == modelPoints && iters < maxAttempts;
 }
 
-bool CCoordTransform3DMultiPt::checkSubset(const cv::Mat& ms1, const cv::Mat& ms2, int count)
+bool CCoordTransform3DMultiPt::checkSubset(const cv::Mat& ms1,
+		const cv::Mat& ms2, int count)
 {
 	const float threshold = 0.996f;
 
@@ -234,15 +244,15 @@ bool CCoordTransform3DMultiPt::checkSubset(const cv::Mat& ms1, const cv::Mat& ms
 		for (j = 0; j < i; ++j)
 		{
 			Point3f d1 = ptr[j] - ptr[i];
-			float n1 = d1.x*d1.x + d1.y*d1.y;
+			float n1 = d1.x * d1.x + d1.y * d1.y;
 
 			for (k = 0; k < j; ++k)
 			{
 				Point3f d2 = ptr[k] - ptr[i];
-				float denom = (d2.x*d2.x + d2.y*d2.y)*n1;
-				float num = d1.x*d2.x + d1.y*d2.y;
+				float denom = (d2.x * d2.x + d2.y * d2.y) * n1;
+				float num = d1.x * d2.x + d1.y * d2.y;
 
-				if (num*num > threshold*threshold*denom)
+				if (num * num > threshold * threshold * denom)
 					return false;
 			}
 		}
@@ -250,17 +260,14 @@ bool CCoordTransform3DMultiPt::checkSubset(const cv::Mat& ms1, const cv::Mat& ms
 	return true;
 }
 
-
-int CCoordTransform3DMultiPt::runKernel(
-	const cv::Mat& m1, 
-	const cv::Mat& m2, 
-	cv::Mat& model)
+int CCoordTransform3DMultiPt::runKernel(const cv::Mat& m1, const cv::Mat& m2,
+		cv::Mat& model)
 {
 	const Point3f* from = m1.ptr<Point3f>();
 	const Point3f* to = m2.ptr<Point3f>();
 
 	const int N = 12;
-	double buf[N*N + N + N];
+	double buf[N * N + N + N];
 	Mat A(N, N, CV_64F, &buf[0]);
 	Mat B(N, 1, CV_64F, &buf[0] + N * N);
 	Mat X(N, 1, CV_64F, &buf[0] + N * N + N);
@@ -291,12 +298,12 @@ int CCoordTransform3DMultiPt::runKernel(
 	return 1;
 }
 
-
 int CCoordTransform3DMultiPt::RANSACUpdateNumIters(double p, double ep,
-	int model_points, int max_iters)
+		int model_points, int max_iters)
 {
 	if (modelPoints <= 0)
-		std::cerr << "the number of model points should be positive" << std::endl;
+		std::cerr << "the number of model points should be positive"
+				<< std::endl;
 
 	p = MAX(p, 0.);
 	p = MIN(p, 1.);
@@ -312,34 +319,33 @@ int CCoordTransform3DMultiPt::RANSACUpdateNumIters(double p, double ep,
 	num = std::log(num);
 	denom = std::log(denom);
 
-	return denom >= 0 || -num >= max_iters * (-denom) ? max_iters : cvRound(num / denom);
+	return denom >= 0 || -num >= max_iters * (-denom) ?
+			max_iters : cvRound(num / denom);
 }
 
-
-int CCoordTransform3DMultiPt::findInliers(const Mat& m1, const Mat& m2, const Mat& model, Mat& err, Mat& mask, double thresh)
+int CCoordTransform3DMultiPt::findInliers(const Mat& m1, const Mat& m2,
+		const Mat& model, Mat& err, Mat& mask, double thresh)
 {
 	computeReprojError(m1, m2, model, err);
 	mask.create(err.size(), CV_8U);
 
-	CV_Assert(err.isContinuous() && err.type() == CV_32F && mask.isContinuous() && mask.type() == CV_8U);
+	CV_Assert(
+			err.isContinuous() && err.type() == CV_32F && mask.isContinuous() && mask.type() == CV_8U);
 	const float* errptr = err.ptr<float>();
 	uchar* maskptr = mask.ptr<uchar>();
-	float t = (float)(thresh*thresh);
-	int i, n = (int)err.total(), nz = 0;
+	float t = (float) (thresh * thresh);
+	int i, n = (int) err.total(), nz = 0;
 	for (i = 0; i < n; i++)
 	{
 		int f = errptr[i] <= t;
-		maskptr[i] = (uchar)f;
+		maskptr[i] = (uchar) f;
 		nz += f;
 	}
 	return nz;
 }
 
-void CCoordTransform3DMultiPt::computeReprojError(
-	const cv::Mat& m1, 
-	const cv::Mat& m2, 
-	const cv::Mat& model, 
-	cv::Mat& err)
+void CCoordTransform3DMultiPt::computeReprojError(const cv::Mat& m1,
+		const cv::Mat& m2, const cv::Mat& model, cv::Mat& err)
 {
 	const Point3f* from = m1.ptr<Point3f>();
 	const Point3f* to = m2.ptr<Point3f>();
@@ -359,6 +365,6 @@ void CCoordTransform3DMultiPt::computeReprojError(
 		double b = F[4] * f.x + F[5] * f.y + F[6] * f.z + F[7] - t.y;
 		double c = F[8] * f.x + F[9] * f.y + F[10] * f.z + F[11] - t.z;
 
-		errptr[i] = (float)(a*a + b * b + c * c);
+		errptr[i] = (float) (a * a + b * b + c * c);
 	}
 }

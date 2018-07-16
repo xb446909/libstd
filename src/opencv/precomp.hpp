@@ -1,44 +1,44 @@
 /*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                           License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
+ //
+ //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+ //
+ //  By downloading, copying, installing or using the software you agree to this license.
+ //  If you do not agree to this license, do not download, install,
+ //  copy or use the software.
+ //
+ //
+ //                           License Agreement
+ //                For Open Source Computer Vision Library
+ //
+ // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+ // Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+ // Third party copyrights are property of their respective owners.
+ //
+ // Redistribution and use in source and binary forms, with or without modification,
+ // are permitted provided that the following conditions are met:
+ //
+ //   * Redistribution's of source code must retain the above copyright notice,
+ //     this list of conditions and the following disclaimer.
+ //
+ //   * Redistribution's in binary form must reproduce the above copyright notice,
+ //     this list of conditions and the following disclaimer in the documentation
+ //     and/or other materials provided with the distribution.
+ //
+ //   * The name of the copyright holders may not be used to endorse or promote products
+ //     derived from this software without specific prior written permission.
+ //
+ // This software is provided by the copyright holders and contributors "as is" and
+ // any express or implied warranties, including, but not limited to, the implied
+ // warranties of merchantability and fitness for a particular purpose are disclaimed.
+ // In no event shall the Intel Corporation or contributors be liable for any direct,
+ // indirect, incidental, special, exemplary, or consequential damages
+ // (including, but not limited to, procurement of substitute goods or services;
+ // loss of use, data, or profits; or business interruption) however caused
+ // and on any theory of liability, whether in contract, strict liability,
+ // or tort (including negligence or otherwise) arising in any way out of
+ // the use of this software, even if advised of the possibility of such damage.
+ //
+ //M*/
 
 #ifndef __OPENCV_PRECOMP_H__
 #define __OPENCV_PRECOMP_H__
@@ -111,34 +111,43 @@ extern const uchar g_Saturate8u[];
 #define CV_MAX_8U(a,b)       ((a) + CV_FAST_CAST_8U((b) - (a)))
 
 template<> inline uchar OpAdd<uchar>::operator ()(uchar a, uchar b) const
-{ return CV_FAST_CAST_8U(a + b); }
+{
+	return CV_FAST_CAST_8U(a + b);
+}
 
 template<> inline uchar OpSub<uchar>::operator ()(uchar a, uchar b) const
-{ return CV_FAST_CAST_8U(a - b); }
+{
+	return CV_FAST_CAST_8U(a - b);
+}
 
 template<> inline short OpAbsDiff<short>::operator ()(short a, short b) const
-{ return saturate_cast<short>(std::abs(a - b)); }
+{
+	return saturate_cast<short>(std::abs(a - b));
+}
 
 template<> inline schar OpAbsDiff<schar>::operator ()(schar a, schar b) const
-{ return saturate_cast<schar>(std::abs(a - b)); }
+{
+	return saturate_cast<schar>(std::abs(a - b));
+}
 
-template<> inline uchar OpMin<uchar>::operator ()(uchar a, uchar b) const { return CV_MIN_8U(a, b); }
+template<> inline uchar OpMin<uchar>::operator ()(uchar a, uchar b) const
+{
+	return CV_MIN_8U(a, b);
+}
 
-template<> inline uchar OpMax<uchar>::operator ()(uchar a, uchar b) const { return CV_MAX_8U(a, b); }
+template<> inline uchar OpMax<uchar>::operator ()(uchar a, uchar b) const
+{
+	return CV_MAX_8U(a, b);
+}
 
-typedef void (*UnaryFunc)(const uchar* src1, size_t step1,
-                       uchar* dst, size_t step, Size sz,
-                       void*);
+typedef void (*UnaryFunc)(const uchar* src1, size_t step1, uchar* dst,
+		size_t step, Size sz, void*);
 
-typedef void (*BinaryFunc)(const uchar* src1, size_t step1,
-                       const uchar* src2, size_t step2,
-                       uchar* dst, size_t step, Size sz,
-                       void*);
+typedef void (*BinaryFunc)(const uchar* src1, size_t step1, const uchar* src2,
+		size_t step2, uchar* dst, size_t step, Size sz, void*);
 
-typedef void (*BinaryFuncC)(const uchar* src1, size_t step1,
-                       const uchar* src2, size_t step2,
-                       uchar* dst, size_t step, int width, int height,
-                       void*);
+typedef void (*BinaryFuncC)(const uchar* src1, size_t step1, const uchar* src2,
+		size_t step2, uchar* dst, size_t step, int width, int height, void*);
 
 BinaryFunc getConvertFunc(int sdepth, int ddepth);
 BinaryFunc getConvertScaleFunc(int sdepth, int ddepth);
@@ -153,59 +162,63 @@ BinaryFunc getCopyMaskFunc(size_t esz);
 /* maximal average node_count/hash_size ratio beyond which hash table is resized */
 #define  CV_SPARSE_HASH_RATIO    3
 
-inline Size getContinuousSize_( int flags, int cols, int rows, int widthScale )
+inline Size getContinuousSize_(int flags, int cols, int rows, int widthScale)
 {
-    int64 sz = (int64)cols * rows * widthScale;
-    return (flags & Mat::CONTINUOUS_FLAG) != 0 &&
-        (int)sz == sz ? Size((int)sz, 1) : Size(cols * widthScale, rows);
+	int64 sz = (int64) cols * rows * widthScale;
+	return (flags & Mat::CONTINUOUS_FLAG) != 0 && (int) sz == sz ?
+			Size((int) sz, 1) : Size(cols * widthScale, rows);
 }
 
-inline Size getContinuousSize( const Mat& m1, int widthScale=1 )
+inline Size getContinuousSize(const Mat& m1, int widthScale = 1)
 {
-    return getContinuousSize_(m1.flags,
-                              m1.cols, m1.rows, widthScale);
+	return getContinuousSize_(m1.flags, m1.cols, m1.rows, widthScale);
 }
 
-inline Size getContinuousSize( const Mat& m1, const Mat& m2, int widthScale=1 )
+inline Size getContinuousSize(const Mat& m1, const Mat& m2, int widthScale = 1)
 {
-    return getContinuousSize_(m1.flags & m2.flags,
-                              m1.cols, m1.rows, widthScale);
+	return getContinuousSize_(m1.flags & m2.flags, m1.cols, m1.rows, widthScale);
 }
 
-inline Size getContinuousSize( const Mat& m1, const Mat& m2,
-                               const Mat& m3, int widthScale=1 )
+inline Size getContinuousSize(const Mat& m1, const Mat& m2, const Mat& m3,
+		int widthScale = 1)
 {
-    return getContinuousSize_(m1.flags & m2.flags & m3.flags,
-                              m1.cols, m1.rows, widthScale);
+	return getContinuousSize_(m1.flags & m2.flags & m3.flags, m1.cols, m1.rows,
+			widthScale);
 }
 
-inline Size getContinuousSize( const Mat& m1, const Mat& m2,
-                               const Mat& m3, const Mat& m4,
-                               int widthScale=1 )
+inline Size getContinuousSize(const Mat& m1, const Mat& m2, const Mat& m3,
+		const Mat& m4, int widthScale = 1)
 {
-    return getContinuousSize_(m1.flags & m2.flags & m3.flags & m4.flags,
-                              m1.cols, m1.rows, widthScale);
+	return getContinuousSize_(m1.flags & m2.flags & m3.flags & m4.flags,
+			m1.cols, m1.rows, widthScale);
 }
 
-inline Size getContinuousSize( const Mat& m1, const Mat& m2,
-                               const Mat& m3, const Mat& m4,
-                               const Mat& m5, int widthScale=1 )
+inline Size getContinuousSize(const Mat& m1, const Mat& m2, const Mat& m3,
+		const Mat& m4, const Mat& m5, int widthScale = 1)
 {
-    return getContinuousSize_(m1.flags & m2.flags & m3.flags & m4.flags & m5.flags,
-                              m1.cols, m1.rows, widthScale);
+	return getContinuousSize_(
+			m1.flags & m2.flags & m3.flags & m4.flags & m5.flags, m1.cols,
+			m1.rows, widthScale);
 }
 
-void setSize( Mat& m, int _dims, const int* _sz, const size_t* _steps, bool autoSteps=false );
+void setSize(Mat& m, int _dims, const int* _sz, const size_t* _steps,
+		bool autoSteps = false);
 void finalizeHdr(Mat& m);
 
 struct NoVec
 {
-    size_t operator()(const void*, const void*, void*, size_t) const { return 0; }
+	size_t operator()(const void*, const void*, void*, size_t) const
+	{
+		return 0;
+	}
 };
 
 #define CV_SPLIT_MERGE_MAX_BLOCK_SIZE(cn) ((INT_MAX/4)/cn) // HAL implementation accepts 'int' len, so INT_MAX doesn't work here
 
-enum { BLOCK_SIZE = 1024 };
+enum
+{
+	BLOCK_SIZE = 1024
+};
 
 #if defined HAVE_IPP && (IPP_VERSION_X100 >= 700)
 #define ARITHM_USE_IPP 1
@@ -215,81 +228,82 @@ enum { BLOCK_SIZE = 1024 };
 
 inline bool checkScalar(const Mat& sc, int atype, int sckind, int akind)
 {
-    if( sc.dims > 2 || !sc.isContinuous() )
-        return false;
-    Size sz = sc.size();
-    if(sz.width != 1 && sz.height != 1)
-        return false;
-    int cn = CV_MAT_CN(atype);
-    if( akind == _InputArray::MATX && sckind != _InputArray::MATX )
-        return false;
-    return sz == Size(1, 1) || sz == Size(1, cn) || sz == Size(cn, 1) ||
-           (sz == Size(1, 4) && sc.type() == CV_64F && cn <= 4);
+	if (sc.dims > 2 || !sc.isContinuous())
+		return false;
+	Size sz = sc.size();
+	if (sz.width != 1 && sz.height != 1)
+		return false;
+	int cn = CV_MAT_CN(atype);
+	if (akind == _InputArray::MATX && sckind != _InputArray::MATX)
+		return false;
+	return sz == Size(1, 1) || sz == Size(1, cn) || sz == Size(cn, 1)
+			|| (sz == Size(1, 4) && sc.type() == CV_64F && cn <= 4);
 }
 
 inline bool checkScalar(InputArray sc, int atype, int sckind, int akind)
 {
-    if( sc.dims() > 2 || !sc.isContinuous() )
-        return false;
-    Size sz = sc.size();
-    if(sz.width != 1 && sz.height != 1)
-        return false;
-    int cn = CV_MAT_CN(atype);
-    if( akind == _InputArray::MATX && sckind != _InputArray::MATX )
-        return false;
-    return sz == Size(1, 1) || sz == Size(1, cn) || sz == Size(cn, 1) ||
-           (sz == Size(1, 4) && sc.type() == CV_64F && cn <= 4);
+	if (sc.dims() > 2 || !sc.isContinuous())
+		return false;
+	Size sz = sc.size();
+	if (sz.width != 1 && sz.height != 1)
+		return false;
+	int cn = CV_MAT_CN(atype);
+	if (akind == _InputArray::MATX && sckind != _InputArray::MATX)
+		return false;
+	return sz == Size(1, 1) || sz == Size(1, cn) || sz == Size(cn, 1)
+			|| (sz == Size(1, 4) && sc.type() == CV_64F && cn <= 4);
 }
 
-void convertAndUnrollScalar( const Mat& sc, int buftype, uchar* scbuf, size_t blocksize );
+void convertAndUnrollScalar(const Mat& sc, int buftype, uchar* scbuf,
+		size_t blocksize);
 
 #ifdef CV_COLLECT_IMPL_DATA
 struct ImplCollector
 {
-    ImplCollector()
-    {
-        useCollection   = false;
-        implFlags       = 0;
-    }
-    bool useCollection; // enable/disable impl data collection
+	ImplCollector()
+	{
+		useCollection = false;
+		implFlags = 0;
+	}
+	bool useCollection; // enable/disable impl data collection
 
-    int implFlags;
-    std::vector<int>    implCode;
-    std::vector<String> implFun;
+	int implFlags;
+	std::vector<int> implCode;
+	std::vector<String> implFun;
 
-    cv::Mutex mutex;
+	cv::Mutex mutex;
 };
 #endif
 
 struct CoreTLSData
 {
-    CoreTLSData() :
+	CoreTLSData() :
 //#ifdef HAVE_OPENCL
-        device(0), useOpenCL(-1),
+			device(0), useOpenCL(-1),
 //#endif
-        useIPP(-1),
-        useIPP_NE(-1)
+			useIPP(-1), useIPP_NE(-1)
 #ifdef HAVE_TEGRA_OPTIMIZATION
-        ,useTegra(-1)
+	,useTegra(-1)
 #endif
 #ifdef HAVE_OPENVX
-        ,useOpenVX(-1)
+	,useOpenVX(-1)
 #endif
-    {}
+	{
+	}
 
-    RNG rng;
+	RNG rng;
 //#ifdef HAVE_OPENCL
-    int device; // device index of an array of devices in a context, see also Device::getDefault
-    ocl::Queue oclQueue; // the queue used for running a kernel, see also getQueue, Kernel::run
-    int useOpenCL; // 1 - use, 0 - do not use, -1 - auto/not initialized
+	int device; // device index of an array of devices in a context, see also Device::getDefault
+	ocl::Queue oclQueue; // the queue used for running a kernel, see also getQueue, Kernel::run
+	int useOpenCL; // 1 - use, 0 - do not use, -1 - auto/not initialized
 //#endif
-    int useIPP;    // 1 - use, 0 - do not use, -1 - auto/not initialized
-    int useIPP_NE; // 1 - use, 0 - do not use, -1 - auto/not initialized
+	int useIPP;    // 1 - use, 0 - do not use, -1 - auto/not initialized
+	int useIPP_NE; // 1 - use, 0 - do not use, -1 - auto/not initialized
 #ifdef HAVE_TEGRA_OPTIMIZATION
-    int useTegra; // 1 - use, 0 - do not use, -1 - auto/not initialized
+	int useTegra; // 1 - use, 0 - do not use, -1 - auto/not initialized
 #endif
 #ifdef HAVE_OPENVX
-    int useOpenVX; // 1 - use, 0 - do not use, -1 - auto/not initialized
+	int useOpenVX; // 1 - use, 0 - do not use, -1 - auto/not initialized
 #endif
 };
 
@@ -308,7 +322,7 @@ TLSData<CoreTLSData>& getCoreTlsData();
 #endif
 
 extern bool __termination; // skip some cleanups, because process is terminating
-                           // (for example, if ExitProcess() was already called)
+// (for example, if ExitProcess() was already called)
 
 cv::Mutex& getInitializationMutex();
 

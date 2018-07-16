@@ -3,9 +3,9 @@
 // of this distribution and at http://opencv.org/license.html.
 
 /*
-  Part of the file is an extract from the standard OpenCL headers from Khronos site.
-  Below is the original copyright.
-*/
+ Part of the file is an extract from the standard OpenCL headers from Khronos site.
+ Below is the original copyright.
+ */
 
 /*******************************************************************************
  * Copyright (c) 2008 - 2012 The Khronos Group Inc.
@@ -50,104 +50,133 @@ static const bool g_haveOpenCL = true;
 
 #else
 
-extern "C" {
+extern "C"
+{
 
-struct _cl_platform_id { int dummy; };
-struct _cl_device_id { int dummy; };
-struct _cl_context { int dummy; };
-struct _cl_command_queue { int dummy; };
-struct _cl_mem { int dummy; };
-struct _cl_program { int dummy; };
-struct _cl_kernel { int dummy; };
-struct _cl_event { int dummy; };
-struct _cl_sampler { int dummy; };
+struct _cl_platform_id
+{
+	int dummy;
+};
+struct _cl_device_id
+{
+	int dummy;
+};
+struct _cl_context
+{
+	int dummy;
+};
+struct _cl_command_queue
+{
+	int dummy;
+};
+struct _cl_mem
+{
+	int dummy;
+};
+struct _cl_program
+{
+	int dummy;
+};
+struct _cl_kernel
+{
+	int dummy;
+};
+struct _cl_event
+{
+	int dummy;
+};
+struct _cl_sampler
+{
+	int dummy;
+};
 
-typedef struct _cl_platform_id *    cl_platform_id;
-typedef struct _cl_device_id *      cl_device_id;
-typedef struct _cl_context *        cl_context;
-typedef struct _cl_command_queue *  cl_command_queue;
-typedef struct _cl_mem *            cl_mem;
-typedef struct _cl_program *        cl_program;
-typedef struct _cl_kernel *         cl_kernel;
-typedef struct _cl_event *          cl_event;
-typedef struct _cl_sampler *        cl_sampler;
+typedef struct _cl_platform_id * cl_platform_id;
+typedef struct _cl_device_id * cl_device_id;
+typedef struct _cl_context * cl_context;
+typedef struct _cl_command_queue * cl_command_queue;
+typedef struct _cl_mem * cl_mem;
+typedef struct _cl_program * cl_program;
+typedef struct _cl_kernel * cl_kernel;
+typedef struct _cl_event * cl_event;
+typedef struct _cl_sampler * cl_sampler;
 
 typedef int cl_int;
 typedef unsigned cl_uint;
 #if defined (_WIN32) && defined(_MSC_VER)
-    typedef __int64 cl_long;
-    typedef unsigned __int64 cl_ulong;
+typedef __int64 cl_long;
+typedef unsigned __int64 cl_ulong;
 #else
-    typedef long cl_long;
-    typedef unsigned long cl_ulong;
+typedef long cl_long;
+typedef unsigned long cl_ulong;
 #endif
 
-typedef cl_uint             cl_bool; /* WARNING!  Unlike cl_ types in cl_platform.h, cl_bool is not guaranteed to be the same size as the bool in kernels. */
-typedef cl_ulong            cl_bitfield;
-typedef cl_bitfield         cl_device_type;
-typedef cl_uint             cl_platform_info;
-typedef cl_uint             cl_device_info;
-typedef cl_bitfield         cl_device_fp_config;
-typedef cl_uint             cl_device_mem_cache_type;
-typedef cl_uint             cl_device_local_mem_type;
-typedef cl_bitfield         cl_device_exec_capabilities;
-typedef cl_bitfield         cl_command_queue_properties;
-typedef intptr_t            cl_device_partition_property;
-typedef cl_bitfield         cl_device_affinity_domain;
+typedef cl_uint cl_bool; /* WARNING!  Unlike cl_ types in cl_platform.h, cl_bool is not guaranteed to be the same size as the bool in kernels. */
+typedef cl_ulong cl_bitfield;
+typedef cl_bitfield cl_device_type;
+typedef cl_uint cl_platform_info;
+typedef cl_uint cl_device_info;
+typedef cl_bitfield cl_device_fp_config;
+typedef cl_uint cl_device_mem_cache_type;
+typedef cl_uint cl_device_local_mem_type;
+typedef cl_bitfield cl_device_exec_capabilities;
+typedef cl_bitfield cl_command_queue_properties;
+typedef intptr_t cl_device_partition_property;
+typedef cl_bitfield cl_device_affinity_domain;
 
-typedef intptr_t            cl_context_properties;
-typedef cl_uint             cl_context_info;
-typedef cl_uint             cl_command_queue_info;
-typedef cl_uint             cl_channel_order;
-typedef cl_uint             cl_channel_type;
-typedef cl_bitfield         cl_mem_flags;
-typedef cl_uint             cl_mem_object_type;
-typedef cl_uint             cl_mem_info;
-typedef cl_bitfield         cl_mem_migration_flags;
-typedef cl_uint             cl_image_info;
-typedef cl_uint             cl_buffer_create_type;
-typedef cl_uint             cl_addressing_mode;
-typedef cl_uint             cl_filter_mode;
-typedef cl_uint             cl_sampler_info;
-typedef cl_bitfield         cl_map_flags;
-typedef cl_uint             cl_program_info;
-typedef cl_uint             cl_program_build_info;
-typedef cl_uint             cl_program_binary_type;
-typedef cl_int              cl_build_status;
-typedef cl_uint             cl_kernel_info;
-typedef cl_uint             cl_kernel_arg_info;
-typedef cl_uint             cl_kernel_arg_address_qualifier;
-typedef cl_uint             cl_kernel_arg_access_qualifier;
-typedef cl_bitfield         cl_kernel_arg_type_qualifier;
-typedef cl_uint             cl_kernel_work_group_info;
-typedef cl_uint             cl_event_info;
-typedef cl_uint             cl_command_type;
-typedef cl_uint             cl_profiling_info;
+typedef intptr_t cl_context_properties;
+typedef cl_uint cl_context_info;
+typedef cl_uint cl_command_queue_info;
+typedef cl_uint cl_channel_order;
+typedef cl_uint cl_channel_type;
+typedef cl_bitfield cl_mem_flags;
+typedef cl_uint cl_mem_object_type;
+typedef cl_uint cl_mem_info;
+typedef cl_bitfield cl_mem_migration_flags;
+typedef cl_uint cl_image_info;
+typedef cl_uint cl_buffer_create_type;
+typedef cl_uint cl_addressing_mode;
+typedef cl_uint cl_filter_mode;
+typedef cl_uint cl_sampler_info;
+typedef cl_bitfield cl_map_flags;
+typedef cl_uint cl_program_info;
+typedef cl_uint cl_program_build_info;
+typedef cl_uint cl_program_binary_type;
+typedef cl_int cl_build_status;
+typedef cl_uint cl_kernel_info;
+typedef cl_uint cl_kernel_arg_info;
+typedef cl_uint cl_kernel_arg_address_qualifier;
+typedef cl_uint cl_kernel_arg_access_qualifier;
+typedef cl_bitfield cl_kernel_arg_type_qualifier;
+typedef cl_uint cl_kernel_work_group_info;
+typedef cl_uint cl_event_info;
+typedef cl_uint cl_command_type;
+typedef cl_uint cl_profiling_info;
 
-
-typedef struct _cl_image_format {
-    cl_channel_order        image_channel_order;
-    cl_channel_type         image_channel_data_type;
+typedef struct _cl_image_format
+{
+	cl_channel_order image_channel_order;
+	cl_channel_type image_channel_data_type;
 } cl_image_format;
 
-typedef struct _cl_image_desc {
-    cl_mem_object_type      image_type;
-    size_t                  image_width;
-    size_t                  image_height;
-    size_t                  image_depth;
-    size_t                  image_array_size;
-    size_t                  image_row_pitch;
-    size_t                  image_slice_pitch;
-    cl_uint                 num_mip_levels;
-    cl_uint                 num_samples;
-    cl_mem                  buffer;
+typedef struct _cl_image_desc
+{
+	cl_mem_object_type image_type;
+	size_t image_width;
+	size_t image_height;
+	size_t image_depth;
+	size_t image_array_size;
+	size_t image_row_pitch;
+	size_t image_slice_pitch;
+	cl_uint num_mip_levels;
+	cl_uint num_samples;
+	cl_mem buffer;
 } cl_image_desc;
 
-typedef struct _cl_buffer_region {
-    size_t                  origin;
-    size_t                  size;
+typedef struct _cl_buffer_region
+{
+	size_t origin;
+	size_t size;
 } cl_buffer_region;
-
 
 //////////////////////////////////////////////////////////
 
@@ -213,8 +242,8 @@ typedef struct _cl_buffer_region {
 #define CL_INVALID_DEVICE_PARTITION_COUNT           -68
 
 /*#define CL_VERSION_1_0                              1
-#define CL_VERSION_1_1                              1
-#define CL_VERSION_1_2                              1*/
+ #define CL_VERSION_1_1                              1
+ #define CL_VERSION_1_2                              1*/
 
 #define CL_FALSE                                    0
 #define CL_TRUE                                     1
@@ -543,7 +572,6 @@ typedef struct _cl_buffer_region {
 
 #define CL_CALLBACK CV_STDCALL
 
-
 #ifdef HAVE_OPENCL
 static const char* oclFuncToCheck = "clEnqueueReadBufferRect";
 static volatile bool g_haveOpenCL = false;
@@ -554,38 +582,38 @@ static volatile bool g_haveOpenCL = false;
 
 static void* initOpenCLAndLoad(const char* funcname)
 {
-    static bool initialized = false;
-    static void* handle = 0;
-    if (!handle)
-    {
-        if(!initialized)
-        {
-            const char* oclpath = getenv("OPENCV_OPENCL_RUNTIME");
-            oclpath = oclpath && strlen(oclpath) > 0 ? oclpath :
-                "/System/Library/Frameworks/OpenCL.framework/Versions/Current/OpenCL";
-            handle = dlopen(oclpath, RTLD_LAZY);
-            initialized = true;
-            g_haveOpenCL = handle != 0 && dlsym(handle, oclFuncToCheck) != 0;
-            if( g_haveOpenCL )
-                fprintf(stderr, "Successfully loaded OpenCL v1.1+ runtime from %s\n", oclpath);
-            else
-                fprintf(stderr, "Failed to load OpenCL runtime\n");
-        }
-        if(!handle)
-            return 0;
-    }
+	static bool initialized = false;
+	static void* handle = 0;
+	if (!handle)
+	{
+		if(!initialized)
+		{
+			const char* oclpath = getenv("OPENCV_OPENCL_RUNTIME");
+			oclpath = oclpath && strlen(oclpath) > 0 ? oclpath :
+			"/System/Library/Frameworks/OpenCL.framework/Versions/Current/OpenCL";
+			handle = dlopen(oclpath, RTLD_LAZY);
+			initialized = true;
+			g_haveOpenCL = handle != 0 && dlsym(handle, oclFuncToCheck) != 0;
+			if( g_haveOpenCL )
+			fprintf(stderr, "Successfully loaded OpenCL v1.1+ runtime from %s\n", oclpath);
+			else
+			fprintf(stderr, "Failed to load OpenCL runtime\n");
+		}
+		if(!handle)
+		return 0;
+	}
 
-    return funcname && handle ? dlsym(handle, funcname) : 0;
+	return funcname && handle ? dlsym(handle, funcname) : 0;
 }
 
 #elif defined _WIN32 && defined(HAVE_OPENCL)
 
 #ifndef _WIN32_WINNT           // This is needed for the declaration of TryEnterCriticalSection in winbase.h with Visual Studio 2005 (and older?)
-  #define _WIN32_WINNT 0x0400  // http://msdn.microsoft.com/en-us/library/ms686857(VS.85).aspx
+#define _WIN32_WINNT 0x0400  // http://msdn.microsoft.com/en-us/library/ms686857(VS.85).aspx
 #endif
 #include <windows.h>
 #if (_WIN32_WINNT >= 0x0602)
-  #include <synchapi.h>
+#include <synchapi.h>
 #endif
 #undef small
 #undef min
@@ -594,23 +622,23 @@ static void* initOpenCLAndLoad(const char* funcname)
 
 static void* initOpenCLAndLoad(const char* funcname)
 {
-    static bool initialized = false;
-    static HMODULE handle = 0;
-    if (!handle)
-    {
+	static bool initialized = false;
+	static HMODULE handle = 0;
+	if (!handle)
+	{
 #ifndef WINRT
-        if(!initialized)
-        {
-            handle = LoadLibraryA("OpenCL.dll");
-            initialized = true;
-            g_haveOpenCL = handle != 0 && GetProcAddress(handle, oclFuncToCheck) != 0;
-        }
+		if(!initialized)
+		{
+			handle = LoadLibraryA("OpenCL.dll");
+			initialized = true;
+			g_haveOpenCL = handle != 0 && GetProcAddress(handle, oclFuncToCheck) != 0;
+		}
 #endif
-        if(!handle)
-            return 0;
-    }
+		if(!handle)
+		return 0;
+	}
 
-    return funcname ? (void*)GetProcAddress(handle, funcname) : 0;
+	return funcname ? (void*)GetProcAddress(handle, funcname) : 0;
 }
 
 #elif defined(__linux) && defined(HAVE_OPENCL)
@@ -620,34 +648,33 @@ static void* initOpenCLAndLoad(const char* funcname)
 
 static void* initOpenCLAndLoad(const char* funcname)
 {
-    static bool initialized = false;
-    static void* handle = 0;
-    if (!handle)
-    {
-        if(!initialized)
-        {
-            handle = dlopen("libOpenCL.so", RTLD_LAZY);
-            if(!handle)
-                handle = dlopen("libCL.so", RTLD_LAZY);
-            initialized = true;
-            g_haveOpenCL = handle != 0 && dlsym(handle, oclFuncToCheck) != 0;
-        }
-        if(!handle)
-            return 0;
-    }
+	static bool initialized = false;
+	static void* handle = 0;
+	if (!handle)
+	{
+		if(!initialized)
+		{
+			handle = dlopen("libOpenCL.so", RTLD_LAZY);
+			if(!handle)
+			handle = dlopen("libCL.so", RTLD_LAZY);
+			initialized = true;
+			g_haveOpenCL = handle != 0 && dlsym(handle, oclFuncToCheck) != 0;
+		}
+		if(!handle)
+		return 0;
+	}
 
-    return funcname ? (void*)dlsym(handle, funcname) : 0;
+	return funcname ? (void*)dlsym(handle, funcname) : 0;
 }
 
 #else
 
 static void* initOpenCLAndLoad(const char*)
 {
-    return 0;
+	return 0;
 }
 
 #endif
-
 
 #define OCL_FUNC(rettype, funcname, argsdecl, args) \
     typedef rettype (CV_STDCALL * funcname##_t) argsdecl; \
@@ -662,7 +689,6 @@ static void* initOpenCLAndLoad(const char*)
         } \
         return funcname##_p args; \
     }
-
 
 #define OCL_FUNC_P(rettype, funcname, argsdecl, args) \
     typedef rettype (CV_STDCALL * funcname##_t) argsdecl; \
@@ -683,157 +709,154 @@ static void* initOpenCLAndLoad(const char*)
     }
 
 OCL_FUNC(cl_int, clGetPlatformIDs,
-    (cl_uint num_entries, cl_platform_id* platforms, cl_uint* num_platforms),
-    (num_entries, platforms, num_platforms))
+		(cl_uint num_entries, cl_platform_id* platforms, cl_uint* num_platforms),
+		(num_entries, platforms, num_platforms))
 
 OCL_FUNC(cl_int, clGetPlatformInfo,
-    (cl_platform_id platform, cl_platform_info param_name,
-    size_t param_value_size, void * param_value,
-    size_t * param_value_size_ret),
-    (platform, param_name, param_value_size, param_value, param_value_size_ret))
+		(cl_platform_id platform, cl_platform_info param_name,
+				size_t param_value_size, void * param_value,
+				size_t * param_value_size_ret),
+		(platform, param_name, param_value_size, param_value, param_value_size_ret))
 
 OCL_FUNC(cl_int, clGetDeviceInfo,
-         (cl_device_id device,
-          cl_device_info param_name,
-          size_t param_value_size,
-          void * param_value,
-          size_t * param_value_size_ret),
-         (device, param_name, param_value_size, param_value, param_value_size_ret))
-
+		(cl_device_id device,
+				cl_device_info param_name,
+				size_t param_value_size,
+				void * param_value,
+				size_t * param_value_size_ret),
+		(device, param_name, param_value_size, param_value, param_value_size_ret))
 
 OCL_FUNC(cl_int, clGetDeviceIDs,
-    (cl_platform_id platform,
-    cl_device_type device_type,
-    cl_uint num_entries,
-    cl_device_id * devices,
-    cl_uint * num_devices),
-    (platform, device_type, num_entries, devices, num_devices))
+		(cl_platform_id platform,
+				cl_device_type device_type,
+				cl_uint num_entries,
+				cl_device_id * devices,
+				cl_uint * num_devices),
+		(platform, device_type, num_entries, devices, num_devices))
 
 OCL_FUNC_P(cl_context, clCreateContext,
-    (const cl_context_properties * properties,
-    cl_uint num_devices,
-    const cl_device_id * devices,
-    void (CL_CALLBACK * pfn_notify)(const char *, const void *, size_t, void *),
-    void * user_data,
-    cl_int * errcode_ret),
-    (properties, num_devices, devices, pfn_notify, user_data, errcode_ret))
+		(const cl_context_properties * properties,
+				cl_uint num_devices,
+				const cl_device_id * devices,
+				void (CL_CALLBACK * pfn_notify)(const char *, const void *, size_t, void *),
+				void * user_data,
+				cl_int * errcode_ret),
+		(properties, num_devices, devices, pfn_notify, user_data, errcode_ret))
 
 OCL_FUNC(cl_int, clReleaseContext, (cl_context context), (context))
 
-
 OCL_FUNC(cl_int, clRetainContext, (cl_context context), (context))
 /*
-OCL_FUNC_P(cl_context, clCreateContextFromType,
-    (const cl_context_properties * properties,
-    cl_device_type device_type,
-    void (CL_CALLBACK * pfn_notify)(const char *, const void *, size_t, void *),
-    void * user_data,
-    cl_int * errcode_ret),
-    (properties, device_type, pfn_notify, user_data, errcode_ret))
+ OCL_FUNC_P(cl_context, clCreateContextFromType,
+ (const cl_context_properties * properties,
+ cl_device_type device_type,
+ void (CL_CALLBACK * pfn_notify)(const char *, const void *, size_t, void *),
+ void * user_data,
+ cl_int * errcode_ret),
+ (properties, device_type, pfn_notify, user_data, errcode_ret))
 
-OCL_FUNC(cl_int, clGetContextInfo,
-    (cl_context context,
-    cl_context_info param_name,
-    size_t param_value_size,
-    void * param_value,
-    size_t * param_value_size_ret),
-    (context, param_name, param_value_size,
-    param_value, param_value_size_ret))
-*/
+ OCL_FUNC(cl_int, clGetContextInfo,
+ (cl_context context,
+ cl_context_info param_name,
+ size_t param_value_size,
+ void * param_value,
+ size_t * param_value_size_ret),
+ (context, param_name, param_value_size,
+ param_value, param_value_size_ret))
+ */
 OCL_FUNC_P(cl_command_queue, clCreateCommandQueue,
-    (cl_context context,
-    cl_device_id device,
-    cl_command_queue_properties properties,
-    cl_int * errcode_ret),
-    (context, device, properties, errcode_ret))
+		(cl_context context,
+				cl_device_id device,
+				cl_command_queue_properties properties,
+				cl_int * errcode_ret),
+		(context, device, properties, errcode_ret))
 
 OCL_FUNC(cl_int, clReleaseCommandQueue, (cl_command_queue command_queue), (command_queue))
 
 OCL_FUNC_P(cl_mem, clCreateBuffer,
-    (cl_context context,
-    cl_mem_flags flags,
-    size_t size,
-    void * host_ptr,
-    cl_int * errcode_ret),
-    (context, flags, size, host_ptr, errcode_ret))
+		(cl_context context,
+				cl_mem_flags flags,
+				size_t size,
+				void * host_ptr,
+				cl_int * errcode_ret),
+		(context, flags, size, host_ptr, errcode_ret))
 
 /*
-OCL_FUNC(cl_int, clRetainCommandQueue, (cl_command_queue command_queue), (command_queue))
-*/
+ OCL_FUNC(cl_int, clRetainCommandQueue, (cl_command_queue command_queue), (command_queue))
+ */
 OCL_FUNC(cl_int, clGetCommandQueueInfo,
-   (cl_command_queue command_queue,
-   cl_command_queue_info param_name,
-   size_t param_value_size,
-   void * param_value,
-   size_t * param_value_size_ret),
-   (command_queue, param_name, param_value_size, param_value, param_value_size_ret))
+		(cl_command_queue command_queue,
+				cl_command_queue_info param_name,
+				size_t param_value_size,
+				void * param_value,
+				size_t * param_value_size_ret),
+		(command_queue, param_name, param_value_size, param_value, param_value_size_ret))
 /*
-OCL_FUNC_P(cl_mem, clCreateSubBuffer,
-    (cl_mem buffer,
-    cl_mem_flags flags,
-    cl_buffer_create_type buffer_create_type,
-    const void * buffer_create_info,
-    cl_int * errcode_ret),
-    (buffer, flags, buffer_create_type, buffer_create_info, errcode_ret))
-*/
+ OCL_FUNC_P(cl_mem, clCreateSubBuffer,
+ (cl_mem buffer,
+ cl_mem_flags flags,
+ cl_buffer_create_type buffer_create_type,
+ const void * buffer_create_info,
+ cl_int * errcode_ret),
+ (buffer, flags, buffer_create_type, buffer_create_info, errcode_ret))
+ */
 
 OCL_FUNC_P(cl_mem, clCreateImage,
-    (cl_context context,
-    cl_mem_flags flags,
-    const cl_image_format * image_format,
-    const cl_image_desc * image_desc,
-    void * host_ptr,
-    cl_int * errcode_ret),
-    (context, flags, image_format, image_desc, host_ptr, errcode_ret))
+		(cl_context context,
+				cl_mem_flags flags,
+				const cl_image_format * image_format,
+				const cl_image_desc * image_desc,
+				void * host_ptr,
+				cl_int * errcode_ret),
+		(context, flags, image_format, image_desc, host_ptr, errcode_ret))
 
 OCL_FUNC_P(cl_mem, clCreateImage2D,
-    (cl_context context,
-    cl_mem_flags flags,
-    const cl_image_format * image_format,
-    size_t image_width,
-    size_t image_height,
-    size_t image_row_pitch,
-    void * host_ptr,
-    cl_int *errcode_ret),
-    (context, flags, image_format, image_width, image_height, image_row_pitch, host_ptr, errcode_ret))
+		(cl_context context,
+				cl_mem_flags flags,
+				const cl_image_format * image_format,
+				size_t image_width,
+				size_t image_height,
+				size_t image_row_pitch,
+				void * host_ptr,
+				cl_int *errcode_ret),
+		(context, flags, image_format, image_width, image_height, image_row_pitch, host_ptr, errcode_ret))
 
 OCL_FUNC(cl_int, clGetSupportedImageFormats,
- (cl_context context,
- cl_mem_flags flags,
- cl_mem_object_type image_type,
- cl_uint num_entries,
- cl_image_format * image_formats,
- cl_uint * num_image_formats),
- (context, flags, image_type, num_entries, image_formats, num_image_formats))
-
+		(cl_context context,
+				cl_mem_flags flags,
+				cl_mem_object_type image_type,
+				cl_uint num_entries,
+				cl_image_format * image_formats,
+				cl_uint * num_image_formats),
+		(context, flags, image_type, num_entries, image_formats, num_image_formats))
 
 OCL_FUNC(cl_int, clGetMemObjectInfo,
- (cl_mem memobj,
- cl_mem_info param_name,
- size_t param_value_size,
- void * param_value,
- size_t * param_value_size_ret),
- (memobj, param_name, param_value_size, param_value, param_value_size_ret))
+		(cl_mem memobj,
+				cl_mem_info param_name,
+				size_t param_value_size,
+				void * param_value,
+				size_t * param_value_size_ret),
+		(memobj, param_name, param_value_size, param_value, param_value_size_ret))
 
 OCL_FUNC(cl_int, clGetImageInfo,
- (cl_mem image,
- cl_image_info param_name,
- size_t param_value_size,
- void * param_value,
- size_t * param_value_size_ret),
- (image, param_name, param_value_size, param_value, param_value_size_ret))
+		(cl_mem image,
+				cl_image_info param_name,
+				size_t param_value_size,
+				void * param_value,
+				size_t * param_value_size_ret),
+		(image, param_name, param_value_size, param_value, param_value_size_ret))
 
 /*
-OCL_FUNC(cl_int, clCreateKernelsInProgram,
+ OCL_FUNC(cl_int, clCreateKernelsInProgram,
  (cl_program program,
  cl_uint num_kernels,
  cl_kernel * kernels,
  cl_uint * num_kernels_ret),
  (program, num_kernels, kernels, num_kernels_ret))
 
-OCL_FUNC(cl_int, clRetainKernel, (cl_kernel kernel), (kernel))
+ OCL_FUNC(cl_int, clRetainKernel, (cl_kernel kernel), (kernel))
 
-OCL_FUNC(cl_int, clGetKernelArgInfo,
+ OCL_FUNC(cl_int, clGetKernelArgInfo,
  (cl_kernel kernel,
  cl_uint arg_indx,
  cl_kernel_arg_info param_name,
@@ -842,7 +865,7 @@ OCL_FUNC(cl_int, clGetKernelArgInfo,
  size_t * param_value_size_ret),
  (kernel, arg_indx, param_name, param_value_size, param_value, param_value_size_ret))
 
-OCL_FUNC(cl_int, clEnqueueReadImage,
+ OCL_FUNC(cl_int, clEnqueueReadImage,
  (cl_command_queue command_queue,
  cl_mem image,
  cl_bool blocking_read,
@@ -861,7 +884,7 @@ OCL_FUNC(cl_int, clEnqueueReadImage,
  event_wait_list,
  event))
 
-OCL_FUNC(cl_int, clEnqueueWriteImage,
+ OCL_FUNC(cl_int, clEnqueueWriteImage,
  (cl_command_queue command_queue,
  cl_mem image,
  cl_bool blocking_write,
@@ -876,7 +899,7 @@ OCL_FUNC(cl_int, clEnqueueWriteImage,
  (command_queue, image, blocking_write, origin, region, input_row_pitch,
  input_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event))
 
-OCL_FUNC(cl_int, clEnqueueFillImage,
+ OCL_FUNC(cl_int, clEnqueueFillImage,
  (cl_command_queue command_queue,
  cl_mem image,
  const void * fill_color,
@@ -888,7 +911,7 @@ OCL_FUNC(cl_int, clEnqueueFillImage,
  (command_queue, image, fill_color, origin, region,
  num_events_in_wait_list, event_wait_list, event))
 
-OCL_FUNC(cl_int, clEnqueueCopyImage,
+ OCL_FUNC(cl_int, clEnqueueCopyImage,
  (cl_command_queue command_queue,
  cl_mem src_image,
  cl_mem dst_image,
@@ -900,40 +923,40 @@ OCL_FUNC(cl_int, clEnqueueCopyImage,
  cl_event * event),
  (command_queue, src_image, dst_image, src_origin, dst_origin,
  region, num_events_in_wait_list, event_wait_list, event))
-*/
+ */
 
 OCL_FUNC(cl_int, clEnqueueCopyImageToBuffer,
- (cl_command_queue command_queue,
- cl_mem src_image,
- cl_mem dst_buffer,
- const size_t * src_origin,
- const size_t * region,
- size_t dst_offset,
- cl_uint num_events_in_wait_list,
- const cl_event * event_wait_list,
- cl_event * event),
- (command_queue, src_image, dst_buffer, src_origin, region, dst_offset,
- num_events_in_wait_list, event_wait_list, event))
+		(cl_command_queue command_queue,
+				cl_mem src_image,
+				cl_mem dst_buffer,
+				const size_t * src_origin,
+				const size_t * region,
+				size_t dst_offset,
+				cl_uint num_events_in_wait_list,
+				const cl_event * event_wait_list,
+				cl_event * event),
+		(command_queue, src_image, dst_buffer, src_origin, region, dst_offset,
+				num_events_in_wait_list, event_wait_list, event))
 
 OCL_FUNC(cl_int, clEnqueueCopyBufferToImage,
- (cl_command_queue command_queue,
- cl_mem src_buffer,
- cl_mem dst_image,
- size_t src_offset,
- const size_t dst_origin[3],
- const size_t region[3],
- cl_uint num_events_in_wait_list,
- const cl_event * event_wait_list,
- cl_event * event),
- (command_queue, src_buffer, dst_image, src_offset, dst_origin,
- region, num_events_in_wait_list, event_wait_list, event))
+		(cl_command_queue command_queue,
+				cl_mem src_buffer,
+				cl_mem dst_image,
+				size_t src_offset,
+				const size_t dst_origin[3],
+				const size_t region[3],
+				cl_uint num_events_in_wait_list,
+				const cl_event * event_wait_list,
+				cl_event * event),
+		(command_queue, src_buffer, dst_image, src_offset, dst_origin,
+				region, num_events_in_wait_list, event_wait_list, event))
 
- OCL_FUNC(cl_int, clFlush,
- (cl_command_queue command_queue),
- (command_queue))
+OCL_FUNC(cl_int, clFlush,
+		(cl_command_queue command_queue),
+		(command_queue))
 
 /*
-OCL_FUNC_P(void*, clEnqueueMapImage,
+ OCL_FUNC_P(void*, clEnqueueMapImage,
  (cl_command_queue command_queue,
  cl_mem image,
  cl_bool blocking_map,
@@ -949,12 +972,12 @@ OCL_FUNC_P(void*, clEnqueueMapImage,
  (command_queue, image, blocking_map, map_flags, origin, region,
  image_row_pitch, image_slice_pitch, num_events_in_wait_list,
  event_wait_list, event, errcode_ret))
-*/
+ */
 
 /*
-OCL_FUNC(cl_int, clRetainProgram, (cl_program program), (program))
+ OCL_FUNC(cl_int, clRetainProgram, (cl_program program), (program))
 
-OCL_FUNC(cl_int, clGetKernelInfo,
+ OCL_FUNC(cl_int, clGetKernelInfo,
  (cl_kernel kernel,
  cl_kernel_info param_name,
  size_t param_value_size,
@@ -962,258 +985,257 @@ OCL_FUNC(cl_int, clGetKernelInfo,
  size_t * param_value_size_ret),
  (kernel, param_name, param_value_size, param_value, param_value_size_ret))
 
-*/
+ */
 
 OCL_FUNC(cl_int, clRetainMemObject, (cl_mem memobj), (memobj))
 
 OCL_FUNC(cl_int, clReleaseMemObject, (cl_mem memobj), (memobj))
 
 /*
-OCL_FUNC_P(cl_program, clCreateProgramWithSource,
-    (cl_context context,
-    cl_uint count,
-    const char ** strings,
-    const size_t * lengths,
-    cl_int * errcode_ret),
-    (context, count, strings, lengths, errcode_ret))
+ OCL_FUNC_P(cl_program, clCreateProgramWithSource,
+ (cl_context context,
+ cl_uint count,
+ const char ** strings,
+ const size_t * lengths,
+ cl_int * errcode_ret),
+ (context, count, strings, lengths, errcode_ret))
 
-OCL_FUNC_P(cl_program, clCreateProgramWithBinary,
-    (cl_context context,
-    cl_uint num_devices,
-    const cl_device_id * device_list,
-    const size_t * lengths,
-    const unsigned char ** binaries,
-    cl_int * binary_status,
-    cl_int * errcode_ret),
-    (context, num_devices, device_list, lengths, binaries, binary_status, errcode_ret))
+ OCL_FUNC_P(cl_program, clCreateProgramWithBinary,
+ (cl_context context,
+ cl_uint num_devices,
+ const cl_device_id * device_list,
+ const size_t * lengths,
+ const unsigned char ** binaries,
+ cl_int * binary_status,
+ cl_int * errcode_ret),
+ (context, num_devices, device_list, lengths, binaries, binary_status, errcode_ret))
 
-OCL_FUNC(cl_int, clReleaseProgram, (cl_program program), (program))
+ OCL_FUNC(cl_int, clReleaseProgram, (cl_program program), (program))
 
-OCL_FUNC(cl_int, clBuildProgram,
-    (cl_program program,
-    cl_uint num_devices,
-    const cl_device_id * device_list,
-    const char * options,
-    void (CL_CALLBACK * pfn_notify)(cl_program, void *),
-    void * user_data),
-    (program, num_devices, device_list, options, pfn_notify, user_data))
+ OCL_FUNC(cl_int, clBuildProgram,
+ (cl_program program,
+ cl_uint num_devices,
+ const cl_device_id * device_list,
+ const char * options,
+ void (CL_CALLBACK * pfn_notify)(cl_program, void *),
+ void * user_data),
+ (program, num_devices, device_list, options, pfn_notify, user_data))
 
-OCL_FUNC(cl_int, clGetProgramInfo,
-    (cl_program program,
-    cl_program_info param_name,
-    size_t param_value_size,
-    void * param_value,
-    size_t * param_value_size_ret),
-    (program, param_name, param_value_size, param_value, param_value_size_ret))
+ OCL_FUNC(cl_int, clGetProgramInfo,
+ (cl_program program,
+ cl_program_info param_name,
+ size_t param_value_size,
+ void * param_value,
+ size_t * param_value_size_ret),
+ (program, param_name, param_value_size, param_value, param_value_size_ret))
 
-OCL_FUNC(cl_int, clGetProgramBuildInfo,
-    (cl_program program,
-    cl_device_id device,
-    cl_program_build_info param_name,
-    size_t param_value_size,
-    void * param_value,
-    size_t * param_value_size_ret),
-    (program, device, param_name, param_value_size, param_value, param_value_size_ret))
-*/
+ OCL_FUNC(cl_int, clGetProgramBuildInfo,
+ (cl_program program,
+ cl_device_id device,
+ cl_program_build_info param_name,
+ size_t param_value_size,
+ void * param_value,
+ size_t * param_value_size_ret),
+ (program, device, param_name, param_value_size, param_value, param_value_size_ret))
+ */
 OCL_FUNC_P(cl_kernel, clCreateKernel,
-    (cl_program program,
-    const char * kernel_name,
-    cl_int * errcode_ret),
-    (program, kernel_name, errcode_ret))
+		(cl_program program,
+				const char * kernel_name,
+				cl_int * errcode_ret),
+		(program, kernel_name, errcode_ret))
 
 OCL_FUNC(cl_int, clReleaseKernel, (cl_kernel kernel), (kernel))
 
 OCL_FUNC(cl_int, clSetKernelArg,
-    (cl_kernel kernel,
-    cl_uint arg_index,
-    size_t arg_size,
-    const void * arg_value),
-    (kernel, arg_index, arg_size, arg_value))
+		(cl_kernel kernel,
+				cl_uint arg_index,
+				size_t arg_size,
+				const void * arg_value),
+		(kernel, arg_index, arg_size, arg_value))
 
 OCL_FUNC(cl_int, clGetKernelWorkGroupInfo,
-    (cl_kernel kernel,
-    cl_device_id device,
-    cl_kernel_work_group_info param_name,
-    size_t param_value_size,
-    void * param_value,
-    size_t * param_value_size_ret),
-    (kernel, device, param_name, param_value_size, param_value, param_value_size_ret))
+		(cl_kernel kernel,
+				cl_device_id device,
+				cl_kernel_work_group_info param_name,
+				size_t param_value_size,
+				void * param_value,
+				size_t * param_value_size_ret),
+		(kernel, device, param_name, param_value_size, param_value, param_value_size_ret))
 
 OCL_FUNC(cl_int, clFinish, (cl_command_queue command_queue), (command_queue))
 
 OCL_FUNC(cl_int, clEnqueueReadBuffer,
-    (cl_command_queue command_queue,
-    cl_mem buffer,
-    cl_bool blocking_read,
-    size_t offset,
-    size_t size,
-    void * ptr,
-    cl_uint num_events_in_wait_list,
-    const cl_event * event_wait_list,
-    cl_event * event),
-    (command_queue, buffer, blocking_read, offset, size, ptr,
-    num_events_in_wait_list, event_wait_list, event))
+		(cl_command_queue command_queue,
+				cl_mem buffer,
+				cl_bool blocking_read,
+				size_t offset,
+				size_t size,
+				void * ptr,
+				cl_uint num_events_in_wait_list,
+				const cl_event * event_wait_list,
+				cl_event * event),
+		(command_queue, buffer, blocking_read, offset, size, ptr,
+				num_events_in_wait_list, event_wait_list, event))
 
 OCL_FUNC(cl_int, clEnqueueReadBufferRect,
-    (cl_command_queue command_queue,
-    cl_mem buffer,
-    cl_bool blocking_read,
-    const size_t * buffer_offset,
-    const size_t * host_offset,
-    const size_t * region,
-    size_t buffer_row_pitch,
-    size_t buffer_slice_pitch,
-    size_t host_row_pitch,
-    size_t host_slice_pitch,
-    void * ptr,
-    cl_uint num_events_in_wait_list,
-    const cl_event * event_wait_list,
-    cl_event * event),
-    (command_queue, buffer, blocking_read, buffer_offset, host_offset, region, buffer_row_pitch,
-    buffer_slice_pitch, host_row_pitch, host_slice_pitch, ptr, num_events_in_wait_list,
-    event_wait_list, event))
+		(cl_command_queue command_queue,
+				cl_mem buffer,
+				cl_bool blocking_read,
+				const size_t * buffer_offset,
+				const size_t * host_offset,
+				const size_t * region,
+				size_t buffer_row_pitch,
+				size_t buffer_slice_pitch,
+				size_t host_row_pitch,
+				size_t host_slice_pitch,
+				void * ptr,
+				cl_uint num_events_in_wait_list,
+				const cl_event * event_wait_list,
+				cl_event * event),
+		(command_queue, buffer, blocking_read, buffer_offset, host_offset, region, buffer_row_pitch,
+				buffer_slice_pitch, host_row_pitch, host_slice_pitch, ptr, num_events_in_wait_list,
+				event_wait_list, event))
 
 OCL_FUNC(cl_int, clEnqueueWriteBuffer,
-    (cl_command_queue command_queue,
-    cl_mem buffer,
-    cl_bool blocking_write,
-    size_t offset,
-    size_t size,
-    const void * ptr,
-    cl_uint num_events_in_wait_list,
-    const cl_event * event_wait_list,
-    cl_event * event),
-    (command_queue, buffer, blocking_write, offset, size, ptr,
-    num_events_in_wait_list, event_wait_list, event))
+		(cl_command_queue command_queue,
+				cl_mem buffer,
+				cl_bool blocking_write,
+				size_t offset,
+				size_t size,
+				const void * ptr,
+				cl_uint num_events_in_wait_list,
+				const cl_event * event_wait_list,
+				cl_event * event),
+		(command_queue, buffer, blocking_write, offset, size, ptr,
+				num_events_in_wait_list, event_wait_list, event))
 
 OCL_FUNC(cl_int, clEnqueueWriteBufferRect,
-    (cl_command_queue command_queue,
-    cl_mem buffer,
-    cl_bool blocking_write,
-    const size_t * buffer_offset,
-    const size_t * host_offset,
-    const size_t * region,
-    size_t buffer_row_pitch,
-    size_t buffer_slice_pitch,
-    size_t host_row_pitch,
-    size_t host_slice_pitch,
-    const void * ptr,
-    cl_uint num_events_in_wait_list,
-    const cl_event * event_wait_list,
-    cl_event * event),
-    (command_queue, buffer, blocking_write, buffer_offset, host_offset,
-    region, buffer_row_pitch, buffer_slice_pitch, host_row_pitch,
-    host_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event))
+		(cl_command_queue command_queue,
+				cl_mem buffer,
+				cl_bool blocking_write,
+				const size_t * buffer_offset,
+				const size_t * host_offset,
+				const size_t * region,
+				size_t buffer_row_pitch,
+				size_t buffer_slice_pitch,
+				size_t host_row_pitch,
+				size_t host_slice_pitch,
+				const void * ptr,
+				cl_uint num_events_in_wait_list,
+				const cl_event * event_wait_list,
+				cl_event * event),
+		(command_queue, buffer, blocking_write, buffer_offset, host_offset,
+				region, buffer_row_pitch, buffer_slice_pitch, host_row_pitch,
+				host_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event))
 
 /*OCL_FUNC(cl_int, clEnqueueFillBuffer,
-    (cl_command_queue command_queue,
-    cl_mem buffer,
-    const void * pattern,
-    size_t pattern_size,
-    size_t offset,
-    size_t size,
-    cl_uint num_events_in_wait_list,
-    const cl_event * event_wait_list,
-    cl_event * event),
-    (command_queue, buffer, pattern, pattern_size, offset, size,
-    num_events_in_wait_list, event_wait_list, event))*/
+ (cl_command_queue command_queue,
+ cl_mem buffer,
+ const void * pattern,
+ size_t pattern_size,
+ size_t offset,
+ size_t size,
+ cl_uint num_events_in_wait_list,
+ const cl_event * event_wait_list,
+ cl_event * event),
+ (command_queue, buffer, pattern, pattern_size, offset, size,
+ num_events_in_wait_list, event_wait_list, event))*/
 
 OCL_FUNC(cl_int, clEnqueueCopyBuffer,
-    (cl_command_queue command_queue,
-    cl_mem src_buffer,
-    cl_mem dst_buffer,
-    size_t src_offset,
-    size_t dst_offset,
-    size_t size,
-    cl_uint num_events_in_wait_list,
-    const cl_event * event_wait_list,
-    cl_event * event),
-    (command_queue, src_buffer, dst_buffer, src_offset, dst_offset,
-    size, num_events_in_wait_list, event_wait_list, event))
+		(cl_command_queue command_queue,
+				cl_mem src_buffer,
+				cl_mem dst_buffer,
+				size_t src_offset,
+				size_t dst_offset,
+				size_t size,
+				cl_uint num_events_in_wait_list,
+				const cl_event * event_wait_list,
+				cl_event * event),
+		(command_queue, src_buffer, dst_buffer, src_offset, dst_offset,
+				size, num_events_in_wait_list, event_wait_list, event))
 
 OCL_FUNC(cl_int, clEnqueueCopyBufferRect,
-    (cl_command_queue command_queue,
-    cl_mem src_buffer,
-    cl_mem dst_buffer,
-    const size_t * src_origin,
-    const size_t * dst_origin,
-    const size_t * region,
-    size_t src_row_pitch,
-    size_t src_slice_pitch,
-    size_t dst_row_pitch,
-    size_t dst_slice_pitch,
-    cl_uint num_events_in_wait_list,
-    const cl_event * event_wait_list,
-    cl_event * event),
-    (command_queue, src_buffer, dst_buffer, src_origin, dst_origin,
-    region, src_row_pitch, src_slice_pitch, dst_row_pitch, dst_slice_pitch,
-    num_events_in_wait_list, event_wait_list, event))
+		(cl_command_queue command_queue,
+				cl_mem src_buffer,
+				cl_mem dst_buffer,
+				const size_t * src_origin,
+				const size_t * dst_origin,
+				const size_t * region,
+				size_t src_row_pitch,
+				size_t src_slice_pitch,
+				size_t dst_row_pitch,
+				size_t dst_slice_pitch,
+				cl_uint num_events_in_wait_list,
+				const cl_event * event_wait_list,
+				cl_event * event),
+		(command_queue, src_buffer, dst_buffer, src_origin, dst_origin,
+				region, src_row_pitch, src_slice_pitch, dst_row_pitch, dst_slice_pitch,
+				num_events_in_wait_list, event_wait_list, event))
 
 OCL_FUNC_P(void*, clEnqueueMapBuffer,
-    (cl_command_queue command_queue,
-    cl_mem buffer,
-    cl_bool blocking_map,
-    cl_map_flags map_flags,
-    size_t offset,
-    size_t size,
-    cl_uint num_events_in_wait_list,
-    const cl_event * event_wait_list,
-    cl_event * event,
-    cl_int * errcode_ret),
-    (command_queue, buffer, blocking_map, map_flags, offset, size,
-    num_events_in_wait_list, event_wait_list, event, errcode_ret))
+		(cl_command_queue command_queue,
+				cl_mem buffer,
+				cl_bool blocking_map,
+				cl_map_flags map_flags,
+				size_t offset,
+				size_t size,
+				cl_uint num_events_in_wait_list,
+				const cl_event * event_wait_list,
+				cl_event * event,
+				cl_int * errcode_ret),
+		(command_queue, buffer, blocking_map, map_flags, offset, size,
+				num_events_in_wait_list, event_wait_list, event, errcode_ret))
 
 OCL_FUNC(cl_int, clEnqueueUnmapMemObject,
-    (cl_command_queue command_queue,
-    cl_mem memobj,
-    void * mapped_ptr,
-    cl_uint num_events_in_wait_list,
-    const cl_event * event_wait_list,
-    cl_event * event),
-    (command_queue, memobj, mapped_ptr, num_events_in_wait_list, event_wait_list, event))
+		(cl_command_queue command_queue,
+				cl_mem memobj,
+				void * mapped_ptr,
+				cl_uint num_events_in_wait_list,
+				const cl_event * event_wait_list,
+				cl_event * event),
+		(command_queue, memobj, mapped_ptr, num_events_in_wait_list, event_wait_list, event))
 
 OCL_FUNC(cl_int, clEnqueueNDRangeKernel,
-    (cl_command_queue command_queue,
-    cl_kernel kernel,
-    cl_uint work_dim,
-    const size_t * global_work_offset,
-    const size_t * global_work_size,
-    const size_t * local_work_size,
-    cl_uint num_events_in_wait_list,
-    const cl_event * event_wait_list,
-    cl_event * event),
-    (command_queue, kernel, work_dim, global_work_offset, global_work_size,
-    local_work_size, num_events_in_wait_list, event_wait_list, event))
+		(cl_command_queue command_queue,
+				cl_kernel kernel,
+				cl_uint work_dim,
+				const size_t * global_work_offset,
+				const size_t * global_work_size,
+				const size_t * local_work_size,
+				cl_uint num_events_in_wait_list,
+				const cl_event * event_wait_list,
+				cl_event * event),
+		(command_queue, kernel, work_dim, global_work_offset, global_work_size,
+				local_work_size, num_events_in_wait_list, event_wait_list, event))
 
 OCL_FUNC(cl_int, clEnqueueTask,
-    (cl_command_queue command_queue,
-    cl_kernel kernel,
-    cl_uint num_events_in_wait_list,
-    const cl_event * event_wait_list,
-    cl_event * event),
-    (command_queue, kernel, num_events_in_wait_list, event_wait_list, event))
+		(cl_command_queue command_queue,
+				cl_kernel kernel,
+				cl_uint num_events_in_wait_list,
+				const cl_event * event_wait_list,
+				cl_event * event),
+		(command_queue, kernel, num_events_in_wait_list, event_wait_list, event))
 
 OCL_FUNC(cl_int, clSetEventCallback,
-    (cl_event event,
-    cl_int command_exec_callback_type ,
-    void (CL_CALLBACK  *pfn_event_notify) (cl_event event, cl_int event_command_exec_status, void *user_data),
-    void *user_data),
-    (event, command_exec_callback_type, pfn_event_notify, user_data))
+		(cl_event event,
+				cl_int command_exec_callback_type ,
+				void (CL_CALLBACK *pfn_event_notify) (cl_event event, cl_int event_command_exec_status, void *user_data),
+				void *user_data),
+		(event, command_exec_callback_type, pfn_event_notify, user_data))
 
 OCL_FUNC(cl_int, clReleaseEvent, (cl_event event), (event))
 
 OCL_FUNC(cl_int, clWaitForEvents,
-    (cl_uint num_events, const cl_event *event_list),
-    (num_events, event_list))
-
+		(cl_uint num_events, const cl_event *event_list),
+		(num_events, event_list))
 
 OCL_FUNC(cl_int, clGetEventProfilingInfo, (
-    cl_event event,
-    cl_profiling_info param_name,
-    size_t param_value_size,
-    void *param_value,
-    size_t *param_value_size_ret),
-    (event, param_name, param_value_size, param_value, param_value_size_ret))
+				cl_event event,
+				cl_profiling_info param_name,
+				size_t param_value_size,
+				void *param_value,
+				size_t *param_value_size_ret),
+		(event, param_name, param_value_size, param_value, param_value_size_ret))
 
 }
 

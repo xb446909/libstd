@@ -7,7 +7,8 @@
 
 CSerialPort g_serialPort;
 
-int __stdcall InitCOM(int nId, const char * szIniPath, SerialPortRecvCallback pCallback, void* pParam)
+int __stdcall InitCOM(int nId, const char * szIniPath,
+		SerialPortRecvCallback pCallback, void* pParam)
 {
 	g_serialPort.RemoveProc(nId);
 	return g_serialPort.AddProc(nId, szIniPath, pCallback, pParam);
@@ -18,7 +19,6 @@ int __stdcall UninitCOM(int nId)
 	g_serialPort.RemoveProc(nId);
 	return COM_SUCCESS;
 }
-
 
 int __stdcall OpenCOM(int nId)
 {

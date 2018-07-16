@@ -20,13 +20,16 @@
 #define IVX_USE_OPENCV
 #include "ivx.hpp"
 
-namespace cv{
-namespace ovx{
+namespace cv
+{
+	namespace ovx
+	{
 // Get common thread local OpenVX context
-CV_EXPORTS_W ivx::Context& getOpenVXContext();
+		CV_EXPORTS_W ivx::Context& getOpenVXContext();
 
-template <int kernel_id> inline bool skipSmallImages(int w, int h)     { return w*h < 3840 * 2160; }
-}}
+		template <int kernel_id> inline bool skipSmallImages(int w, int h)
+		{	return w*h < 3840 * 2160;}
+	}}
 
 #define CV_OVX_RUN(condition, func, ...)          \
     if (cv::useOpenVX() && (condition) && func)   \
@@ -35,7 +38,7 @@ template <int kernel_id> inline bool skipSmallImages(int w, int h)     { return 
     }
 
 #else
-    #define CV_OVX_RUN(condition, func, ...)
+#define CV_OVX_RUN(condition, func, ...)
 #endif // HAVE_OPENVX
 
 // Throw an error in debug mode or try another implementation in release

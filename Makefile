@@ -1,7 +1,7 @@
 CXX := g++
 
 ifeq ($(shell uname), Linux)
-LD_FLAGS	:= -fPIC -shared
+LD_FLAGS	:= -fPIC -shared -g
 TARGET := libstd.so
 endif
 

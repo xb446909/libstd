@@ -15,16 +15,15 @@ CriticalLock::CriticalLock()
 #ifdef WIN32
 	EnterCriticalSection(&g_csLock);
 #else
-    pthread_mutex_lock(&mutex);
+	pthread_mutex_lock(&mutex);
 #endif
 }
-
 
 CriticalLock::~CriticalLock()
 {
 #ifdef WIN32
 	LeaveCriticalSection(&g_csLock);
 #else
-    pthread_mutex_unlock(&mutex);
+	pthread_mutex_unlock(&mutex);
 #endif
 }

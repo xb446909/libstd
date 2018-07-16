@@ -12,7 +12,7 @@
 
 typedef cl_bitfield cl_device_svm_capabilities;
 typedef cl_bitfield cl_svm_mem_flags;
-typedef cl_uint     cl_kernel_exec_info;
+typedef cl_uint cl_kernel_exec_info;
 
 //
 // TODO Add real values after OpenCL 2.0 release
@@ -34,7 +34,6 @@ typedef cl_uint     cl_kernel_exec_info;
 #ifndef CL_MEM_SVM_ATOMICS
 #define CL_MEM_SVM_ATOMICS (1 << 11)
 #endif
-
 
 #endif // CL_VERSION_2_0
 #endif // HAVE_OPENCL_SVM

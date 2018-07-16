@@ -24,8 +24,13 @@ using namespace std::tr1;
 #ifdef WIN32
 typedef int socklen_t;
 #else
-inline int WSAGetLastError() { return errno; }
-inline void WSACleanup() {}
+inline int WSAGetLastError()
+{
+	return errno;
+}
+inline void WSACleanup()
+{
+}
 
 #define SOCKET int
 #define INVALID_SOCKET -1
@@ -46,21 +51,15 @@ public:
 		std::string szIniPath;
 		SocketRecvCallback callback;
 		void* pParam;
-		_tagSocketParam()
-			: nId(0)
-			, nType(0)
-			, szIniPath("")
-			, callback(0)
-			, pParam(0)
+		_tagSocketParam() :
+				nId(0), nType(0), szIniPath(""), callback(0), pParam(0)
 		{
 		}
 
-		_tagSocketParam(int nId, int nType, std::string szIniPath, SocketRecvCallback callback, void* pParam)
-			: nId(nId)
-			, nType(nType)
-			, szIniPath(szIniPath)
-			, callback(callback)
-			, pParam(pParam)
+		_tagSocketParam(int nId, int nType, std::string szIniPath,
+				SocketRecvCallback callback, void* pParam) :
+				nId(nId), nType(nType), szIniPath(szIniPath), callback(
+						callback), pParam(pParam)
 		{
 		}
 
@@ -74,7 +73,7 @@ public:
 			return *this;
 		}
 
-	}SocketParam;
+	} SocketParam;
 
 	CSocketLib();
 	virtual ~CSocketLib();
@@ -82,11 +81,21 @@ public:
 	static shared_ptr<CSocketLib> Create(int nType);
 	virtual void SetParam(shared_ptr<CSocketLib::SocketParam> param);
 	virtual int Connect(int nTimeoutMs);
-	virtual int Send(const char* szSendBuf, int nLen, const char* szDstIP, int nDstPort);
-	virtual int Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort);
-	SOCKET GetSocket() { return m_socket; }
-	SocketRecvCallback RecvCallback() { return m_param.callback; }
-	void* UserParam() { return m_param.pParam; }
+	virtual int Send(const char* szSendBuf, int nLen, const char* szDstIP,
+			int nDstPort);
+	virtual int Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs,
+			const char * szDstIP, int nDstPort);SOCKET GetSocket()
+	{
+		return m_socket;
+	}
+	SocketRecvCallback RecvCallback()
+	{
+		return m_param.callback;
+	}
+	void* UserParam()
+	{
+		return m_param.pParam;
+	}
 	bool ThreadEventIsSet();
 	void ResetThreadEvent();
 	void SetThreadEvent();

@@ -23,12 +23,10 @@ public:
 	static coord_transform_ptr Create(int nType);
 	CCoordTransform();
 	virtual ~CCoordTransform();
-	virtual int SetTransPoints(std::vector<cv::Point3d> src, std::vector<cv::Point3d> dst) = 0;
+	virtual int SetTransPoints(std::vector<cv::Point3d> src,
+			std::vector<cv::Point3d> dst) = 0;
 	virtual int TransformPoint(cv::Point3d src, cv::Point3d& dst) = 0;
 };
 
-
 #endif // !__CCOORDTRANSFORM_H
-
-
 

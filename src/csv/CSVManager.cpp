@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+#include "stdafx.h"
 #include "CSVManager.h"
 #include "csv.h"
 #include <sstream>
@@ -12,7 +12,6 @@
 CSVManager::CSVManager()
 {
 }
-
 
 CSVManager::~CSVManager()
 {
@@ -63,8 +62,10 @@ std::vector<std::vector<std::string>> CSVManager::GetData()
 
 int CSVManager::GetData(int nRow, int nCol, string & str)
 {
-	if (nRow >= m_vecData.size()) return CSV_ERROR_DATA_OVERFLOW;
-	if (nCol >= m_vecData[nRow].size()) return CSV_ERROR_DATA_OVERFLOW;
+	if (nRow >= m_vecData.size())
+		return CSV_ERROR_DATA_OVERFLOW;
+	if (nCol >= m_vecData[nRow].size())
+		return CSV_ERROR_DATA_OVERFLOW;
 	str = m_vecData[nRow][nCol];
 	return CSV_SUCCESS;
 }
@@ -86,7 +87,6 @@ int CSVManager::WriteData(std::vector<std::vector<std::string>> data)
 	return CSV_SUCCESS;
 }
 
-
 int CSVManager::LoadFile()
 {
 	const char delims[] = ",";
@@ -95,7 +95,8 @@ int CSVManager::LoadFile()
 	{
 		string strline;
 		m_fs >> strline;
-		if (strline.compare("") == 0) continue;
+		if (strline.compare("") == 0)
+			continue;
 
 		vector<string> vecString;
 		char* str = new char[strline.length() + 1];

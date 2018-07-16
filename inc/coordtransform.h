@@ -12,10 +12,11 @@
 
 #define TRANSFORM_TYPE_3D_MULTI_POINT		0
 
-
 int __stdcall InitTransform(int nID, int nType);
-int __stdcall SetPoints(int nID, double* srcX, double* srcY, double* srcZ, double* dstX, double* dstY, double* dstZ, int nSize);
-int __stdcall Transform(int nID, double srcX, double srcY, double srcZ, double* dstX, double* dstY, double* dstZ);
+int __stdcall SetPoints(int nID, double* srcX, double* srcY, double* srcZ,
+		double* dstX, double* dstY, double* dstZ, int nSize);
+int __stdcall Transform(int nID, double srcX, double srcY, double srcZ,
+		double* dstX, double* dstY, double* dstZ);
 
 #endif // !__COORDTRANSFORM_H
 

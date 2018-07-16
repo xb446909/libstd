@@ -9,7 +9,8 @@ coord_transform_ptr CCoordTransform::Create(int nType)
 	switch (nType)
 	{
 	case TRANSFORM_TYPE_3D_MULTI_POINT:
-		ptr = shared_ptr<CCoordTransform3DMultiPt>(new CCoordTransform3DMultiPt());
+		ptr = shared_ptr<CCoordTransform3DMultiPt>(
+				new CCoordTransform3DMultiPt());
 		break;
 	default:
 		break;
@@ -20,7 +21,6 @@ coord_transform_ptr CCoordTransform::Create(int nType)
 CCoordTransform::CCoordTransform()
 {
 }
-
 
 CCoordTransform::~CCoordTransform()
 {

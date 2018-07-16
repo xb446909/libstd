@@ -1,46 +1,46 @@
 /*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                          License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
-// Copyright (C) 2015, Itseez Inc., all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
+ //
+ //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+ //
+ //  By downloading, copying, installing or using the software you agree to this license.
+ //  If you do not agree to this license, do not download, install,
+ //  copy or use the software.
+ //
+ //
+ //                          License Agreement
+ //                For Open Source Computer Vision Library
+ //
+ // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+ // Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+ // Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+ // Copyright (C) 2015, Itseez Inc., all rights reserved.
+ // Third party copyrights are property of their respective owners.
+ //
+ // Redistribution and use in source and binary forms, with or without modification,
+ // are permitted provided that the following conditions are met:
+ //
+ //   * Redistribution's of source code must retain the above copyright notice,
+ //     this list of conditions and the following disclaimer.
+ //
+ //   * Redistribution's in binary form must reproduce the above copyright notice,
+ //     this list of conditions and the following disclaimer in the documentation
+ //     and/or other materials provided with the distribution.
+ //
+ //   * The name of the copyright holders may not be used to endorse or promote products
+ //     derived from this software without specific prior written permission.
+ //
+ // This software is provided by the copyright holders and contributors "as is" and
+ // any express or implied warranties, including, but not limited to, the implied
+ // warranties of merchantability and fitness for a particular purpose are disclaimed.
+ // In no event shall the Intel Corporation or contributors be liable for any direct,
+ // indirect, incidental, special, exemplary, or consequential damages
+ // (including, but not limited to, procurement of substitute goods or services;
+ // loss of use, data, or profits; or business interruption) however caused
+ // and on any theory of liability, whether in contract, strict liability,
+ // or tort (including negligence or otherwise) arising in any way out of
+ // the use of this software, even if advised of the possibility of such damage.
+ //
+ //M*/
 
 #ifndef OPENCV_HAL_VSX_UTILS_HPP
 #define OPENCV_HAL_VSX_UTILS_HPP
@@ -132,7 +132,7 @@ typedef __vector signed long long vec_dword2;
 #define vec_dword2_mn       vec_dword2_sp(-9223372036854775807LL-1)
 #define vec_dword2_z        vec_dword2_sp(0)
 
-typedef  __vector double vec_double2;
+typedef __vector double vec_double2;
 #define vec_double2_set(...) (vec_double2){__VA_ARGS__}
 #define vec_double2_c(v)     ((vec_double2)(v))
 #define vec_double2_sp(c)    (__VSX_S2__(vec_double2, c))
@@ -164,7 +164,6 @@ typedef  __vector double vec_double2;
 #define vec_bdword2_f         (__VSX_S2__(vec_bdword2, 0))
 #define vec_bdword2_t         (__VSX_S2__(vec_bdword2, 1))
 
-
 #define VSX_FINLINE(tp) extern inline tp __attribute__((always_inline))
 
 #define VSX_REDIRECT_1RG(rt, rg, fnm, fn2)   \
@@ -175,7 +174,7 @@ VSX_FINLINE(rt) fnm(const rg& a, const rg& b) { return fn2(a, b); }
 
 /*
  * GCC VSX compatibility
-**/
+ **/
 #if defined(__GNUG__) && !defined(__clang__)
 
 // inline asm helper
@@ -202,7 +201,7 @@ VSX_FINLINE(rt) fnm(const rg& a, const rg& b)  \
  * there's no a direct instruction for supporting 16-bit multiplication in ISA 2.07,
  * XLC Implement it by using instruction "multiply even", "multiply odd" and "permute"
  * todo: Do I need to support 8-bit ?
-**/
+ **/
 #   define VSX_IMPL_MULH(Tvec, Tcast)                                               \
     VSX_FINLINE(Tvec) vec_mul(const Tvec& a, const Tvec& b)                         \
     {                                                                               \
@@ -210,16 +209,16 @@ VSX_FINLINE(rt) fnm(const rg& a, const rg& b)  \
                                               8, 9, 24, 25, 12, 13, 28, 29};        \
         return vec_perm(Tcast(vec_mule(a, b)), Tcast(vec_mulo(a, b)), even_perm);   \
     }
-    VSX_IMPL_MULH(vec_short8,  vec_short8_c)
-    VSX_IMPL_MULH(vec_ushort8, vec_ushort8_c)
-    // vmuluwm can be used for unsigned or signed integers, that's what they said
-    VSX_IMPL_2VRG(vec_int4,  vec_int4,  vmuluwm, vec_mul)
-    VSX_IMPL_2VRG(vec_uint4, vec_uint4, vmuluwm, vec_mul)
-    // redirect to GCC builtin vec_mul, since it already supports precisions and llong
-    VSX_REDIRECT_2RG(vec_float4,  vec_float4,  vec_mul, __builtin_vec_mul)
-    VSX_REDIRECT_2RG(vec_double2, vec_double2, vec_mul, __builtin_vec_mul)
-    VSX_REDIRECT_2RG(vec_dword2,  vec_dword2,  vec_mul, __builtin_vec_mul)
-    VSX_REDIRECT_2RG(vec_udword2, vec_udword2, vec_mul, __builtin_vec_mul)
+VSX_IMPL_MULH(vec_short8, vec_short8_c)
+VSX_IMPL_MULH(vec_ushort8, vec_ushort8_c)
+// vmuluwm can be used for unsigned or signed integers, that's what they said
+VSX_IMPL_2VRG(vec_int4, vec_int4, vmuluwm, vec_mul)
+VSX_IMPL_2VRG(vec_uint4, vec_uint4, vmuluwm, vec_mul)
+// redirect to GCC builtin vec_mul, since it already supports precisions and llong
+VSX_REDIRECT_2RG(vec_float4, vec_float4, vec_mul, __builtin_vec_mul)
+VSX_REDIRECT_2RG(vec_double2, vec_double2, vec_mul, __builtin_vec_mul)
+VSX_REDIRECT_2RG(vec_dword2, vec_dword2, vec_mul, __builtin_vec_mul)
+VSX_REDIRECT_2RG(vec_udword2, vec_udword2, vec_mul, __builtin_vec_mul)
 #endif // __GNUG__ < 7
 
 #if __GNUG__ < 6
@@ -227,7 +226,7 @@ VSX_FINLINE(rt) fnm(const rg& a, const rg& b)  \
  * Instruction "compare greater than or equal" in ISA 2.07 only supports single
  * and double precision.
  * In XLC and new versions of GCC implement integers by using instruction "greater than" and NOR.
-**/
+ **/
 #   ifdef vec_cmpge
 #       undef vec_cmpge
 #   endif
@@ -238,36 +237,36 @@ VSX_FINLINE(rt) fnm(const rg& a, const rg& b)  \
 #   define VSX_IMPL_CMPGE(rt, rg, opc, fnm) \
     VSX_IMPL_2VRG_F(rt, rg, #opc" %0,%2,%1\n\t xxlnor %x0,%x0,%x0", fnm)
 
-    VSX_IMPL_CMPGE(vec_bchar16, vec_char16,  vcmpgtsb, vec_cmpge)
-    VSX_IMPL_CMPGE(vec_bchar16, vec_uchar16, vcmpgtub, vec_cmpge)
-    VSX_IMPL_CMPGE(vec_bshort8, vec_short8,  vcmpgtsh, vec_cmpge)
-    VSX_IMPL_CMPGE(vec_bshort8, vec_ushort8, vcmpgtuh, vec_cmpge)
-    VSX_IMPL_CMPGE(vec_bint4,   vec_int4,    vcmpgtsw, vec_cmpge)
-    VSX_IMPL_CMPGE(vec_bint4,   vec_uint4,   vcmpgtuw, vec_cmpge)
-    VSX_IMPL_CMPGE(vec_bdword2, vec_dword2,  vcmpgtsd, vec_cmpge)
-    VSX_IMPL_CMPGE(vec_bdword2, vec_udword2, vcmpgtud, vec_cmpge)
+VSX_IMPL_CMPGE(vec_bchar16, vec_char16, vcmpgtsb, vec_cmpge)
+VSX_IMPL_CMPGE(vec_bchar16, vec_uchar16, vcmpgtub, vec_cmpge)
+VSX_IMPL_CMPGE(vec_bshort8, vec_short8, vcmpgtsh, vec_cmpge)
+VSX_IMPL_CMPGE(vec_bshort8, vec_ushort8, vcmpgtuh, vec_cmpge)
+VSX_IMPL_CMPGE(vec_bint4, vec_int4, vcmpgtsw, vec_cmpge)
+VSX_IMPL_CMPGE(vec_bint4, vec_uint4, vcmpgtuw, vec_cmpge)
+VSX_IMPL_CMPGE(vec_bdword2, vec_dword2, vcmpgtsd, vec_cmpge)
+VSX_IMPL_CMPGE(vec_bdword2, vec_udword2, vcmpgtud, vec_cmpge)
 
 // redirect to GCC builtin cmpge, since it already supports precisions
-    VSX_REDIRECT_2RG(vec_bint4,   vec_float4,  vec_cmpge, __builtin_vec_cmpge)
-    VSX_REDIRECT_2RG(vec_bdword2, vec_double2, vec_cmpge, __builtin_vec_cmpge)
+VSX_REDIRECT_2RG(vec_bint4, vec_float4, vec_cmpge, __builtin_vec_cmpge)
+VSX_REDIRECT_2RG(vec_bdword2, vec_double2, vec_cmpge, __builtin_vec_cmpge)
 
 // up to gcc5 vec_nor doesn't support bool long long
 #   undef vec_nor
-    template<typename T>
-    VSX_REDIRECT_2RG(T, T, vec_nor, __builtin_vec_nor)
+template<typename T>
+VSX_REDIRECT_2RG(T, T, vec_nor, __builtin_vec_nor)
 
-    VSX_FINLINE(vec_bdword2) vec_nor(const vec_bdword2& a, const vec_bdword2& b)
-    { return vec_bdword2_c(__builtin_vec_nor(vec_dword2_c(a), vec_dword2_c(b))); }
+VSX_FINLINE(vec_bdword2) vec_nor(const vec_bdword2& a, const vec_bdword2& b)
+{	return vec_bdword2_c(__builtin_vec_nor(vec_dword2_c(a), vec_dword2_c(b)));}
 
 // vec_packs doesn't support double words in gcc4 and old versions of gcc5
 #   undef vec_packs
-    VSX_REDIRECT_2RG(vec_char16,  vec_short8,  vec_packs, __builtin_vec_packs)
-    VSX_REDIRECT_2RG(vec_uchar16, vec_ushort8, vec_packs, __builtin_vec_packs)
-    VSX_REDIRECT_2RG(vec_short8,  vec_int4,    vec_packs, __builtin_vec_packs)
-    VSX_REDIRECT_2RG(vec_ushort8, vec_uint4,   vec_packs, __builtin_vec_packs)
+VSX_REDIRECT_2RG(vec_char16, vec_short8, vec_packs, __builtin_vec_packs)
+VSX_REDIRECT_2RG(vec_uchar16, vec_ushort8, vec_packs, __builtin_vec_packs)
+VSX_REDIRECT_2RG(vec_short8, vec_int4, vec_packs, __builtin_vec_packs)
+VSX_REDIRECT_2RG(vec_ushort8, vec_uint4, vec_packs, __builtin_vec_packs)
 
-    VSX_IMPL_2VRG_F(vec_int4,  vec_dword2,  "vpksdss %0,%2,%1", vec_packs)
-    VSX_IMPL_2VRG_F(vec_uint4, vec_udword2, "vpkudus %0,%2,%1", vec_packs)
+VSX_IMPL_2VRG_F(vec_int4, vec_dword2, "vpksdss %0,%2,%1", vec_packs)
+VSX_IMPL_2VRG_F(vec_uint4, vec_udword2, "vpkudus %0,%2,%1", vec_packs)
 #endif // __GNUG__ < 6
 
 #if __GNUG__ < 5
@@ -284,57 +283,57 @@ VSX_FINLINE(rt) fnm(const rg& a, const rg& b)  \
 
 // vector population count
 VSX_IMPL_1VRG(vec_uchar16, vec_uchar16, vpopcntb, vec_popcntu)
-VSX_IMPL_1VRG(vec_uchar16, vec_char16,  vpopcntb, vec_popcntu)
+VSX_IMPL_1VRG(vec_uchar16, vec_char16, vpopcntb, vec_popcntu)
 VSX_IMPL_1VRG(vec_ushort8, vec_ushort8, vpopcnth, vec_popcntu)
-VSX_IMPL_1VRG(vec_ushort8, vec_short8,  vpopcnth, vec_popcntu)
-VSX_IMPL_1VRG(vec_uint4,   vec_uint4,   vpopcntw, vec_popcntu)
-VSX_IMPL_1VRG(vec_uint4,   vec_int4,    vpopcntw, vec_popcntu)
+VSX_IMPL_1VRG(vec_ushort8, vec_short8, vpopcnth, vec_popcntu)
+VSX_IMPL_1VRG(vec_uint4, vec_uint4, vpopcntw, vec_popcntu)
+VSX_IMPL_1VRG(vec_uint4, vec_int4, vpopcntw, vec_popcntu)
 VSX_IMPL_1VRG(vec_udword2, vec_udword2, vpopcntd, vec_popcntu)
-VSX_IMPL_1VRG(vec_udword2, vec_dword2,  vpopcntd, vec_popcntu)
+VSX_IMPL_1VRG(vec_udword2, vec_dword2, vpopcntd, vec_popcntu)
 
 // converts between single and double-precision
-VSX_REDIRECT_1RG(vec_float4,  vec_double2, vec_cvfo, __builtin_vsx_xvcvdpsp)
-VSX_REDIRECT_1RG(vec_double2, vec_float4,  vec_cvfo, __builtin_vsx_xvcvspdp)
+VSX_REDIRECT_1RG(vec_float4, vec_double2, vec_cvfo, __builtin_vsx_xvcvdpsp)
+VSX_REDIRECT_1RG(vec_double2, vec_float4, vec_cvfo, __builtin_vsx_xvcvspdp)
 
 // converts word and doubleword to double-precision
 #ifdef vec_ctd
 #   undef vec_ctd
 #endif
-VSX_IMPL_1RG(vec_double2, wd, vec_int4,    wa, xvcvsxwdp, vec_ctdo)
-VSX_IMPL_1RG(vec_double2, wd, vec_uint4,   wa, xvcvuxwdp, vec_ctdo)
-VSX_IMPL_1RG(vec_double2, wd, vec_dword2,  wi, xvcvsxddp, vec_ctd)
+VSX_IMPL_1RG(vec_double2, wd, vec_int4, wa, xvcvsxwdp, vec_ctdo)
+VSX_IMPL_1RG(vec_double2, wd, vec_uint4, wa, xvcvuxwdp, vec_ctdo)
+VSX_IMPL_1RG(vec_double2, wd, vec_dword2, wi, xvcvsxddp, vec_ctd)
 VSX_IMPL_1RG(vec_double2, wd, vec_udword2, wi, xvcvuxddp, vec_ctd)
 
 // converts word and doubleword to single-precision
 #undef vec_ctf
-VSX_IMPL_1RG(vec_float4, wf, vec_int4,    wa, xvcvsxwsp, vec_ctf)
-VSX_IMPL_1RG(vec_float4, wf, vec_uint4,   wa, xvcvuxwsp, vec_ctf)
-VSX_IMPL_1RG(vec_float4, wf, vec_dword2,  wi, xvcvsxdsp, vec_ctfo)
+VSX_IMPL_1RG(vec_float4, wf, vec_int4, wa, xvcvsxwsp, vec_ctf)
+VSX_IMPL_1RG(vec_float4, wf, vec_uint4, wa, xvcvuxwsp, vec_ctf)
+VSX_IMPL_1RG(vec_float4, wf, vec_dword2, wi, xvcvsxdsp, vec_ctfo)
 VSX_IMPL_1RG(vec_float4, wf, vec_udword2, wi, xvcvuxdsp, vec_ctfo)
 
 // converts single and double precision to signed word
 #undef vec_cts
-VSX_IMPL_1RG(vec_int4,  wa, vec_double2, wd, xvcvdpsxws, vec_ctso)
-VSX_IMPL_1RG(vec_int4,  wa, vec_float4,  wf, xvcvspsxws, vec_cts)
+VSX_IMPL_1RG(vec_int4, wa, vec_double2, wd, xvcvdpsxws, vec_ctso)
+VSX_IMPL_1RG(vec_int4, wa, vec_float4, wf, xvcvspsxws, vec_cts)
 
 // converts single and double precision to unsigned word
 #undef vec_ctu
 VSX_IMPL_1RG(vec_uint4, wa, vec_double2, wd, xvcvdpuxws, vec_ctuo)
-VSX_IMPL_1RG(vec_uint4, wa, vec_float4,  wf, xvcvspuxws, vec_ctu)
+VSX_IMPL_1RG(vec_uint4, wa, vec_float4, wf, xvcvspuxws, vec_ctu)
 
 // converts single and double precision to signed doubleword
 #ifdef vec_ctsl
 #   undef vec_ctsl
 #endif
 VSX_IMPL_1RG(vec_dword2, wi, vec_double2, wd, xvcvdpsxds, vec_ctsl)
-VSX_IMPL_1RG(vec_dword2, wi, vec_float4,  wf, xvcvspsxds, vec_ctslo)
+VSX_IMPL_1RG(vec_dword2, wi, vec_float4, wf, xvcvspsxds, vec_ctslo)
 
 // converts single and double precision to unsigned doubleword
 #ifdef vec_ctul
 #   undef vec_ctul
 #endif
 VSX_IMPL_1RG(vec_udword2, wi, vec_double2, wd, xvcvdpuxds, vec_ctul)
-VSX_IMPL_1RG(vec_udword2, wi, vec_float4,  wf, xvcvspuxds, vec_ctulo)
+VSX_IMPL_1RG(vec_udword2, wi, vec_float4, wf, xvcvspuxds, vec_ctulo)
 
 // just in case if GCC doesn't define it
 #ifndef vec_xl
@@ -346,7 +345,7 @@ VSX_IMPL_1RG(vec_udword2, wi, vec_float4,  wf, xvcvspuxds, vec_ctulo)
 
 /*
  * CLANG VSX compatibility
-**/
+ **/
 #if defined(__clang__) && !defined(__IBMCPP__)
 
 /*
@@ -358,7 +357,7 @@ VSX_IMPL_1RG(vec_udword2, wi, vec_float4,  wf, xvcvspuxds, vec_ctulo)
  *
  * So we're not able to use inline asm and only use built-in functions that CLANG supports
  * and use __builtin_convertvector if clang missng any of vector conversions built-in functions
-*/
+ */
 
 // convert vector helper
 #define VSX_IMPL_CONVERT(rt, rg, fnm) \
@@ -381,9 +380,9 @@ VSX_FINLINE(rt) fnm(const rg& a) { return __builtin_convertvector(a, rt); }
             return vec_mergel(a, b);                                                    \
         }                                                                               \
     }
-    VSX_IMPL_CLANG_4_PERMI(vec_udword2)
-    VSX_IMPL_CLANG_4_PERMI(vec_dword2)
-    VSX_IMPL_CLANG_4_PERMI(vec_double2)
+VSX_IMPL_CLANG_4_PERMI(vec_udword2)
+VSX_IMPL_CLANG_4_PERMI(vec_dword2)
+VSX_IMPL_CLANG_4_PERMI(vec_double2)
 
 // vec_xxsldwi is missing in clang 4
 #   define vec_xxsldwi(a, b, c) vec_sld(a, b, (c) * 4)
@@ -399,26 +398,26 @@ VSX_FINLINE(rt) fnm(const rg& a) { return __builtin_convertvector(a, rt); }
 
 // Implement vec_rsqrt since clang only supports vec_rsqrte
 #ifndef vec_rsqrt
-    VSX_FINLINE(vec_float4) vec_rsqrt(const vec_float4& a)
-    { return vec_div(vec_float4_sp(1), vec_sqrt(a)); }
+VSX_FINLINE(vec_float4) vec_rsqrt(const vec_float4& a)
+{	return vec_div(vec_float4_sp(1), vec_sqrt(a));}
 
-    VSX_FINLINE(vec_double2) vec_rsqrt(const vec_double2& a)
-    { return vec_div(vec_double2_sp(1), vec_sqrt(a)); }
+VSX_FINLINE(vec_double2) vec_rsqrt(const vec_double2& a)
+{	return vec_div(vec_double2_sp(1), vec_sqrt(a));}
 #endif
 
 // vec_promote missing support for doubleword
 VSX_FINLINE(vec_dword2) vec_promote(long long a, int b)
 {
-    vec_dword2 ret = vec_dword2_z;
-    ret[b & 1] = a;
-    return ret;
+	vec_dword2 ret = vec_dword2_z;
+	ret[b & 1] = a;
+	return ret;
 }
 
 VSX_FINLINE(vec_udword2) vec_promote(unsigned long long a, int b)
 {
-    vec_udword2 ret = vec_udword2_z;
-    ret[b & 1] = a;
-    return ret;
+	vec_udword2 ret = vec_udword2_z;
+	ret[b & 1] = a;
+	return ret;
 }
 
 // vec_popcnt should return unsigned but clang has different thought just like gcc in vec_vpopcnt
@@ -427,48 +426,48 @@ VSX_FINLINE(Tvec) vec_popcntu(const Tvec2& a)  \
 { return ucast(vec_popcnt(a)); }
 VSX_IMPL_POPCNTU(vec_uchar16, vec_char16, vec_uchar16_c);
 VSX_IMPL_POPCNTU(vec_ushort8, vec_short8, vec_ushort8_c);
-VSX_IMPL_POPCNTU(vec_uint4,   vec_int4,   vec_uint4_c);
+VSX_IMPL_POPCNTU(vec_uint4, vec_int4, vec_uint4_c);
 // redirect unsigned types
 VSX_REDIRECT_1RG(vec_uchar16, vec_uchar16, vec_popcntu, vec_popcnt)
 VSX_REDIRECT_1RG(vec_ushort8, vec_ushort8, vec_popcntu, vec_popcnt)
-VSX_REDIRECT_1RG(vec_uint4,   vec_uint4,   vec_popcntu, vec_popcnt)
+VSX_REDIRECT_1RG(vec_uint4, vec_uint4, vec_popcntu, vec_popcnt)
 
 // converts between single and double precision
-VSX_REDIRECT_1RG(vec_float4,  vec_double2, vec_cvfo, __builtin_vsx_xvcvdpsp)
-VSX_REDIRECT_1RG(vec_double2, vec_float4,  vec_cvfo, __builtin_vsx_xvcvspdp)
+VSX_REDIRECT_1RG(vec_float4, vec_double2, vec_cvfo, __builtin_vsx_xvcvdpsp)
+VSX_REDIRECT_1RG(vec_double2, vec_float4, vec_cvfo, __builtin_vsx_xvcvspdp)
 
 // converts word and doubleword to double-precision
 #ifdef vec_ctd
 #   undef vec_ctd
 #endif
-VSX_REDIRECT_1RG(vec_double2, vec_int4,  vec_ctdo, __builtin_vsx_xvcvsxwdp)
+VSX_REDIRECT_1RG(vec_double2, vec_int4, vec_ctdo, __builtin_vsx_xvcvsxwdp)
 VSX_REDIRECT_1RG(vec_double2, vec_uint4, vec_ctdo, __builtin_vsx_xvcvuxwdp)
 
-VSX_IMPL_CONVERT(vec_double2, vec_dword2,  vec_ctd)
+VSX_IMPL_CONVERT(vec_double2, vec_dword2, vec_ctd)
 VSX_IMPL_CONVERT(vec_double2, vec_udword2, vec_ctd)
 
 // converts word and doubleword to single-precision
 #if __clang_major__ > 4
 #   undef vec_ctf
 #endif
-VSX_IMPL_CONVERT(vec_float4, vec_int4,    vec_ctf)
-VSX_IMPL_CONVERT(vec_float4, vec_uint4,   vec_ctf)
-VSX_REDIRECT_1RG(vec_float4, vec_dword2,  vec_ctfo, __builtin_vsx_xvcvsxdsp)
+VSX_IMPL_CONVERT(vec_float4, vec_int4, vec_ctf)
+VSX_IMPL_CONVERT(vec_float4, vec_uint4, vec_ctf)
+VSX_REDIRECT_1RG(vec_float4, vec_dword2, vec_ctfo, __builtin_vsx_xvcvsxdsp)
 VSX_REDIRECT_1RG(vec_float4, vec_udword2, vec_ctfo, __builtin_vsx_xvcvuxdsp)
 
 // converts single and double precision to signed word
 #if __clang_major__ > 4
 #   undef vec_cts
 #endif
-VSX_REDIRECT_1RG(vec_int4,  vec_double2, vec_ctso, __builtin_vsx_xvcvdpsxws)
-VSX_IMPL_CONVERT(vec_int4,  vec_float4,  vec_cts)
+VSX_REDIRECT_1RG(vec_int4, vec_double2, vec_ctso, __builtin_vsx_xvcvdpsxws)
+VSX_IMPL_CONVERT(vec_int4, vec_float4, vec_cts)
 
 // converts single and double precision to unsigned word
 #if __clang_major__ > 4
 #   undef vec_ctu
 #endif
 VSX_REDIRECT_1RG(vec_uint4, vec_double2, vec_ctuo, __builtin_vsx_xvcvdpuxws)
-VSX_IMPL_CONVERT(vec_uint4, vec_float4,  vec_ctu)
+VSX_IMPL_CONVERT(vec_uint4, vec_float4, vec_ctu)
 
 // converts single and double precision to signed doubleword
 #ifdef vec_ctsl
@@ -477,7 +476,7 @@ VSX_IMPL_CONVERT(vec_uint4, vec_float4,  vec_ctu)
 VSX_IMPL_CONVERT(vec_dword2, vec_double2, vec_ctsl)
 // __builtin_convertvector unable to convert, xvcvspsxds is missing on it
 VSX_FINLINE(vec_dword2) vec_ctslo(const vec_float4& a)
-{ return vec_ctsl(vec_cvfo(a)); }
+{	return vec_ctsl(vec_cvfo(a));}
 
 // converts single and double precision to unsigned doubleword
 #ifdef vec_ctul
@@ -486,13 +485,13 @@ VSX_FINLINE(vec_dword2) vec_ctslo(const vec_float4& a)
 VSX_IMPL_CONVERT(vec_udword2, vec_double2, vec_ctul)
 // __builtin_convertvector unable to convert, xvcvspuxds is missing on it
 VSX_FINLINE(vec_udword2) vec_ctulo(const vec_float4& a)
-{ return vec_ctul(vec_cvfo(a)); }
+{	return vec_ctul(vec_cvfo(a));}
 
 #endif // CLANG VSX compatibility
 
 /*
  * Common GCC, CLANG compatibility
-**/
+ **/
 #if defined(__GNUG__) && !defined(__IBMCPP__)
 
 #ifdef vec_cvf
@@ -503,11 +502,11 @@ VSX_FINLINE(vec_udword2) vec_ctulo(const vec_float4& a)
 VSX_FINLINE(rt) fnm(const rg& a)                 \
 { return fn2(vec_sldw(a, a, 1)); }
 
-VSX_IMPL_CONV_EVEN_4_2(vec_double2, vec_float4, vec_cvf,  vec_cvfo)
-VSX_IMPL_CONV_EVEN_4_2(vec_double2, vec_int4,   vec_ctd,  vec_ctdo)
-VSX_IMPL_CONV_EVEN_4_2(vec_double2, vec_uint4,  vec_ctd,  vec_ctdo)
+VSX_IMPL_CONV_EVEN_4_2(vec_double2, vec_float4, vec_cvf, vec_cvfo)
+VSX_IMPL_CONV_EVEN_4_2(vec_double2, vec_int4, vec_ctd, vec_ctdo)
+VSX_IMPL_CONV_EVEN_4_2(vec_double2, vec_uint4, vec_ctd, vec_ctdo)
 
-VSX_IMPL_CONV_EVEN_4_2(vec_dword2,  vec_float4, vec_ctsl, vec_ctslo)
+VSX_IMPL_CONV_EVEN_4_2(vec_dword2, vec_float4, vec_ctsl, vec_ctslo)
 VSX_IMPL_CONV_EVEN_4_2(vec_udword2, vec_float4, vec_ctul, vec_ctulo)
 
 #define VSX_IMPL_CONV_EVEN_2_4(rt, rg, fnm, fn2) \
@@ -518,19 +517,19 @@ VSX_FINLINE(rt) fnm(const rg& a)                 \
 }
 
 VSX_IMPL_CONV_EVEN_2_4(vec_float4, vec_double2, vec_cvf, vec_cvfo)
-VSX_IMPL_CONV_EVEN_2_4(vec_float4, vec_dword2,  vec_ctf, vec_ctfo)
+VSX_IMPL_CONV_EVEN_2_4(vec_float4, vec_dword2, vec_ctf, vec_ctfo)
 VSX_IMPL_CONV_EVEN_2_4(vec_float4, vec_udword2, vec_ctf, vec_ctfo)
 
-VSX_IMPL_CONV_EVEN_2_4(vec_int4,   vec_double2, vec_cts, vec_ctso)
-VSX_IMPL_CONV_EVEN_2_4(vec_uint4,  vec_double2, vec_ctu, vec_ctuo)
+VSX_IMPL_CONV_EVEN_2_4(vec_int4, vec_double2, vec_cts, vec_ctso)
+VSX_IMPL_CONV_EVEN_2_4(vec_uint4, vec_double2, vec_ctu, vec_ctuo)
 
 // Only for Eigen!
 /*
  * changing behavior of conversion intrinsics for gcc has effect on Eigen
  * so we redfine old behavior again only on gcc, clang
-*/
+ */
 #if !defined(__clang__) || __clang_major__ > 4
-    // ignoring second arg since Eigen only truncates toward zero
+// ignoring second arg since Eigen only truncates toward zero
 #   define VSX_IMPL_CONV_2VARIANT(rt, rg, fnm, fn2)     \
     VSX_FINLINE(rt) fnm(const rg& a, int only_truncate) \
     {                                                   \
@@ -538,18 +537,18 @@ VSX_IMPL_CONV_EVEN_2_4(vec_uint4,  vec_double2, vec_ctu, vec_ctuo)
         (void)only_truncate;                            \
         return fn2(a);                                  \
     }
-    VSX_IMPL_CONV_2VARIANT(vec_int4,   vec_float4,  vec_cts, vec_cts)
-    VSX_IMPL_CONV_2VARIANT(vec_float4, vec_int4,    vec_ctf, vec_ctf)
-    // define vec_cts for converting double precision to signed doubleword
-    // which isn't combitable with xlc but its okay since Eigen only use it for gcc
-    VSX_IMPL_CONV_2VARIANT(vec_dword2, vec_double2, vec_cts, vec_ctsl)
+VSX_IMPL_CONV_2VARIANT(vec_int4, vec_float4, vec_cts, vec_cts)
+VSX_IMPL_CONV_2VARIANT(vec_float4, vec_int4, vec_ctf, vec_ctf)
+// define vec_cts for converting double precision to signed doubleword
+// which isn't combitable with xlc but its okay since Eigen only use it for gcc
+VSX_IMPL_CONV_2VARIANT(vec_dword2, vec_double2, vec_cts, vec_ctsl)
 #endif // Eigen
 
 #endif // Common GCC, CLANG compatibility
 
 /*
  * XLC VSX compatibility
-**/
+ **/
 #if defined(__IBMCPP__)
 
 // vector population count
@@ -560,38 +559,38 @@ VSX_IMPL_CONV_EVEN_2_4(vec_uint4,  vec_double2, vec_ctu, vec_ctuo)
 #define VSX_IMPL_OVERLOAD_Z2(rt, rg, fnm) \
 VSX_FINLINE(rt) fnm(const rg& a) { return fnm(a, 0); }
 
-VSX_IMPL_OVERLOAD_Z2(vec_double2, vec_int4,    vec_ctd)
-VSX_IMPL_OVERLOAD_Z2(vec_double2, vec_uint4,   vec_ctd)
-VSX_IMPL_OVERLOAD_Z2(vec_double2, vec_dword2,  vec_ctd)
+VSX_IMPL_OVERLOAD_Z2(vec_double2, vec_int4, vec_ctd)
+VSX_IMPL_OVERLOAD_Z2(vec_double2, vec_uint4, vec_ctd)
+VSX_IMPL_OVERLOAD_Z2(vec_double2, vec_dword2, vec_ctd)
 VSX_IMPL_OVERLOAD_Z2(vec_double2, vec_udword2, vec_ctd)
 
-VSX_IMPL_OVERLOAD_Z2(vec_float4,  vec_int4,    vec_ctf)
-VSX_IMPL_OVERLOAD_Z2(vec_float4,  vec_uint4,   vec_ctf)
-VSX_IMPL_OVERLOAD_Z2(vec_float4,  vec_dword2,  vec_ctf)
-VSX_IMPL_OVERLOAD_Z2(vec_float4,  vec_udword2, vec_ctf)
+VSX_IMPL_OVERLOAD_Z2(vec_float4, vec_int4, vec_ctf)
+VSX_IMPL_OVERLOAD_Z2(vec_float4, vec_uint4, vec_ctf)
+VSX_IMPL_OVERLOAD_Z2(vec_float4, vec_dword2, vec_ctf)
+VSX_IMPL_OVERLOAD_Z2(vec_float4, vec_udword2, vec_ctf)
 
-VSX_IMPL_OVERLOAD_Z2(vec_int4,    vec_double2, vec_cts)
-VSX_IMPL_OVERLOAD_Z2(vec_int4,    vec_float4,  vec_cts)
+VSX_IMPL_OVERLOAD_Z2(vec_int4, vec_double2, vec_cts)
+VSX_IMPL_OVERLOAD_Z2(vec_int4, vec_float4, vec_cts)
 
-VSX_IMPL_OVERLOAD_Z2(vec_uint4,   vec_double2, vec_ctu)
-VSX_IMPL_OVERLOAD_Z2(vec_uint4,   vec_float4,  vec_ctu)
+VSX_IMPL_OVERLOAD_Z2(vec_uint4, vec_double2, vec_ctu)
+VSX_IMPL_OVERLOAD_Z2(vec_uint4, vec_float4, vec_ctu)
 
-VSX_IMPL_OVERLOAD_Z2(vec_dword2,  vec_double2, vec_ctsl)
-VSX_IMPL_OVERLOAD_Z2(vec_dword2,  vec_float4,  vec_ctsl)
+VSX_IMPL_OVERLOAD_Z2(vec_dword2, vec_double2, vec_ctsl)
+VSX_IMPL_OVERLOAD_Z2(vec_dword2, vec_float4, vec_ctsl)
 
 VSX_IMPL_OVERLOAD_Z2(vec_udword2, vec_double2, vec_ctul)
-VSX_IMPL_OVERLOAD_Z2(vec_udword2, vec_float4,  vec_ctul)
+VSX_IMPL_OVERLOAD_Z2(vec_udword2, vec_float4, vec_ctul)
 
 // fixme: implement conversions of odd-numbered elements in a dirty way
 // since xlc doesn't support VSX registers operand in inline asm.
 #define VSX_IMPL_CONV_ODD_4_2(rt, rg, fnm, fn2) \
 VSX_FINLINE(rt) fnm(const rg& a) { return fn2(vec_sldw(a, a, 3)); }
 
-VSX_IMPL_CONV_ODD_4_2(vec_double2, vec_float4, vec_cvfo,  vec_cvf)
-VSX_IMPL_CONV_ODD_4_2(vec_double2, vec_int4,   vec_ctdo,  vec_ctd)
-VSX_IMPL_CONV_ODD_4_2(vec_double2, vec_uint4,  vec_ctdo,  vec_ctd)
+VSX_IMPL_CONV_ODD_4_2(vec_double2, vec_float4, vec_cvfo, vec_cvf)
+VSX_IMPL_CONV_ODD_4_2(vec_double2, vec_int4, vec_ctdo, vec_ctd)
+VSX_IMPL_CONV_ODD_4_2(vec_double2, vec_uint4, vec_ctdo, vec_ctd)
 
-VSX_IMPL_CONV_ODD_4_2(vec_dword2,  vec_float4, vec_ctslo, vec_ctsl)
+VSX_IMPL_CONV_ODD_4_2(vec_dword2, vec_float4, vec_ctslo, vec_ctsl)
 VSX_IMPL_CONV_ODD_4_2(vec_udword2, vec_float4, vec_ctulo, vec_ctul)
 
 #define VSX_IMPL_CONV_ODD_2_4(rt, rg, fnm, fn2)  \
@@ -602,11 +601,11 @@ VSX_FINLINE(rt) fnm(const rg& a)                 \
 }
 
 VSX_IMPL_CONV_ODD_2_4(vec_float4, vec_double2, vec_cvfo, vec_cvf)
-VSX_IMPL_CONV_ODD_2_4(vec_float4, vec_dword2,  vec_ctfo, vec_ctf)
+VSX_IMPL_CONV_ODD_2_4(vec_float4, vec_dword2, vec_ctfo, vec_ctf)
 VSX_IMPL_CONV_ODD_2_4(vec_float4, vec_udword2, vec_ctfo, vec_ctf)
 
-VSX_IMPL_CONV_ODD_2_4(vec_int4,   vec_double2, vec_ctso, vec_cts)
-VSX_IMPL_CONV_ODD_2_4(vec_uint4,  vec_double2, vec_ctuo, vec_ctu)
+VSX_IMPL_CONV_ODD_2_4(vec_int4, vec_double2, vec_ctso, vec_cts)
+VSX_IMPL_CONV_ODD_2_4(vec_uint4, vec_double2, vec_ctuo, vec_ctu)
 
 #endif // XLC VSX compatibility
 
@@ -619,17 +618,17 @@ VSX_IMPL_CONV_ODD_2_4(vec_uint4,  vec_double2, vec_ctuo, vec_ctu)
 
 // gcc can find his way in casting log int and XLC, CLANG ambiguous
 #if defined(__clang__) || defined(__IBMCPP__)
-    VSX_FINLINE(vec_udword2) vec_splats(uint64 v)
-    { return vec_splats((unsigned long long) v); }
+VSX_FINLINE(vec_udword2) vec_splats(uint64 v)
+{	return vec_splats((unsigned long long) v);}
 
-    VSX_FINLINE(vec_dword2) vec_splats(int64 v)
-    { return vec_splats((long long) v); }
+VSX_FINLINE(vec_dword2) vec_splats(int64 v)
+{	return vec_splats((long long) v);}
 
-    VSX_FINLINE(vec_udword2) vec_promote(uint64 a, int b)
-    { return vec_promote((unsigned long long) a, b); }
+VSX_FINLINE(vec_udword2) vec_promote(uint64 a, int b)
+{	return vec_promote((unsigned long long) a, b);}
 
-    VSX_FINLINE(vec_dword2) vec_promote(int64 a, int b)
-    { return vec_promote((long long) a, b); }
+VSX_FINLINE(vec_dword2) vec_promote(int64 a, int b)
+{	return vec_promote((long long) a, b);}
 #endif
 
 /*
@@ -641,7 +640,7 @@ VSX_IMPL_CONV_ODD_2_4(vec_uint4,  vec_double2, vec_ctuo, vec_ctu)
  *
  * Note: In clang vec_xl and vec_xst fails to load unaligned addresses
  * so we are using vec_vsx_ld, vec_vsx_st instead
-*/
+ */
 
 #if defined(__clang__) && !defined(__IBMCPP__)
 #   define vsx_ldf  vec_vsx_ld
@@ -661,31 +660,31 @@ VSX_IMPL_CONV_ODD_2_4(vec_uint4,  vec_double2, vec_ctuo, vec_ctu)
  * and in CLANG we are using vec_vsx_ld, vec_vsx_st because vec_xl, vec_xst fails to load unaligned addresses
  *
  * In XLC vec_xl and vec_xst fail to cast int64(long int) to long long
-*/
+ */
 #if (defined(__GNUG__) || defined(__clang__)) && !defined(__IBMCPP__)
-    VSX_FINLINE(vec_udword2) vsx_ld2(long o, const uint64* p)
-    { return vec_udword2_c(vsx_ldf(VSX_OFFSET(o, p), (unsigned int*)p)); }
+VSX_FINLINE(vec_udword2) vsx_ld2(long o, const uint64* p)
+{	return vec_udword2_c(vsx_ldf(VSX_OFFSET(o, p), (unsigned int*)p));}
 
-    VSX_FINLINE(vec_dword2) vsx_ld2(long o, const int64* p)
-    { return vec_dword2_c(vsx_ldf(VSX_OFFSET(o, p), (int*)p)); }
+VSX_FINLINE(vec_dword2) vsx_ld2(long o, const int64* p)
+{	return vec_dword2_c(vsx_ldf(VSX_OFFSET(o, p), (int*)p));}
 
-    VSX_FINLINE(void) vsx_st2(const vec_udword2& vec, long o, uint64* p)
-    { vsx_stf(vec_uint4_c(vec), VSX_OFFSET(o, p), (unsigned int*)p); }
+VSX_FINLINE(void) vsx_st2(const vec_udword2& vec, long o, uint64* p)
+{	vsx_stf(vec_uint4_c(vec), VSX_OFFSET(o, p), (unsigned int*)p);}
 
-    VSX_FINLINE(void) vsx_st2(const vec_dword2& vec, long o, int64* p)
-    { vsx_stf(vec_int4_c(vec), VSX_OFFSET(o, p), (int*)p); }
+VSX_FINLINE(void) vsx_st2(const vec_dword2& vec, long o, int64* p)
+{	vsx_stf(vec_int4_c(vec), VSX_OFFSET(o, p), (int*)p);}
 #else // XLC
-    VSX_FINLINE(vec_udword2) vsx_ld2(long o, const uint64* p)
-    { return vsx_ldf(VSX_OFFSET(o, p), (unsigned long long*)p); }
+VSX_FINLINE(vec_udword2) vsx_ld2(long o, const uint64* p)
+{	return vsx_ldf(VSX_OFFSET(o, p), (unsigned long long*)p);}
 
-    VSX_FINLINE(vec_dword2) vsx_ld2(long o, const int64* p)
-    { return vsx_ldf(VSX_OFFSET(o, p), (long long*)p); }
+VSX_FINLINE(vec_dword2) vsx_ld2(long o, const int64* p)
+{	return vsx_ldf(VSX_OFFSET(o, p), (long long*)p);}
 
-    VSX_FINLINE(void) vsx_st2(const vec_udword2& vec, long o, uint64* p)
-    { vsx_stf(vec, VSX_OFFSET(o, p), (unsigned long long*)p); }
+VSX_FINLINE(void) vsx_st2(const vec_udword2& vec, long o, uint64* p)
+{	vsx_stf(vec, VSX_OFFSET(o, p), (unsigned long long*)p);}
 
-    VSX_FINLINE(void) vsx_st2(const vec_dword2& vec, long o, int64* p)
-    { vsx_stf(vec, VSX_OFFSET(o, p), (long long*)p); }
+VSX_FINLINE(void) vsx_st2(const vec_dword2& vec, long o, int64* p)
+{	vsx_stf(vec, VSX_OFFSET(o, p), (long long*)p);}
 #endif
 
 // load 4 unsigned bytes into uint4 vector
@@ -706,7 +705,7 @@ VSX_IMPL_CONV_ODD_2_4(vec_uint4,  vec_double2, vec_ctuo, vec_ctu)
 /*
  * vec_ld_l8(ptr) -> Load 64-bits of integer data to lower part
  * vec_ldz_l8(ptr) -> Load 64-bits of integer data to lower part and zero upper part
-**/
+ **/
 #define VSX_IMPL_LOAD_L8(Tvec, Tp)                                              \
 VSX_FINLINE(Tvec) vec_ld_l8(const Tp *p)                                        \
 { return ((Tvec)vec_promote(*((uint64*)p), 0)); }                               \
@@ -717,14 +716,14 @@ VSX_FINLINE(Tvec) vec_ldz_l8(const Tp *p)                                       
     return vec_and(vec_ld_l8(p), (Tvec)mask);                                   \
 }
 VSX_IMPL_LOAD_L8(vec_uchar16, uchar)
-VSX_IMPL_LOAD_L8(vec_char16,  schar)
+VSX_IMPL_LOAD_L8(vec_char16, schar)
 VSX_IMPL_LOAD_L8(vec_ushort8, ushort)
-VSX_IMPL_LOAD_L8(vec_short8,  short)
-VSX_IMPL_LOAD_L8(vec_uint4,   uint)
-VSX_IMPL_LOAD_L8(vec_int4,    int)
-VSX_IMPL_LOAD_L8(vec_float4,  float)
+VSX_IMPL_LOAD_L8(vec_short8, short)
+VSX_IMPL_LOAD_L8(vec_uint4, uint)
+VSX_IMPL_LOAD_L8(vec_int4, int)
+VSX_IMPL_LOAD_L8(vec_float4, float)
 VSX_IMPL_LOAD_L8(vec_udword2, uint64)
-VSX_IMPL_LOAD_L8(vec_dword2,  int64)
+VSX_IMPL_LOAD_L8(vec_dword2, int64)
 VSX_IMPL_LOAD_L8(vec_double2, double)
 
 // logical not
@@ -744,7 +743,7 @@ VSX_IMPL_LOAD_L8(vec_double2, double)
 /*
  * Implement vec_unpacklu and vec_unpackhu
  * since vec_unpackl, vec_unpackh only support signed integers
-**/
+ **/
 #define VSX_IMPL_UNPACKU(rt, rg, zero)                 \
 VSX_FINLINE(rt) vec_unpacklu(const rg& a)              \
 { return reinterpret_cast<rt>(vec_mergel(a, zero)); }  \
@@ -752,13 +751,13 @@ VSX_FINLINE(rt) vec_unpackhu(const rg& a)              \
 { return reinterpret_cast<rt>(vec_mergeh(a, zero));  }
 
 VSX_IMPL_UNPACKU(vec_ushort8, vec_uchar16, vec_uchar16_z)
-VSX_IMPL_UNPACKU(vec_uint4,   vec_ushort8, vec_ushort8_z)
-VSX_IMPL_UNPACKU(vec_udword2, vec_uint4,   vec_uint4_z)
+VSX_IMPL_UNPACKU(vec_uint4, vec_ushort8, vec_ushort8_z)
+VSX_IMPL_UNPACKU(vec_udword2, vec_uint4, vec_uint4_z)
 
 /*
  * Implement vec_mergesqe and vec_mergesqo
  * Merges the sequence values of even and odd elements of two vectors
-*/
+ */
 #define VSX_IMPL_PERM(rt, fnm, ...)            \
 VSX_FINLINE(rt) fnm(const rt& a, const rt& b)  \
 { static const vec_uchar16 perm = {__VA_ARGS__}; return vec_perm(a, b, perm); }
@@ -768,36 +767,36 @@ VSX_FINLINE(rt) fnm(const rt& a, const rt& b)  \
 #define perm16_mergesqo 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31
 VSX_IMPL_PERM(vec_uchar16, vec_mergesqe, perm16_mergesqe)
 VSX_IMPL_PERM(vec_uchar16, vec_mergesqo, perm16_mergesqo)
-VSX_IMPL_PERM(vec_char16,  vec_mergesqe, perm16_mergesqe)
-VSX_IMPL_PERM(vec_char16,  vec_mergesqo, perm16_mergesqo)
+VSX_IMPL_PERM(vec_char16, vec_mergesqe, perm16_mergesqe)
+VSX_IMPL_PERM(vec_char16, vec_mergesqo, perm16_mergesqo)
 // 8
 #define perm8_mergesqe 0, 1, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24, 25, 28, 29
 #define perm8_mergesqo 2, 3, 6, 7, 10, 11, 14, 15, 18, 19, 22, 23, 26, 27, 30, 31
 VSX_IMPL_PERM(vec_ushort8, vec_mergesqe, perm8_mergesqe)
 VSX_IMPL_PERM(vec_ushort8, vec_mergesqo, perm8_mergesqo)
-VSX_IMPL_PERM(vec_short8,  vec_mergesqe, perm8_mergesqe)
-VSX_IMPL_PERM(vec_short8,  vec_mergesqo, perm8_mergesqo)
+VSX_IMPL_PERM(vec_short8, vec_mergesqe, perm8_mergesqe)
+VSX_IMPL_PERM(vec_short8, vec_mergesqo, perm8_mergesqo)
 // 4
 #define perm4_mergesqe 0, 1, 2, 3, 8, 9, 10, 11, 16, 17, 18, 19, 24, 25, 26, 27
 #define perm4_mergesqo 4, 5, 6, 7, 12, 13, 14, 15, 20, 21, 22, 23, 28, 29, 30, 31
-VSX_IMPL_PERM(vec_uint4,  vec_mergesqe, perm4_mergesqe)
-VSX_IMPL_PERM(vec_uint4,  vec_mergesqo, perm4_mergesqo)
-VSX_IMPL_PERM(vec_int4,   vec_mergesqe, perm4_mergesqe)
-VSX_IMPL_PERM(vec_int4,   vec_mergesqo, perm4_mergesqo)
+VSX_IMPL_PERM(vec_uint4, vec_mergesqe, perm4_mergesqe)
+VSX_IMPL_PERM(vec_uint4, vec_mergesqo, perm4_mergesqo)
+VSX_IMPL_PERM(vec_int4, vec_mergesqe, perm4_mergesqe)
+VSX_IMPL_PERM(vec_int4, vec_mergesqo, perm4_mergesqo)
 VSX_IMPL_PERM(vec_float4, vec_mergesqe, perm4_mergesqe)
 VSX_IMPL_PERM(vec_float4, vec_mergesqo, perm4_mergesqo)
 // 2
 VSX_REDIRECT_2RG(vec_double2, vec_double2, vec_mergesqe, vec_mergeh)
 VSX_REDIRECT_2RG(vec_double2, vec_double2, vec_mergesqo, vec_mergel)
-VSX_REDIRECT_2RG(vec_dword2,  vec_dword2,  vec_mergesqe, vec_mergeh)
-VSX_REDIRECT_2RG(vec_dword2,  vec_dword2,  vec_mergesqo, vec_mergel)
+VSX_REDIRECT_2RG(vec_dword2, vec_dword2, vec_mergesqe, vec_mergeh)
+VSX_REDIRECT_2RG(vec_dword2, vec_dword2, vec_mergesqo, vec_mergel)
 VSX_REDIRECT_2RG(vec_udword2, vec_udword2, vec_mergesqe, vec_mergeh)
 VSX_REDIRECT_2RG(vec_udword2, vec_udword2, vec_mergesqo, vec_mergel)
 
 /*
  * Implement vec_mergesqh and vec_mergesql
  * Merges the sequence most and least significant halves of two vectors
-*/
+ */
 #define VSX_IMPL_MERGESQHL(Tvec)                                    \
 VSX_FINLINE(Tvec) vec_mergesqh(const Tvec& a, const Tvec& b)        \
 { return (Tvec)vec_mergeh(vec_udword2_c(a), vec_udword2_c(b)); }    \
@@ -812,11 +811,10 @@ VSX_IMPL_MERGESQHL(vec_int4)
 VSX_IMPL_MERGESQHL(vec_float4)
 VSX_REDIRECT_2RG(vec_udword2, vec_udword2, vec_mergesqh, vec_mergeh)
 VSX_REDIRECT_2RG(vec_udword2, vec_udword2, vec_mergesql, vec_mergel)
-VSX_REDIRECT_2RG(vec_dword2,  vec_dword2,  vec_mergesqh, vec_mergeh)
-VSX_REDIRECT_2RG(vec_dword2,  vec_dword2,  vec_mergesql, vec_mergel)
+VSX_REDIRECT_2RG(vec_dword2, vec_dword2, vec_mergesqh, vec_mergeh)
+VSX_REDIRECT_2RG(vec_dword2, vec_dword2, vec_mergesql, vec_mergel)
 VSX_REDIRECT_2RG(vec_double2, vec_double2, vec_mergesqh, vec_mergeh)
 VSX_REDIRECT_2RG(vec_double2, vec_double2, vec_mergesql, vec_mergel)
-
 
 // 2 and 4 channels interleave for all types except 2 lanes
 #define VSX_IMPL_ST_INTERLEAVE(Tp, Tvec)                                    \
@@ -837,13 +835,13 @@ VSX_FINLINE(void) vec_st_interleave(const Tvec& a, const Tvec& b,           \
     vsx_stf(vec_mergeh(ac, bd), 32, ptr);                                   \
     vsx_stf(vec_mergel(ac, bd), 48, ptr);                                   \
 }
-VSX_IMPL_ST_INTERLEAVE(uchar,  vec_uchar16)
-VSX_IMPL_ST_INTERLEAVE(schar,  vec_char16)
+VSX_IMPL_ST_INTERLEAVE(uchar, vec_uchar16)
+VSX_IMPL_ST_INTERLEAVE(schar, vec_char16)
 VSX_IMPL_ST_INTERLEAVE(ushort, vec_ushort8)
-VSX_IMPL_ST_INTERLEAVE(short,  vec_short8)
-VSX_IMPL_ST_INTERLEAVE(uint,   vec_uint4)
-VSX_IMPL_ST_INTERLEAVE(int,    vec_int4)
-VSX_IMPL_ST_INTERLEAVE(float,  vec_float4)
+VSX_IMPL_ST_INTERLEAVE(short, vec_short8)
+VSX_IMPL_ST_INTERLEAVE(uint, vec_uint4)
+VSX_IMPL_ST_INTERLEAVE(int, vec_int4)
+VSX_IMPL_ST_INTERLEAVE(float, vec_float4)
 
 // 2 and 4 channels deinterleave for 16 lanes
 #define VSX_IMPL_ST_DINTERLEAVE_8(Tp, Tvec)                                 \
@@ -903,7 +901,7 @@ VSX_FINLINE(void) vec_ld_deinterleave(const Tp* ptr, Tvec& a, Tvec& b,      \
     d = vec_mergesql(cd0, cd1);                                             \
 }
 VSX_IMPL_ST_DINTERLEAVE_16(ushort, vec_ushort8)
-VSX_IMPL_ST_DINTERLEAVE_16(short,  vec_short8)
+VSX_IMPL_ST_DINTERLEAVE_16(short, vec_short8)
 
 // 2 and 4 channels deinterleave for 4 lanes
 #define VSX_IMPL_ST_DINTERLEAVE_32(Tp, Tvec)                                \
@@ -932,8 +930,8 @@ VSX_FINLINE(void) vec_ld_deinterleave(const Tp* ptr, Tvec& a, Tvec& b,      \
     c = vec_mergeh(m0, m1);                                                 \
     d = vec_mergel(m0, m1);                                                 \
 }
-VSX_IMPL_ST_DINTERLEAVE_32(uint,  vec_uint4)
-VSX_IMPL_ST_DINTERLEAVE_32(int,   vec_int4)
+VSX_IMPL_ST_DINTERLEAVE_32(uint, vec_uint4)
+VSX_IMPL_ST_DINTERLEAVE_32(int, vec_int4)
 VSX_IMPL_ST_DINTERLEAVE_32(float, vec_float4)
 
 // 2 and 4 channels interleave and deinterleave for 2 lanes
@@ -970,9 +968,9 @@ VSX_FINLINE(void) vec_ld_deinterleave(const Tp* ptr, Tvec& a, Tvec& b,      \
     c = vec_mergeh(v1, v3);                                                 \
     d = vec_mergel(v1, v3);                                                 \
 }
-VSX_IMPL_ST_D_INTERLEAVE_64(int64,  vec_dword2,  vsx_ld2, vsx_st2)
+VSX_IMPL_ST_D_INTERLEAVE_64(int64, vec_dword2, vsx_ld2, vsx_st2)
 VSX_IMPL_ST_D_INTERLEAVE_64(uint64, vec_udword2, vsx_ld2, vsx_st2)
-VSX_IMPL_ST_D_INTERLEAVE_64(double, vec_double2, vsx_ld,  vsx_st)
+VSX_IMPL_ST_D_INTERLEAVE_64(double, vec_double2, vsx_ld, vsx_st)
 
 /* 3 channels */
 #define VSX_IMPL_ST_INTERLEAVE_3CH_16(Tp, Tvec)                                                   \
@@ -1037,7 +1035,7 @@ VSX_FINLINE(void) vec_ld_deinterleave(const Tp* ptr, Tvec& a, Tvec& b, Tvec& c) 
     c = vec_perm(vec_perm(v1, v2, c12_perm), v3, c123_perm);                                      \
 }
 VSX_IMPL_ST_INTERLEAVE_3CH_8(ushort, vec_ushort8)
-VSX_IMPL_ST_INTERLEAVE_3CH_8(short,  vec_short8)
+VSX_IMPL_ST_INTERLEAVE_3CH_8(short, vec_short8)
 
 #define VSX_IMPL_ST_INTERLEAVE_3CH_4(Tp, Tvec)                                                     \
 VSX_FINLINE(void) vec_st_interleave(const Tvec& a, const Tvec& b,                                  \
@@ -1062,8 +1060,8 @@ VSX_FINLINE(void) vec_ld_deinterleave(const Tp* ptr, Tvec& a, Tvec& b, Tvec& c) 
     b = vec_perm(v2, vec_sld(v1, v3, 8), flp2);                                                    \
     c = vec_perm(vec_sld(v2, v1, 8), v3, flp);                                                     \
 }
-VSX_IMPL_ST_INTERLEAVE_3CH_4(uint,  vec_uint4)
-VSX_IMPL_ST_INTERLEAVE_3CH_4(int,   vec_int4)
+VSX_IMPL_ST_INTERLEAVE_3CH_4(uint, vec_uint4)
+VSX_IMPL_ST_INTERLEAVE_3CH_4(int, vec_int4)
 VSX_IMPL_ST_INTERLEAVE_3CH_4(float, vec_float4)
 
 #define VSX_IMPL_ST_INTERLEAVE_3CH_2(Tp, Tvec, ld_func, st_func)     \
@@ -1084,9 +1082,9 @@ VSX_FINLINE(void) vec_ld_deinterleave(const Tp* ptr, Tvec& a,        \
     b = vec_permi(v1, v3, 2);                                        \
     c = vec_permi(v2, v3, 1);                                        \
 }
-VSX_IMPL_ST_INTERLEAVE_3CH_2(int64,  vec_dword2,  vsx_ld2, vsx_st2)
+VSX_IMPL_ST_INTERLEAVE_3CH_2(int64, vec_dword2, vsx_ld2, vsx_st2)
 VSX_IMPL_ST_INTERLEAVE_3CH_2(uint64, vec_udword2, vsx_ld2, vsx_st2)
-VSX_IMPL_ST_INTERLEAVE_3CH_2(double, vec_double2, vsx_ld,  vsx_st)
+VSX_IMPL_ST_INTERLEAVE_3CH_2(double, vec_double2, vsx_ld, vsx_st)
 
 #endif // CV_VSX
 

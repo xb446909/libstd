@@ -196,7 +196,7 @@
 /* #undef HAVE_XINE */
 
 /* Define if your processor stores words with the most significant byte
-first (like Motorola and SPARC, unlike Intel and VAX). */
+ first (like Motorola and SPARC, unlike Intel and VAX). */
 /* #undef WORDS_BIGENDIAN */
 
 /* gPhoto2 library */
@@ -243,6 +243,5 @@ first (like Motorola and SPARC, unlike Intel and VAX). */
 
 /* OpenCV trace utilities */
 #define OPENCV_TRACE
-
 
 #endif // OPENCV_CVCONFIG_H_INCLUDED

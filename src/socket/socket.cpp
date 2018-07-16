@@ -21,7 +21,8 @@ using namespace std::tr1;
 
 std::map<int, shared_ptr<CSocketLib> > g_mapSockets;
 
-int __stdcall InitSocket(int nID, int nType, const char* szIniPath, SocketRecvCallback pCallback, void* pParam)
+int __stdcall InitSocket(int nID, int nType, const char* szIniPath,
+		SocketRecvCallback pCallback, void* pParam)
 {
 	std::string strIni;
 	if ((!szIniPath) || (!strcmp(szIniPath, "")))
@@ -35,7 +36,8 @@ int __stdcall InitSocket(int nID, int nType, const char* szIniPath, SocketRecvCa
 	g_mapSockets.erase(nID);
 
 	shared_ptr<CSocketLib> socket = CSocketLib::Create(nType);
-	socket_param_ptr param = shared_ptr<CSocketLib::SocketParam>(new CSocketLib::SocketParam(nID, nType, strIni, pCallback, pParam));
+	socket_param_ptr param = shared_ptr<CSocketLib::SocketParam>(
+			new CSocketLib::SocketParam(nID, nType, strIni, pCallback, pParam));
 	g_mapSockets.insert(std::pair<int, shared_ptr<CSocketLib> >(nID, socket));
 	socket->SetParam(param);
 
@@ -56,7 +58,8 @@ int __stdcall TCPConnect(int nID, int nTimeoutMs)
 	return g_mapSockets[nID]->Connect(nTimeoutMs);
 }
 
-int __stdcall TCPSend(int nID, const char * szSendBuf, int nlen, const char * szDstIP, int nDstPort)
+int __stdcall TCPSend(int nID, const char * szSendBuf, int nlen,
+		const char * szDstIP, int nDstPort)
 {
 	if (g_mapSockets.find(nID) == g_mapSockets.end())
 		return SOCK_ERROR_ID;
@@ -64,10 +67,12 @@ int __stdcall TCPSend(int nID, const char * szSendBuf, int nlen, const char * sz
 	return g_mapSockets[nID]->Send(szSendBuf, nlen, szDstIP, nDstPort);
 }
 
-int __stdcall TCPRecv(int nID, char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort)
+int __stdcall TCPRecv(int nID, char * szRecvBuf, int nBufLen, int nTimeoutMs,
+		const char * szDstIP, int nDstPort)
 {
 	if (g_mapSockets.find(nID) == g_mapSockets.end())
 		return SOCK_ERROR_ID;
-	return g_mapSockets[nID]->Receive(szRecvBuf, nBufLen, nTimeoutMs, szDstIP, nDstPort);
+	return g_mapSockets[nID]->Receive(szRecvBuf, nBufLen, nTimeoutMs, szDstIP,
+			nDstPort);
 }
 

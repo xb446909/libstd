@@ -35,13 +35,13 @@ extern CL_RUNTIME_EXPORT cl_int (CL_API_CALL *clSetKernelArgSVMPointer)(cl_kerne
 //        void (CL_CALLBACK *pfn_free_func)(cl_command_queue queue, cl_uint num_svm_pointers, void* svm_pointers[], void* user_data), void* user_data,
 //        cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 extern CL_RUNTIME_EXPORT cl_int (CL_API_CALL *clEnqueueSVMMemcpy)(cl_command_queue command_queue, cl_bool blocking_copy, void* dst_ptr, const void* src_ptr, size_t size,
-        cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
+		cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 extern CL_RUNTIME_EXPORT cl_int (CL_API_CALL *clEnqueueSVMMemFill)(cl_command_queue command_queue, void* svm_ptr, const void* pattern, size_t pattern_size, size_t size,
-        cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
+		cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 extern CL_RUNTIME_EXPORT cl_int (CL_API_CALL *clEnqueueSVMMap)(cl_command_queue command_queue, cl_bool blocking_map, cl_map_flags map_flags, void* svm_ptr, size_t size,
-        cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
+		cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 extern CL_RUNTIME_EXPORT cl_int (CL_API_CALL *clEnqueueSVMUnmap)(cl_command_queue command_queue, void* svm_ptr,
-        cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
+		cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 
 #endif // HAVE_OPENCL_SVM
 

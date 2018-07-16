@@ -16,32 +16,37 @@
 //
 //! @{
 
-namespace cv {
-namespace utils {
-namespace logging {
+namespace cv
+{
+namespace utils
+{
+namespace logging
+{
 
 //! Supported logging levels and their semantic
-enum LogLevel {
-    LOG_LEVEL_SILENT = 0,              //!< for using in setLogVevel() call
-    LOG_LEVEL_FATAL = 1,               //!< Fatal (critical) error (unrecoverable internal error)
-    LOG_LEVEL_ERROR = 2,               //!< Error message
-    LOG_LEVEL_WARNING = 3,             //!< Warning message
-    LOG_LEVEL_INFO = 4,                //!< Info message
-    LOG_LEVEL_DEBUG = 5,               //!< Debug message. Disabled in the "Release" build.
-    LOG_LEVEL_VERBOSE = 6,             //!< Verbose (trace) messages. Requires verbosity level. Disabled in the "Release" build.
+enum LogLevel
+{
+	LOG_LEVEL_SILENT = 0,              //!< for using in setLogVevel() call
+	LOG_LEVEL_FATAL = 1, //!< Fatal (critical) error (unrecoverable internal error)
+	LOG_LEVEL_ERROR = 2,               //!< Error message
+	LOG_LEVEL_WARNING = 3,             //!< Warning message
+	LOG_LEVEL_INFO = 4,                //!< Info message
+	LOG_LEVEL_DEBUG = 5,    //!< Debug message. Disabled in the "Release" build.
+	LOG_LEVEL_VERBOSE = 6, //!< Verbose (trace) messages. Requires verbosity level. Disabled in the "Release" build.
 #ifndef CV_DOXYGEN
-    ENUM_LOG_LEVEL_FORCE_INT = INT_MAX
+	ENUM_LOG_LEVEL_FORCE_INT = INT_MAX
 #endif
 };
 
 /** Set global logging level
-@return previous logging level
-*/
+ @return previous logging level
+ */
 CV_EXPORTS LogLevel setLogLevel(LogLevel logLevel);
 /** Get global logging level */
 CV_EXPORTS LogLevel getLogLevel();
 
-namespace internal {
+namespace internal
+{
 /** Write log message */
 CV_EXPORTS void writeLogMessage(LogLevel logLevel, const char* message);
 } // namespace
@@ -58,7 +63,6 @@ CV_EXPORTS void writeLogMessage(LogLevel logLevel, const char* message);
 #   define CV_LOG_STRIP_LEVEL CV_LOG_LEVEL_VERBOSE
 # endif
 #endif
-
 
 #define CV_LOG_FATAL(tag, ...)   for(;;) { if (cv::utils::logging::getLogLevel() < cv::utils::logging::LOG_LEVEL_FATAL) break; std::stringstream ss; ss << __VA_ARGS__; cv::utils::logging::internal::writeLogMessage(cv::utils::logging::LOG_LEVEL_FATAL, ss.str().c_str()); break; }
 #define CV_LOG_ERROR(tag, ...)   for(;;) { if (cv::utils::logging::getLogLevel() < cv::utils::logging::LOG_LEVEL_ERROR) break; std::stringstream ss; ss << __VA_ARGS__; cv::utils::logging::internal::writeLogMessage(cv::utils::logging::LOG_LEVEL_ERROR, ss.str().c_str()); break; }
@@ -79,8 +83,9 @@ CV_EXPORTS void writeLogMessage(LogLevel logLevel, const char* message);
 #define CV_LOG_VERBOSE(tag, v, ...) for(;;) { if (cv::utils::logging::getLogLevel() < cv::utils::logging::LOG_LEVEL_VERBOSE) break; std::stringstream ss; ss << "[VERB" << v << ":" << cv::utils::getThreadID() << "] " << __VA_ARGS__; cv::utils::logging::internal::writeLogMessage(cv::utils::logging::LOG_LEVEL_VERBOSE, ss.str().c_str()); break; }
 #endif
 
-
-}}} // namespace
+}
+}
+} // namespace
 
 //! @}
 

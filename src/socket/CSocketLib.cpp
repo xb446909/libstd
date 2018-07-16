@@ -8,8 +8,8 @@ using namespace std;
 
 CSocketLib::CSocketLib()
 #ifdef WIN32
-	: m_hThread(INVALID_HANDLE_VALUE)
-	, m_socket(INVALID_SOCKET)
+: m_hThread(INVALID_HANDLE_VALUE)
+, m_socket(INVALID_SOCKET)
 #endif
 {
 #ifdef WIN32
@@ -26,7 +26,6 @@ CSocketLib::CSocketLib()
 	pthread_mutex_init(&m_mutex, NULL);
 #endif
 }
-
 
 CSocketLib::~CSocketLib()
 {
@@ -70,12 +69,14 @@ int CSocketLib::Connect(int nTimeoutMs)
 	return SOCK_ERROR_ID;
 }
 
-int CSocketLib::Send(const char* szSendBuf, int nLen, const char* szDstIP, int nDstPort)
+int CSocketLib::Send(const char* szSendBuf, int nLen, const char* szDstIP,
+		int nDstPort)
 {
 	return SOCK_ERROR_ID;
 }
 
-int CSocketLib::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort)
+int CSocketLib::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs,
+		const char * szDstIP, int nDstPort)
 {
 	return SOCK_ERROR_ID;
 }

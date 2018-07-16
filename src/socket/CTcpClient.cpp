@@ -17,7 +17,6 @@ void* TCPClientReceiveThread(void* lpParam);
 
 char g_szClientRecvBuf[RECV_BUF_SIZE];
 
-
 CTcpClient::CTcpClient()
 {
 	m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -26,7 +25,6 @@ CTcpClient::CTcpClient()
 		cerr << "Create socket error: " << WSAGetLastError() << endl;
 	}
 }
-
 
 CTcpClient::~CTcpClient()
 {
@@ -41,8 +39,10 @@ int CTcpClient::Connect(int nTimeoutMs)
 {
 	std::stringstream section;
 	section << "TcpClient" << m_param.nId;
-	string strIp = ReadIniStdString(section.str().c_str(), "Address", "127.0.0.1", m_param.szIniPath.c_str());
-	int nPort = ReadIniInt(section.str().c_str(), "Port", 10000, m_param.szIniPath.c_str());
+	string strIp = ReadIniStdString(section.str().c_str(), "Address",
+			"127.0.0.1", m_param.szIniPath.c_str());
+	int nPort = ReadIniInt(section.str().c_str(), "Port", 10000,
+			m_param.szIniPath.c_str());
 
 	struct sockaddr_in clientService;
 
@@ -55,7 +55,7 @@ int CTcpClient::Connect(int nTimeoutMs)
 
 	//----------------------
 	// Connect to server.
-	connect(m_socket, (struct sockaddr*)&clientService, sizeof(clientService));
+	connect(m_socket, (struct sockaddr*) &clientService, sizeof(clientService));
 
 	fd_set r, w;
 	FD_ZERO(&r);
@@ -93,7 +93,8 @@ int CTcpClient::Connect(int nTimeoutMs)
 	return SOCK_SUCCESS;
 }
 
-int CTcpClient::Send(const char* szSendBuf, int nLen, const char* szDstIP, int nDstPort)
+int CTcpClient::Send(const char* szSendBuf, int nLen, const char* szDstIP,
+		int nDstPort)
 {
 	int iResult = send(m_socket, szSendBuf, nLen, 0);
 	if (iResult == SOCKET_ERROR)
@@ -104,7 +105,8 @@ int CTcpClient::Send(const char* szSendBuf, int nLen, const char* szDstIP, int n
 	return iResult;
 }
 
-int CTcpClient::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const char * szDstIP, int nDstPort)
+int CTcpClient::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs,
+		const char * szDstIP, int nDstPort)
 {
 	if (RecvCallback() != nullptr)
 	{
@@ -159,43 +161,53 @@ void* TCPClientReceiveThread(void* lpParam)
 	timeout.tv_sec = 0;
 	timeout.tv_usec = 20000;
 
-	sockaddr_in  addrTemp;
+	sockaddr_in addrTemp;
 	socklen_t iTempLen = sizeof(addrTemp);
-	getpeername(pClient->GetSocket(), (sockaddr *)&addrTemp, &iTempLen);
+	getpeername(pClient->GetSocket(), (sockaddr *) &addrTemp, &iTempLen);
 
 	while (pClient->ThreadEventIsSet())
 	{
 		fd_set fdOld = fd;
 
-		int iResult = select(pClient->GetSocket() + 1, &fdOld, NULL, NULL, &timeout);
+		int iResult = select(pClient->GetSocket() + 1, &fdOld, NULL, NULL,
+				&timeout);
 
 		if (iResult == SOCKET_ERROR)
 		{
-			cerr << "Failed to select socket, error: " << WSAGetLastError() << endl;
-			pClient->RecvCallback()(SOCK_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pClient->UserParam());
+			cerr << "Failed to select socket, error: " << WSAGetLastError()
+					<< endl;
+			pClient->RecvCallback()(SOCK_ERROR, inet_ntoa(addrTemp.sin_addr),
+					ntohs(addrTemp.sin_port), 0, NULL, pClient->UserParam());
 		}
 		else if (iResult > 0)
 		{
 			memset(g_szClientRecvBuf, 0, RECV_BUF_SIZE);
-			int iRecvSize = recv(pClient->GetSocket(), g_szClientRecvBuf, RECV_BUF_SIZE, 0);
+			int iRecvSize = recv(pClient->GetSocket(), g_szClientRecvBuf,
+					RECV_BUF_SIZE, 0);
 
 			if (SOCKET_ERROR == iRecvSize)
 			{
-				pClient->RecvCallback()(RECV_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pClient->UserParam());
+				pClient->RecvCallback()(RECV_ERROR,
+						inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port),
+						0, NULL, pClient->UserParam());
 				closesocket(pClient->GetSocket());
 				break;
 			}
 			else if (0 == iRecvSize)
 			{
 				//客户socket关闭    
-				pClient->RecvCallback()(RECV_CLOSE, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pClient->UserParam());
+				pClient->RecvCallback()(RECV_CLOSE,
+						inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port),
+						0, NULL, pClient->UserParam());
 				closesocket(pClient->GetSocket());
 				break;
 			}
 			else if (0 < iRecvSize)
 			{
 				//打印接收的数据    
-				pClient->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szClientRecvBuf, pClient->UserParam());
+				pClient->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr),
+						ntohs(addrTemp.sin_port), iRecvSize, g_szClientRecvBuf,
+						pClient->UserParam());
 			}
 		}
 	}

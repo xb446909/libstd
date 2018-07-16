@@ -14,12 +14,10 @@ public:
 		SerialPortRecvCallback recvCallback;
 		void* pParam;
 
-		_tagProcParam()
-			: nId(0)
-			, strIniPath("")
-			, recvCallback(nullptr)
-			, pParam(nullptr)
-		{}
+		_tagProcParam() :
+				nId(0), strIniPath(""), recvCallback(nullptr), pParam(nullptr)
+		{
+		}
 
 		_tagProcParam& operator =(_tagProcParam& src)
 		{
@@ -29,7 +27,7 @@ public:
 			pParam = src.pParam;
 			return *this;
 		}
-	}ProcParam;
+	} ProcParam;
 
 	CSerialPortProc();
 	~CSerialPortProc();
@@ -37,7 +35,10 @@ public:
 	int Open();
 	int Write(const char *szBuf, int nLen);
 	int Read(char * szBuf, int nBufLen, int nTimeout);
-	std::string GetPortName() { return m_szPortName; }
+	std::string GetPortName()
+	{
+		return m_szPortName;
+	}
 
 	ProcParam m_procParam;
 	HANDLE m_hThreadEvent;

@@ -15,7 +15,6 @@ using namespace std::tr1;
 #include "CSerialPortProc_unix.h"
 #endif // WIN32
 
-
 class CSerialPort
 {
 public:
@@ -23,7 +22,8 @@ public:
 	~CSerialPort();
 
 	void RemoveProc(int nId);
-	int AddProc(int nId, const char * szIniPath, SerialPortRecvCallback pCallback, void* pParam);
+	int AddProc(int nId, const char * szIniPath,
+			SerialPortRecvCallback pCallback, void* pParam);
 	int OpenProc(int nId);
 	int WriteProc(int nId, const char* szBuf, int nLen);
 	int ReadProc(int nId, char * szBuf, int nBufLen, int nTimeout);

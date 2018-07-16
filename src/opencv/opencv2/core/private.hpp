@@ -1,45 +1,45 @@
 /*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                          License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
+ //
+ //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+ //
+ //  By downloading, copying, installing or using the software you agree to this license.
+ //  If you do not agree to this license, do not download, install,
+ //  copy or use the software.
+ //
+ //
+ //                          License Agreement
+ //                For Open Source Computer Vision Library
+ //
+ // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+ // Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+ // Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+ // Third party copyrights are property of their respective owners.
+ //
+ // Redistribution and use in source and binary forms, with or without modification,
+ // are permitted provided that the following conditions are met:
+ //
+ //   * Redistribution's of source code must retain the above copyright notice,
+ //     this list of conditions and the following disclaimer.
+ //
+ //   * Redistribution's in binary form must reproduce the above copyright notice,
+ //     this list of conditions and the following disclaimer in the documentation
+ //     and/or other materials provided with the distribution.
+ //
+ //   * The name of the copyright holders may not be used to endorse or promote products
+ //     derived from this software without specific prior written permission.
+ //
+ // This software is provided by the copyright holders and contributors "as is" and
+ // any express or implied warranties, including, but not limited to, the implied
+ // warranties of merchantability and fitness for a particular purpose are disclaimed.
+ // In no event shall the Intel Corporation or contributors be liable for any direct,
+ // indirect, incidental, special, exemplary, or consequential damages
+ // (including, but not limited to, procurement of substitute goods or services;
+ // loss of use, data, or profits; or business interruption) however caused
+ // and on any theory of liability, whether in contract, strict liability,
+ // or tort (including negligence or otherwise) arising in any way out of
+ // the use of this software, even if advised of the possibility of such damage.
+ //
+ //M*/
 
 #ifndef OPENCV_CORE_PRIVATE_HPP
 #define OPENCV_CORE_PRIVATE_HPP
@@ -74,61 +74,78 @@ namespace cv
 {
 #ifdef HAVE_TBB
 
-    typedef tbb::blocked_range<int> BlockedRange;
+typedef tbb::blocked_range<int> BlockedRange;
 
-    template<typename Body> static inline
-    void parallel_for( const BlockedRange& range, const Body& body )
-    {
-        tbb::parallel_for(range, body);
-    }
+template<typename Body> static inline
+void parallel_for( const BlockedRange& range, const Body& body )
+{
+	tbb::parallel_for(range, body);
+}
 
-    typedef tbb::split Split;
+typedef tbb::split Split;
 
-    template<typename Body> static inline
-    void parallel_reduce( const BlockedRange& range, Body& body )
-    {
-        tbb::parallel_reduce(range, body);
-    }
+template<typename Body> static inline
+void parallel_reduce( const BlockedRange& range, Body& body )
+{
+	tbb::parallel_reduce(range, body);
+}
 
-    typedef tbb::concurrent_vector<Rect> ConcurrentRectVector;
+typedef tbb::concurrent_vector<Rect> ConcurrentRectVector;
 #else
-    class BlockedRange
-    {
-    public:
-        BlockedRange() : _begin(0), _end(0), _grainsize(0) {}
-        BlockedRange(int b, int e, int g=1) : _begin(b), _end(e), _grainsize(g) {}
-        int begin() const { return _begin; }
-        int end() const { return _end; }
-        int grainsize() const { return _grainsize; }
+class BlockedRange
+{
+public:
+	BlockedRange() :
+			_begin(0), _end(0), _grainsize(0)
+	{
+	}
+	BlockedRange(int b, int e, int g = 1) :
+			_begin(b), _end(e), _grainsize(g)
+	{
+	}
+	int begin() const
+	{
+		return _begin;
+	}
+	int end() const
+	{
+		return _end;
+	}
+	int grainsize() const
+	{
+		return _grainsize;
+	}
 
-    protected:
-        int _begin, _end, _grainsize;
-    };
+protected:
+	int _begin, _end, _grainsize;
+};
 
-    template<typename Body> static inline
-    void parallel_for( const BlockedRange& range, const Body& body )
-    {
-        body(range);
-    }
-    typedef std::vector<Rect> ConcurrentRectVector;
+template<typename Body> static inline
+void parallel_for(const BlockedRange& range, const Body& body)
+{
+	body(range);
+}
+typedef std::vector<Rect> ConcurrentRectVector;
 
-    class Split {};
+class Split
+{
+};
 
-    template<typename Body> static inline
-    void parallel_reduce( const BlockedRange& range, Body& body )
-    {
-        body(range);
-    }
+template<typename Body> static inline
+void parallel_reduce(const BlockedRange& range, Body& body)
+{
+	body(range);
+}
 #endif
 
-    // Returns a static string if there is a parallel framework,
-    // NULL otherwise.
-    CV_EXPORTS const char* currentParallelFramework();
+// Returns a static string if there is a parallel framework,
+// NULL otherwise.
+CV_EXPORTS const char* currentParallelFramework();
 } //namespace cv
 
 /****************************************************************************************\
 *                                  Common declarations                                   *
-\****************************************************************************************/
+ \****************************************************************************************/
 
 /* the alignment of all the allocated buffers */
 #define  CV_MALLOC_ALIGN    64
@@ -137,32 +154,36 @@ namespace cv
 #define  CV_TOGGLE_FLT(x) ((x)^((int)(x) < 0 ? 0x7fffffff : 0))
 #define  CV_TOGGLE_DBL(x) ((x)^((int64)(x) < 0 ? CV_BIG_INT(0x7fffffffffffffff) : 0))
 
-static inline void* cvAlignPtr( const void* ptr, int align = 32 )
+static inline void* cvAlignPtr(const void* ptr, int align = 32)
 {
-    CV_DbgAssert ( (align & (align-1)) == 0 );
-    return (void*)( ((size_t)ptr + align - 1) & ~(size_t)(align-1) );
+	CV_DbgAssert ( (align & (align-1)) == 0 );
+	return (void*) (((size_t) ptr + align - 1) & ~(size_t) (align - 1));
 }
 
-static inline int cvAlign( int size, int align )
+static inline int cvAlign(int size, int align)
 {
-    CV_DbgAssert( (align & (align-1)) == 0 && size < INT_MAX );
-    return (size + align - 1) & -align;
+	CV_DbgAssert( (align & (align-1)) == 0 && size < INT_MAX );
+	return (size + align - 1) & -align;
 }
 
 #ifdef IPL_DEPTH_8U
-static inline cv::Size cvGetMatSize( const CvMat* mat )
+static inline cv::Size cvGetMatSize(const CvMat* mat)
 {
-    return cv::Size(mat->cols, mat->rows);
+	return cv::Size(mat->cols, mat->rows);
 }
 #endif
 
 namespace cv
 {
-CV_EXPORTS void scalarToRawData(const cv::Scalar& s, void* buf, int type, int unroll_to = 0);
+CV_EXPORTS void scalarToRawData(const cv::Scalar& s, void* buf, int type,
+		int unroll_to = 0);
 
 //! Allocate all memory buffers which will not be freed, ease filtering memcheck issues
-template <typename T>
-T* allocSingleton(size_t count) { return static_cast<T*>(fastMalloc(sizeof(T) * count)); }
+template<typename T>
+T* allocSingleton(size_t count)
+{
+	return static_cast<T*>(fastMalloc(sizeof(T) * count));
+}
 }
 
 // property implementation macros
@@ -189,7 +210,7 @@ T* allocSingleton(size_t count) { return static_cast<T*>(fastMalloc(sizeof(T) * 
 
 /****************************************************************************************\
 *                     Structures and macros for integration with IPP                     *
-\****************************************************************************************/
+ \****************************************************************************************/
 
 // Temporary disabled named IPP region. Accuracy
 #define IPP_DISABLE_PYRAMIDS_UP         1 // Different results
@@ -255,214 +276,220 @@ T* allocSingleton(size_t count) { return static_cast<T*>(fastMalloc(sizeof(T) * 
 
 namespace cv
 {
-namespace ipp
-{
-CV_EXPORTS   unsigned long long getIppTopFeatures(); // Returns top major enabled IPP feature flag
-}
+	namespace ipp
+	{
+		CV_EXPORTS unsigned long long getIppTopFeatures(); // Returns top major enabled IPP feature flag
+	}
 }
 
 static inline IppiSize ippiSize(size_t width, size_t height)
 {
-    IppiSize size = { (int)width, (int)height };
-    return size;
+	IppiSize size =
+	{	(int)width, (int)height};
+	return size;
 }
 
 static inline IppiSize ippiSize(const cv::Size & _size)
 {
-    IppiSize size = { _size.width, _size.height };
-    return size;
+	IppiSize size =
+	{	_size.width, _size.height};
+	return size;
 }
 
 #if IPP_VERSION_X100 >= 201700
 static inline IppiSizeL ippiSizeL(size_t width, size_t height)
 {
-    IppiSizeL size = { (IppSizeL)width, (IppSizeL)height };
-    return size;
+	IppiSizeL size =
+	{	(IppSizeL)width, (IppSizeL)height};
+	return size;
 }
 
 static inline IppiSizeL ippiSizeL(const cv::Size & _size)
 {
-    IppiSizeL size = { _size.width, _size.height };
-    return size;
+	IppiSizeL size =
+	{	_size.width, _size.height};
+	return size;
 }
 #endif
 
 static inline IppiPoint ippiPoint(const cv::Point & _point)
 {
-    IppiPoint point = { _point.x, _point.y };
-    return point;
+	IppiPoint point =
+	{	_point.x, _point.y};
+	return point;
 }
 
 static inline IppiPoint ippiPoint(int x, int y)
 {
-    IppiPoint point = { x, y };
-    return point;
+	IppiPoint point =
+	{	x, y};
+	return point;
 }
 
 static inline IppiBorderType ippiGetBorderType(int borderTypeNI)
 {
-    return borderTypeNI == cv::BORDER_CONSTANT    ? ippBorderConst   :
-           borderTypeNI == cv::BORDER_TRANSPARENT ? ippBorderTransp  :
-           borderTypeNI == cv::BORDER_REPLICATE   ? ippBorderRepl    :
-           borderTypeNI == cv::BORDER_REFLECT_101 ? ippBorderMirror  :
-           (IppiBorderType)-1;
+	return borderTypeNI == cv::BORDER_CONSTANT ? ippBorderConst :
+	borderTypeNI == cv::BORDER_TRANSPARENT ? ippBorderTransp :
+	borderTypeNI == cv::BORDER_REPLICATE ? ippBorderRepl :
+	borderTypeNI == cv::BORDER_REFLECT_101 ? ippBorderMirror :
+	(IppiBorderType)-1;
 }
 
 static inline IppiMaskSize ippiGetMaskSize(int kx, int ky)
 {
-    return (kx == 1 && ky == 3) ? ippMskSize1x3 :
-           (kx == 1 && ky == 5) ? ippMskSize1x5 :
-           (kx == 3 && ky == 1) ? ippMskSize3x1 :
-           (kx == 3 && ky == 3) ? ippMskSize3x3 :
-           (kx == 5 && ky == 1) ? ippMskSize5x1 :
-           (kx == 5 && ky == 5) ? ippMskSize5x5 :
-           (IppiMaskSize)-1;
+	return (kx == 1 && ky == 3) ? ippMskSize1x3 :
+	(kx == 1 && ky == 5) ? ippMskSize1x5 :
+	(kx == 3 && ky == 1) ? ippMskSize3x1 :
+	(kx == 3 && ky == 3) ? ippMskSize3x3 :
+	(kx == 5 && ky == 1) ? ippMskSize5x1 :
+	(kx == 5 && ky == 5) ? ippMskSize5x5 :
+	(IppiMaskSize)-1;
 }
 
 static inline IppDataType ippiGetDataType(int depth)
 {
-    depth = CV_MAT_DEPTH(depth);
-    return depth == CV_8U ? ipp8u :
-        depth == CV_8S ? ipp8s :
-        depth == CV_16U ? ipp16u :
-        depth == CV_16S ? ipp16s :
-        depth == CV_32S ? ipp32s :
-        depth == CV_32F ? ipp32f :
-        depth == CV_64F ? ipp64f :
-        (IppDataType)-1;
+	depth = CV_MAT_DEPTH(depth);
+	return depth == CV_8U ? ipp8u :
+	depth == CV_8S ? ipp8s :
+	depth == CV_16U ? ipp16u :
+	depth == CV_16S ? ipp16s :
+	depth == CV_32S ? ipp32s :
+	depth == CV_32F ? ipp32f :
+	depth == CV_64F ? ipp64f :
+	(IppDataType)-1;
 }
 
 static inline int ippiSuggestThreadsNum(size_t width, size_t height, size_t elemSize, double multiplier)
 {
-    int threads = cv::getNumThreads();
-    if(threads > 1 && height >= 64)
-    {
-        size_t opMemory = (int)(width*height*elemSize*multiplier);
-        int l2cache = 0;
+	int threads = cv::getNumThreads();
+	if(threads > 1 && height >= 64)
+	{
+		size_t opMemory = (int)(width*height*elemSize*multiplier);
+		int l2cache = 0;
 #if IPP_VERSION_X100 >= 201700
-        ippGetL2CacheSize(&l2cache);
+		ippGetL2CacheSize(&l2cache);
 #endif
-        if(!l2cache)
-            l2cache = 1 << 18;
+		if(!l2cache)
+		l2cache = 1 << 18;
 
-        return IPP_MAX(1, (IPP_MIN((int)(opMemory/l2cache), threads)));
-    }
-    return 1;
+		return IPP_MAX(1, (IPP_MIN((int)(opMemory/l2cache), threads)));
+	}
+	return 1;
 }
 
 static inline int ippiSuggestThreadsNum(const cv::Mat &image, double multiplier)
 {
-    return ippiSuggestThreadsNum(image.cols, image.rows, image.elemSize(), multiplier);
+	return ippiSuggestThreadsNum(image.cols, image.rows, image.elemSize(), multiplier);
 }
 
 #ifdef HAVE_IPP_IW
 static inline bool ippiCheckAnchor(int x, int y, int kernelWidth, int kernelHeight)
 {
-    if(x != ((kernelWidth-1)/2) || y != ((kernelHeight-1)/2))
-        return 0;
-    else
-        return 1;
+	if(x != ((kernelWidth-1)/2) || y != ((kernelHeight-1)/2))
+	return 0;
+	else
+	return 1;
 }
 
 static inline ::ipp::IwiSize ippiGetSize(const cv::Size & size)
 {
-    return ::ipp::IwiSize((IwSize)size.width, (IwSize)size.height);
+	return ::ipp::IwiSize((IwSize)size.width, (IwSize)size.height);
 }
 
 static inline IwiDerivativeType ippiGetDerivType(int dx, int dy, bool nvert)
 {
-    return (dx == 1 && dy == 0) ? ((nvert)?iwiDerivNVerFirst:iwiDerivVerFirst) :
-           (dx == 0 && dy == 1) ? iwiDerivHorFirst :
-           (dx == 2 && dy == 0) ? iwiDerivVerSecond :
-           (dx == 0 && dy == 2) ? iwiDerivHorSecond :
-           (IwiDerivativeType)-1;
+	return (dx == 1 && dy == 0) ? ((nvert)?iwiDerivNVerFirst:iwiDerivVerFirst) :
+	(dx == 0 && dy == 1) ? iwiDerivHorFirst :
+	(dx == 2 && dy == 0) ? iwiDerivVerSecond :
+	(dx == 0 && dy == 2) ? iwiDerivHorSecond :
+	(IwiDerivativeType)-1;
 }
 
 static inline void ippiGetImage(const cv::Mat &src, ::ipp::IwiImage &dst)
 {
-    ::ipp::IwiBorderSize inMemBorder;
-    if(src.isSubmatrix()) // already have physical border
-    {
-        cv::Size  origSize;
-        cv::Point offset;
-        src.locateROI(origSize, offset);
+	::ipp::IwiBorderSize inMemBorder;
+	if(src.isSubmatrix()) // already have physical border
+	{
+		cv::Size origSize;
+		cv::Point offset;
+		src.locateROI(origSize, offset);
 
-        inMemBorder.left   = (IwSize)offset.x;
-        inMemBorder.top    = (IwSize)offset.y;
-        inMemBorder.right  = (IwSize)(origSize.width - src.cols - offset.x);
-        inMemBorder.bottom = (IwSize)(origSize.height - src.rows - offset.y);
-    }
+		inMemBorder.left = (IwSize)offset.x;
+		inMemBorder.top = (IwSize)offset.y;
+		inMemBorder.right = (IwSize)(origSize.width - src.cols - offset.x);
+		inMemBorder.bottom = (IwSize)(origSize.height - src.rows - offset.y);
+	}
 
-    dst.Init(ippiSize(src.size()), ippiGetDataType(src.depth()), src.channels(), inMemBorder, (void*)src.ptr(), src.step);
+	dst.Init(ippiSize(src.size()), ippiGetDataType(src.depth()), src.channels(), inMemBorder, (void*)src.ptr(), src.step);
 }
 
 static inline ::ipp::IwiImage ippiGetImage(const cv::Mat &src)
 {
-    ::ipp::IwiImage image;
-    ippiGetImage(src, image);
-    return image;
+	::ipp::IwiImage image;
+	ippiGetImage(src, image);
+	return image;
 }
 
 static inline IppiBorderType ippiGetBorder(::ipp::IwiImage &image, int ocvBorderType, ipp::IwiBorderSize &borderSize)
 {
-    int            inMemFlags = 0;
-    IppiBorderType border     = ippiGetBorderType(ocvBorderType & ~cv::BORDER_ISOLATED);
-    if((int)border == -1)
-        return (IppiBorderType)0;
+	int inMemFlags = 0;
+	IppiBorderType border = ippiGetBorderType(ocvBorderType & ~cv::BORDER_ISOLATED);
+	if((int)border == -1)
+	return (IppiBorderType)0;
 
-    if(!(ocvBorderType & cv::BORDER_ISOLATED))
-    {
-        if(image.m_inMemSize.left)
-        {
-            if(image.m_inMemSize.left >= borderSize.left)
-                inMemFlags |= ippBorderInMemLeft;
-            else
-                return (IppiBorderType)0;
-        }
-        else
-            borderSize.left = 0;
-        if(image.m_inMemSize.top)
-        {
-            if(image.m_inMemSize.top >= borderSize.top)
-                inMemFlags |= ippBorderInMemTop;
-            else
-                return (IppiBorderType)0;
-        }
-        else
-            borderSize.top = 0;
-        if(image.m_inMemSize.right)
-        {
-            if(image.m_inMemSize.right >= borderSize.right)
-                inMemFlags |= ippBorderInMemRight;
-            else
-                return (IppiBorderType)0;
-        }
-        else
-            borderSize.right = 0;
-        if(image.m_inMemSize.bottom)
-        {
-            if(image.m_inMemSize.bottom >= borderSize.bottom)
-                inMemFlags |= ippBorderInMemBottom;
-            else
-                return (IppiBorderType)0;
-        }
-        else
-            borderSize.bottom = 0;
-    }
-    else
-        borderSize.left = borderSize.right = borderSize.top = borderSize.bottom = 0;
+	if(!(ocvBorderType & cv::BORDER_ISOLATED))
+	{
+		if(image.m_inMemSize.left)
+		{
+			if(image.m_inMemSize.left >= borderSize.left)
+			inMemFlags |= ippBorderInMemLeft;
+			else
+			return (IppiBorderType)0;
+		}
+		else
+		borderSize.left = 0;
+		if(image.m_inMemSize.top)
+		{
+			if(image.m_inMemSize.top >= borderSize.top)
+			inMemFlags |= ippBorderInMemTop;
+			else
+			return (IppiBorderType)0;
+		}
+		else
+		borderSize.top = 0;
+		if(image.m_inMemSize.right)
+		{
+			if(image.m_inMemSize.right >= borderSize.right)
+			inMemFlags |= ippBorderInMemRight;
+			else
+			return (IppiBorderType)0;
+		}
+		else
+		borderSize.right = 0;
+		if(image.m_inMemSize.bottom)
+		{
+			if(image.m_inMemSize.bottom >= borderSize.bottom)
+			inMemFlags |= ippBorderInMemBottom;
+			else
+			return (IppiBorderType)0;
+		}
+		else
+		borderSize.bottom = 0;
+	}
+	else
+	borderSize.left = borderSize.right = borderSize.top = borderSize.bottom = 0;
 
-    return (IppiBorderType)(border|inMemFlags);
+	return (IppiBorderType)(border|inMemFlags);
 }
 
 static inline ::ipp::IwValueFloat ippiGetValue(const cv::Scalar &scalar)
 {
-    return ::ipp::IwValueFloat(scalar[0], scalar[1], scalar[2], scalar[3]);
+	return ::ipp::IwValueFloat(scalar[0], scalar[1], scalar[2], scalar[3]);
 }
 
 static inline int ippiSuggestThreadsNum(const ::ipp::IwiImage &image, double multiplier)
 {
-    return ippiSuggestThreadsNum(image.m_size.width, image.m_size.height, image.m_typeSize*image.m_channels, multiplier);
+	return ippiSuggestThreadsNum(image.m_size.width, image.m_size.height, image.m_typeSize*image.m_channels, multiplier);
 }
 #endif
 
@@ -471,21 +498,33 @@ template<typename T>
 class IppAutoBuffer
 {
 public:
-    IppAutoBuffer() { m_size = 0; m_pBuffer = NULL; }
-    IppAutoBuffer(size_t size) { m_size = 0; m_pBuffer = NULL; allocate(size); }
-    ~IppAutoBuffer() { deallocate(); }
-    T* allocate(size_t size)   { if(m_size < size) { deallocate(); m_pBuffer = (T*)CV_IPP_MALLOC(size); m_size = size; } return m_pBuffer; }
-    void deallocate() { if(m_pBuffer) { ippFree(m_pBuffer); m_pBuffer = NULL; } m_size = 0; }
-    inline T* get() { return (T*)m_pBuffer;}
-    inline operator T* () { return (T*)m_pBuffer;}
-    inline operator const T* () const { return (const T*)m_pBuffer;}
+	IppAutoBuffer()
+	{	m_size = 0; m_pBuffer = NULL;}
+	IppAutoBuffer(size_t size)
+	{	m_size = 0; m_pBuffer = NULL; allocate(size);}
+	~IppAutoBuffer()
+	{	deallocate();}
+	T* allocate(size_t size)
+	{	if(m_size < size)
+		{	deallocate(); m_pBuffer = (T*)CV_IPP_MALLOC(size); m_size = size;}return m_pBuffer;}
+	void deallocate()
+	{	if(m_pBuffer)
+		{	ippFree(m_pBuffer); m_pBuffer = NULL;}m_size = 0;}
+	inline T* get()
+	{	return (T*)m_pBuffer;}
+	inline operator T* ()
+	{	return (T*)m_pBuffer;}
+	inline operator const T* () const
+	{	return (const T*)m_pBuffer;}
 private:
-    // Disable copy operations
-    IppAutoBuffer(IppAutoBuffer &) {}
-    IppAutoBuffer& operator =(const IppAutoBuffer &) {return *this;}
+	// Disable copy operations
+	IppAutoBuffer(IppAutoBuffer &)
+	{}
+	IppAutoBuffer& operator =(const IppAutoBuffer &)
+	{	return *this;}
 
-    size_t m_size;
-    T*     m_pBuffer;
+	size_t m_size;
+	T* m_pBuffer;
 };
 
 // Extracts border interpolation type without flags
@@ -594,7 +633,6 @@ static struct __IppInitializer__ __ipp_initializer__;
 #define CV_IPP_RUN_FAST(func, ...) CV_IPP_RUN_(true, func, __VA_ARGS__)
 #define CV_IPP_RUN(condition, func, ...) CV_IPP_RUN_((condition), (func), __VA_ARGS__)
 
-
 #ifndef IPPI_CALL
 #  define IPPI_CALL(func) CV_Assert((func) >= 0)
 #endif
@@ -602,48 +640,48 @@ static struct __IppInitializer__ __ipp_initializer__;
 /* IPP-compatible return codes */
 typedef enum CvStatus
 {
-    CV_BADMEMBLOCK_ERR          = -113,
-    CV_INPLACE_NOT_SUPPORTED_ERR= -112,
-    CV_UNMATCHED_ROI_ERR        = -111,
-    CV_NOTFOUND_ERR             = -110,
-    CV_BADCONVERGENCE_ERR       = -109,
+	CV_BADMEMBLOCK_ERR = -113,
+	CV_INPLACE_NOT_SUPPORTED_ERR = -112,
+	CV_UNMATCHED_ROI_ERR = -111,
+	CV_NOTFOUND_ERR = -110,
+	CV_BADCONVERGENCE_ERR = -109,
 
-    CV_BADDEPTH_ERR             = -107,
-    CV_BADROI_ERR               = -106,
-    CV_BADHEADER_ERR            = -105,
-    CV_UNMATCHED_FORMATS_ERR    = -104,
-    CV_UNSUPPORTED_COI_ERR      = -103,
-    CV_UNSUPPORTED_CHANNELS_ERR = -102,
-    CV_UNSUPPORTED_DEPTH_ERR    = -101,
-    CV_UNSUPPORTED_FORMAT_ERR   = -100,
+	CV_BADDEPTH_ERR = -107,
+	CV_BADROI_ERR = -106,
+	CV_BADHEADER_ERR = -105,
+	CV_UNMATCHED_FORMATS_ERR = -104,
+	CV_UNSUPPORTED_COI_ERR = -103,
+	CV_UNSUPPORTED_CHANNELS_ERR = -102,
+	CV_UNSUPPORTED_DEPTH_ERR = -101,
+	CV_UNSUPPORTED_FORMAT_ERR = -100,
 
-    CV_BADARG_ERR               = -49,  //ipp comp
-    CV_NOTDEFINED_ERR           = -48,  //ipp comp
+	CV_BADARG_ERR = -49,  //ipp comp
+	CV_NOTDEFINED_ERR = -48,  //ipp comp
 
-    CV_BADCHANNELS_ERR          = -47,  //ipp comp
-    CV_BADRANGE_ERR             = -44,  //ipp comp
-    CV_BADSTEP_ERR              = -29,  //ipp comp
+	CV_BADCHANNELS_ERR = -47,  //ipp comp
+	CV_BADRANGE_ERR = -44,  //ipp comp
+	CV_BADSTEP_ERR = -29,  //ipp comp
 
-    CV_BADFLAG_ERR              =  -12,
-    CV_DIV_BY_ZERO_ERR          =  -11, //ipp comp
-    CV_BADCOEF_ERR              =  -10,
+	CV_BADFLAG_ERR = -12,
+	CV_DIV_BY_ZERO_ERR = -11, //ipp comp
+	CV_BADCOEF_ERR = -10,
 
-    CV_BADFACTOR_ERR            =  -7,
-    CV_BADPOINT_ERR             =  -6,
-    CV_BADSCALE_ERR             =  -4,
-    CV_OUTOFMEM_ERR             =  -3,
-    CV_NULLPTR_ERR              =  -2,
-    CV_BADSIZE_ERR              =  -1,
-    CV_NO_ERR                   =   0,
-    CV_OK                       =   CV_NO_ERR
-}
-CvStatus;
+	CV_BADFACTOR_ERR = -7,
+	CV_BADPOINT_ERR = -6,
+	CV_BADSCALE_ERR = -4,
+	CV_OUTOFMEM_ERR = -3,
+	CV_NULLPTR_ERR = -2,
+	CV_BADSIZE_ERR = -1,
+	CV_NO_ERR = 0,
+	CV_OK = CV_NO_ERR
+} CvStatus;
 
 #ifdef HAVE_TEGRA_OPTIMIZATION
-namespace tegra {
+namespace tegra
+{
 
-CV_EXPORTS bool useTegra();
-CV_EXPORTS void setUseTegra(bool flag);
+	CV_EXPORTS bool useTegra();
+	CV_EXPORTS void setUseTegra(bool flag);
 
 }
 #endif
@@ -651,55 +689,55 @@ CV_EXPORTS void setUseTegra(bool flag);
 #ifdef ENABLE_INSTRUMENTATION
 namespace cv
 {
-namespace instr
-{
-struct InstrTLSStruct
-{
-    InstrTLSStruct()
-    {
-        pCurrentNode = NULL;
-    }
-    InstrNode* pCurrentNode;
-};
+	namespace instr
+	{
+		struct InstrTLSStruct
+		{
+			InstrTLSStruct()
+			{
+				pCurrentNode = NULL;
+			}
+			InstrNode* pCurrentNode;
+		};
 
-class InstrStruct
-{
-public:
-    InstrStruct()
-    {
-        useInstr    = false;
-        flags       = FLAGS_MAPPING;
-        maxDepth    = 0;
+		class InstrStruct
+		{
+		public:
+			InstrStruct()
+			{
+				useInstr = false;
+				flags = FLAGS_MAPPING;
+				maxDepth = 0;
 
-        rootNode.m_payload = NodeData("ROOT", NULL, 0, NULL, false, TYPE_GENERAL, IMPL_PLAIN);
-        tlsStruct.get()->pCurrentNode = &rootNode;
-    }
+				rootNode.m_payload = NodeData("ROOT", NULL, 0, NULL, false, TYPE_GENERAL, IMPL_PLAIN);
+				tlsStruct.get()->pCurrentNode = &rootNode;
+			}
 
-    Mutex mutexCreate;
-    Mutex mutexCount;
+			Mutex mutexCreate;
+			Mutex mutexCount;
 
-    bool       useInstr;
-    int        flags;
-    int        maxDepth;
-    InstrNode  rootNode;
-    TLSData<InstrTLSStruct> tlsStruct;
-};
+			bool useInstr;
+			int flags;
+			int maxDepth;
+			InstrNode rootNode;
+			TLSData<InstrTLSStruct> tlsStruct;
+		};
 
-class CV_EXPORTS IntrumentationRegion
-{
-public:
-    IntrumentationRegion(const char* funName, const char* fileName, int lineNum, void *retAddress, bool alwaysExpand, TYPE instrType = TYPE_GENERAL, IMPL implType = IMPL_PLAIN);
-    ~IntrumentationRegion();
+		class CV_EXPORTS IntrumentationRegion
+		{
+		public:
+			IntrumentationRegion(const char* funName, const char* fileName, int lineNum, void *retAddress, bool alwaysExpand, TYPE instrType = TYPE_GENERAL, IMPL implType = IMPL_PLAIN);
+			~IntrumentationRegion();
 
-private:
-    bool    m_disabled; // region status
-    uint64  m_regionTicks;
-};
+		private:
+			bool m_disabled; // region status
+			uint64 m_regionTicks;
+		};
 
-CV_EXPORTS InstrStruct& getInstrumentStruct();
-InstrTLSStruct&         getInstrumentTLSStruct();
-CV_EXPORTS InstrNode*   getCurrentNode();
-}
+		CV_EXPORTS InstrStruct& getInstrumentStruct();
+		InstrTLSStruct& getInstrumentTLSStruct();
+		CV_EXPORTS InstrNode* getCurrentNode();
+	}
 }
 
 #ifdef _WIN32

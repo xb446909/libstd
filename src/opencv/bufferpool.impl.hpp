@@ -9,18 +9,34 @@
 
 #include "opencv2/core/bufferpool.hpp"
 
-namespace cv {
+namespace cv
+{
 
-class DummyBufferPoolController : public BufferPoolController
+class DummyBufferPoolController: public BufferPoolController
 {
 public:
-    DummyBufferPoolController() { }
-    virtual ~DummyBufferPoolController() { }
+	DummyBufferPoolController()
+	{
+	}
+	virtual ~DummyBufferPoolController()
+	{
+	}
 
-    virtual size_t getReservedSize() const { return (size_t)-1; }
-    virtual size_t getMaxReservedSize() const { return (size_t)-1; }
-    virtual void setMaxReservedSize(size_t size) { (void)size; }
-    virtual void freeAllReservedBuffers() { }
+	virtual size_t getReservedSize() const
+	{
+		return (size_t) -1;
+	}
+	virtual size_t getMaxReservedSize() const
+	{
+		return (size_t) -1;
+	}
+	virtual void setMaxReservedSize(size_t size)
+	{
+		(void) size;
+	}
+	virtual void freeAllReservedBuffers()
+	{
+	}
 };
 
 } // namespace
