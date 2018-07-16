@@ -1,7 +1,7 @@
 CXX := g++
 
 ifeq ($(shell uname), Linux)
-LD_FLAGS	:= -fPIC -shared -g
+LD_FLAGS	:= -fPIC -shared -g3
 TARGET := libstd.so
 endif
 
@@ -10,7 +10,7 @@ LD_FLAGS	:= -fPIC -dynamiclib
 TARGET := libstd.dylib
 endif
 
-CXX_FLAGS := -O3 -Wall $(LD_FLAGS) -std=gnu++11 -D__OPENCV_BUILD
+CXX_FLAGS := -O0 -Wall $(LD_FLAGS) -std=gnu++11 -D__OPENCV_BUILD
 
 SRC_DIR := src
 INC_FLAGS := -Iinc -Iwin -Isrc/opencv -Isrc/zlib

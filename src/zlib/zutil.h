@@ -254,9 +254,9 @@ extern void ZLIB_INTERNAL z_error OF((char *m));
 #endif
 
 #ifndef Z_SOLO
-voidpf ZLIB_INTERNAL zcallocOF((voidpf opaque, unsigned items,
+voidpf ZLIB_INTERNAL zcalloc OF((voidpf opaque, unsigned items,
 				unsigned size));
-void ZLIB_INTERNAL zcfreeOF((voidpf opaque, voidpf ptr));
+void ZLIB_INTERNAL zcfree OF((voidpf opaque, voidpf ptr));
 #endif
 
 #define ZALLOC(strm, items, size) \

@@ -92,14 +92,14 @@
 #endif
 
 /* function prototypes */
-local int inflateStateCheckOF((z_streamp strm));
-local void fixedtablesOF((struct inflate_state FAR *state));
-local int updatewindowOF((z_streamp strm, const unsigned char FAR *end,
+local int inflateStateCheck OF((z_streamp strm));
+local void fixedtables OF((struct inflate_state FAR *state));
+local int updatewindow OF((z_streamp strm, const unsigned char FAR *end,
 				unsigned copy));
 #ifdef BUILDFIXED
 void makefixed OF((void));
 #endif
-local unsigned syncsearchOF((unsigned FAR *have, const unsigned char FAR *buf,
+local unsigned syncsearch OF((unsigned FAR *have, const unsigned char FAR *buf,
 				unsigned len));
 
 local int inflateStateCheck(z_streamp strm)

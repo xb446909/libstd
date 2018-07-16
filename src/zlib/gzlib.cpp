@@ -16,8 +16,8 @@
 #endif
 
 /* Local functions */
-local void gz_resetOF((gz_statep));
-local gzFile gz_openOF((const void *, int, const char *));
+local void gz_resetOF(gz_statep);
+local gzFile gz_openOF(const void *, int, const char *);
 
 #if defined UNDER_CE
 

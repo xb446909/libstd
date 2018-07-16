@@ -143,23 +143,23 @@ local const static_tree_desc static_bl_desc =
  * Local (static) routines in this file.
  */
 
-local void tr_static_initOF((void));
-local void init_blockOF((deflate_state * s));
-local void pqdownheapOF((deflate_state *s, ct_data *tree, int k));
-local void gen_bitlenOF((deflate_state * s, tree_desc * desc));
-local void gen_codesOF((ct_data *tree, int max_code, ushf *bl_count));
-local void build_treeOF((deflate_state * s, tree_desc * desc));
-local void scan_treeOF((deflate_state *s, ct_data *tree, int max_code));
-local void send_treeOF((deflate_state *s, ct_data *tree, int max_code));
-local int build_bl_treeOF((deflate_state * s));
-local void send_all_treesOF((deflate_state *s, int lcodes, int dcodes,
+local void tr_static_init OF((void));
+local void init_block OF((deflate_state * s));
+local void pqdownheap OF((deflate_state *s, ct_data *tree, int k));
+local void gen_bitlen OF((deflate_state * s, tree_desc * desc));
+local void gen_codes OF((ct_data *tree, int max_code, ushf *bl_count));
+local void build_tree OF((deflate_state * s, tree_desc * desc));
+local void scan_tree OF((deflate_state *s, ct_data *tree, int max_code));
+local void send_tree OF((deflate_state *s, ct_data *tree, int max_code));
+local int build_bl_tree OF((deflate_state * s));
+local void send_all_trees OF((deflate_state *s, int lcodes, int dcodes,
 				int blcodes));
-local void compress_blockOF((deflate_state *s, const ct_data *ltree,
+local void compress_block OF((deflate_state *s, const ct_data *ltree,
 				const ct_data *dtree));
-local int detect_data_typeOF((deflate_state * s));
-local unsigned bi_reverseOF((unsigned value, int length));
-local void bi_windupOF((deflate_state * s));
-local void bi_flushOF((deflate_state * s));
+local int detect_data_type OF((deflate_state * s));
+local unsigned bi_reverse OF((unsigned value, int length));
+local void bi_windup OF((deflate_state * s));
+local void bi_flush OF((deflate_state * s));
 
 #ifdef GEN_TREES_H
 local void gen_trees_header OF((void));

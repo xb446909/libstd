@@ -30,7 +30,7 @@ const char inflate_copyright[] =
  longest code or if it is less than the shortest code.
  */
 int ZLIB_INTERNAL inflate_table(codetype type, unsigned short FAR *lens,
-		unsigned codes, code FAR * FAR *table, unsigned FAR *bits, unsigned shortFAR *work)
+		unsigned codes, code FAR * FAR *table, unsigned FAR *bits, unsigned short FAR *work)
 {
 	unsigned len; /* a code's length in bits */
 	unsigned sym; /* index of code symbols */

@@ -35,9 +35,9 @@
 #  define BYFOUR
 #endif
 #ifdef BYFOUR
-local unsigned long crc32_littleOF((unsigned long,
+local unsigned long crc32_little OF((unsigned long,
 				const unsigned char FAR *, z_size_t));
-local unsigned long crc32_bigOF((unsigned long,
+local unsigned long crc32_big OF((unsigned long,
 				const unsigned char FAR *, z_size_t));
 #  define TBLS 8
 #else
@@ -45,10 +45,10 @@ local unsigned long crc32_bigOF((unsigned long,
 #endif /* BYFOUR */
 
 /* Local functions for crc concatenation */
-local unsigned long gf2_matrix_timesOF((unsigned long *mat,
+local unsigned long gf2_matrix_times OF((unsigned long *mat,
 				unsigned long vec));
-local void gf2_matrix_squareOF((unsigned long *square, unsigned long *mat));
-local uLong crc32_combine_OF((uLong crc1, uLong crc2, z_off64_t len2));
+local void gf2_matrix_square OF((unsigned long *square, unsigned long *mat));
+local uLong crc32_combine_ OF((uLong crc1, uLong crc2, z_off64_t len2));
 
 #ifdef DYNAMIC_CRC_TABLE
 
