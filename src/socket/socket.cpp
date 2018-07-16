@@ -7,6 +7,7 @@
 #include "CSocketLib.h"
 #include <map>
 #include <memory>
+#include <string.h>
 
 #if __cplusplus >= 201103L
 using namespace std;

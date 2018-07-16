@@ -63,18 +63,6 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="socket\CSocketLib.h">
-      <Filter>头文件\socket</Filter>
-    </ClInclude>
-    <ClInclude Include="socket\CTcpClient.h">
-      <Filter>头文件\socket</Filter>
-    </ClInclude>
-    <ClInclude Include="socket\CTcpServer.h">
-      <Filter>头文件\socket</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\socket.h">
-      <Filter>头文件\socket</Filter>
-    </ClInclude>
     <ClInclude Include="..\inc\coordtransform.h">
       <Filter>头文件\coordtransform</Filter>
     </ClInclude>
@@ -107,6 +95,18 @@
     </ClInclude>
     <ClInclude Include="..\src\common\CriticalLock.h">
       <Filter>头文件\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\socket.h">
+      <Filter>头文件\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\socket\CSocketLib.h">
+      <Filter>头文件\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\socket\CTcpClient.h">
+      <Filter>头文件\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\socket\CTcpServer.h">
+      <Filter>头文件\socket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

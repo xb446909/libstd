@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -159,6 +159,7 @@
     <ClInclude Include="..\inc\csv.h" />
     <ClInclude Include="..\inc\iniconfig.h" />
     <ClInclude Include="..\inc\serialport.h" />
+    <ClInclude Include="..\inc\socket.h" />
     <ClInclude Include="..\src\common\CriticalLock.h" />
     <ClInclude Include="..\src\coordtransform\ccoordtransform.h" />
     <ClInclude Include="..\src\coordtransform\ccoordtransform3dmultipt.h" />
@@ -166,10 +167,9 @@
     <ClInclude Include="..\src\iniconfig\iniparser.h" />
     <ClInclude Include="..\src\serialport\CSerialPort.h" />
     <ClInclude Include="..\src\serialport\CSerialPortProc_win.h" />
-    <ClInclude Include="inc\socket.h" />
-    <ClInclude Include="socket\CSocketLib.h" />
-    <ClInclude Include="socket\CTcpClient.h" />
-    <ClInclude Include="socket\CTcpServer.h" />
+    <ClInclude Include="..\src\socket\CSocketLib.h" />
+    <ClInclude Include="..\src\socket\CTcpClient.h" />
+    <ClInclude Include="..\src\socket\CTcpServer.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

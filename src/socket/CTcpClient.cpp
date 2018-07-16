@@ -11,7 +11,8 @@ using namespace std;
 
 #ifdef WIN32
 DWORD WINAPI TCPClientReceiveThread(LPVOID lpParam);
-HANDLE g_hEventClientThread;
+#else
+void* TCPClientReceiveThread(void* lpParam);
 #endif
 
 char g_szClientRecvBuf[RECV_BUF_SIZE];
@@ -21,13 +22,8 @@ CTcpClient::CTcpClient()
 {
 	m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (m_socket == INVALID_SOCKET)
-        {
-#ifdef WIN32
+	{
 		cerr << "Create socket error: " << WSAGetLastError() << endl;
-                WSACleanup();
-#else
-                cerr << "Create socket error: " << errno << endl;
-#endif
 	}
 }
 
@@ -35,15 +31,10 @@ CTcpClient::CTcpClient()
 CTcpClient::~CTcpClient()
 {
 	if (m_socket != INVALID_SOCKET)
-        {
-#ifdef WIN32
+	{
 		shutdown(m_socket, SD_BOTH);
-                closesocket(m_socket);
-#else
-                shutdown(m_socket, SHUT_RDWR);
-                close(m_socket);
-#endif
-        }
+		closesocket(m_socket);
+	}
 }
 
 int CTcpClient::Connect(int nTimeoutMs)
@@ -60,41 +51,42 @@ int CTcpClient::Connect(int nTimeoutMs)
 	clientService.sin_port = htons(nPort);
 
 	u_long iMode = 1;
-#ifdef WIN32
-        ioctlsocket(m_socket, FIONBIO, &iMode);
-#else
-        ioctl(m_socket, FIONBIO, &iMode);
-#endif
+	ioctlsocket(m_socket, FIONBIO, &iMode);
 
 	//----------------------
 	// Connect to server.
-        connect(m_socket, (struct sockaddr*)&clientService, sizeof(clientService));
+	connect(m_socket, (struct sockaddr*)&clientService, sizeof(clientService));
 
-	fd_set r;
+	fd_set r, w;
 	FD_ZERO(&r);
 	FD_SET(m_socket, &r);
+	w = r;
 	struct timeval timeout;
 	timeout.tv_sec = nTimeoutMs / 1000;
 	timeout.tv_usec = (nTimeoutMs % 1000) * 1000;
-	int ret = select(0, 0, &r, 0, &timeout);
+	int ret = select(m_socket + 1, &w, &r, 0, &timeout);
 
 	if (ret <= 0)
 	{
-                cerr << "Connect server timeout!" << endl;
-#ifdef WIN32
+		cerr << "Connect server timeout!" << endl;
 		closesocket(m_socket);
-                WSACleanup();
-#else
-                close(m_socket);
-#endif
+		WSACleanup();
 		return SOCK_TIMEOUT;
 	}
 
 	if (RecvCallback() != nullptr)
-        {
+	{
 #ifdef WIN32
-		g_hEventClientThread = CreateEvent(NULL, TRUE, TRUE, NULL);
-                m_hThread = CreateThread(NULL, 0, TCPClientReceiveThread, this, 0, NULL);
+		m_hThread = CreateThread(NULL, 0, TCPClientReceiveThread, this, 0, NULL);
+#else
+		pthread_t tid;
+		int err = pthread_create(&tid, NULL, TCPClientReceiveThread, this);
+		if (err != 0)
+		{
+			cerr << "Create thread error!" << endl;
+			return err;
+		}
+		pthread_detach(tid);
 #endif
 	}
 
@@ -105,12 +97,8 @@ int CTcpClient::Send(const char* szSendBuf, int nLen, const char* szDstIP, int n
 {
 	int iResult = send(m_socket, szSendBuf, nLen, 0);
 	if (iResult == SOCKET_ERROR)
-        {
-#ifdef WIN32
-                cerr << "Send error: " << WSAGetLastError() << endl;
-#else
-                cerr << "Send error: " << errno << endl;
-#endif
+	{
+		cerr << "Send error: " << WSAGetLastError() << endl;
 		iResult = SOCK_ERROR;
 	}
 	return iResult;
@@ -148,7 +136,7 @@ int CTcpClient::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const cha
 	{
 		nRet = SOCK_ERROR;
 	}
-	else if (nRet == 0) 
+	else if (nRet == 0)
 	{
 		nRet = SOCK_CLOSED;
 	}
@@ -157,6 +145,9 @@ int CTcpClient::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs, const cha
 
 #ifdef WIN32
 DWORD WINAPI TCPClientReceiveThread(LPVOID lpParam)
+#else
+void* TCPClientReceiveThread(void* lpParam)
+#endif
 {
 	CTcpClient* pClient = static_cast<CTcpClient*>(lpParam);
 
@@ -169,14 +160,14 @@ DWORD WINAPI TCPClientReceiveThread(LPVOID lpParam)
 	timeout.tv_usec = 20000;
 
 	sockaddr_in  addrTemp;
-	int iTempLen = sizeof(addrTemp);
+	socklen_t iTempLen = sizeof(addrTemp);
 	getpeername(pClient->GetSocket(), (sockaddr *)&addrTemp, &iTempLen);
 
 	while (pClient->ThreadEventIsSet())
 	{
 		fd_set fdOld = fd;
 
-		int iResult = select(0, &fdOld, NULL, NULL, &timeout);
+		int iResult = select(pClient->GetSocket() + 1, &fdOld, NULL, NULL, &timeout);
 
 		if (iResult == SOCKET_ERROR)
 		{
@@ -210,4 +201,4 @@ DWORD WINAPI TCPClientReceiveThread(LPVOID lpParam)
 	}
 	return 0;
 }
-#endif
+

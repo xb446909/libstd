@@ -6,6 +6,7 @@
 #include <WinSock2.h>
 #else
 #include <unistd.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -20,9 +21,17 @@ using namespace std;
 using namespace std::tr1;
 #endif
 
-#ifndef WIN32
+#ifdef WIN32
+typedef int socklen_t;
+#else
+inline int WSAGetLastError() { return errno; }
+inline void WSACleanup() {}
+
 #define SOCKET int
 #define INVALID_SOCKET -1
+#define SD_BOTH SHUT_RDWR
+#define closesocket close
+#define ioctlsocket ioctl
 #endif
 
 const int RECV_BUF_SIZE = 1024 * 1024;
@@ -89,6 +98,8 @@ protected:
 #ifdef WIN32
 	HANDLE m_hThread;
 	HANDLE m_hEvent;
+#else
+	pthread_mutex_t m_mutex;
 #endif
 };
 

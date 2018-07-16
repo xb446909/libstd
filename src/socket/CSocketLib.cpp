@@ -22,6 +22,8 @@ CSocketLib::CSocketLib()
 		cerr << "Initialize socket error: " << WSAGetLastError() << endl;
 	}
 	m_hEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
+#else
+	pthread_mutex_init(&m_mutex, NULL);
 #endif
 }
 
@@ -35,8 +37,10 @@ CSocketLib::~CSocketLib()
 		m_hThread = INVALID_HANDLE_VALUE;
 	}
 	CloseHandle(m_hEvent);
-	WSACleanup();
+#else
+	pthread_mutex_destroy(&m_mutex);
 #endif
+	WSACleanup();
 }
 
 shared_ptr<CSocketLib> CSocketLib::Create(int nType)
@@ -80,6 +84,17 @@ bool CSocketLib::ThreadEventIsSet()
 {
 #ifdef WIN32
 	return (WaitForSingleObject(m_hEvent, 0) == WAIT_OBJECT_0);
+#else
+	int ret = pthread_mutex_trylock(&m_mutex);
+	if (ret == 0)
+	{
+		pthread_mutex_unlock(&m_mutex);
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 #endif
 }
 
@@ -87,6 +102,8 @@ void CSocketLib::ResetThreadEvent()
 {
 #ifdef WIN32
 	ResetEvent(m_hEvent);
+#else
+	pthread_mutex_unlock(&m_mutex);
 #endif
 }
 
@@ -94,5 +111,7 @@ void CSocketLib::SetThreadEvent()
 {
 #ifdef WIN32
 	SetEvent(m_hEvent);
+#else
+	pthread_mutex_lock(&m_mutex);
 #endif
 }

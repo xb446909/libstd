@@ -26,7 +26,7 @@
 
 /*    用于Server的回调函数
 请参照以下例子使用：
-int SocketRecvCallbackFun(int nType, const char* szIP, int nPort, int nSize, const char* szRecv)
+int SocketRecvCallbackFun(int nType, const char* szIP, int nPort, int nSize, const char* szRecv, void* param)
 {
 	int nCnt = 0;
 	switch (nType)

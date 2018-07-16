@@ -17,12 +17,8 @@ CTcpServer::CTcpServer()
 	m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (m_socket == INVALID_SOCKET)
 	{
-#ifdef WIN32
 		cerr << "Create socket error: " << WSAGetLastError() << endl;
 		WSACleanup();
-#else
-		cerr << "Create socket error: " << errno << endl;
-#endif
 		return;
 	}
 }
@@ -31,18 +27,15 @@ CTcpServer::CTcpServer()
 CTcpServer::~CTcpServer()
 {
 	ResetThreadEvent();
+	shutdown(m_socket, SD_BOTH);
+	closesocket(m_socket);
 #ifdef WIN32
-        shutdown(m_socket, SD_BOTH);
-        closesocket(m_socket);
 	if ((m_hThread != INVALID_HANDLE_VALUE) && (WaitForSingleObject(m_hThread, 1000) != WAIT_OBJECT_0))
 	{
 		DWORD dwExitcode;
 		GetExitCodeThread(m_hThread, &dwExitcode);
 		TerminateThread(m_hThread, dwExitcode);
         }
-#else
-        shutdown(m_socket, SHUT_RDWR);
-        close(m_socket);
 #endif
 }
 
@@ -69,11 +62,7 @@ int CTcpServer::Send(const char* szSendBuf, int nLen, const char* szDstIP, int n
 	int nRet = send(m_vecClients[nIndex].AcceptSocket, szSendBuf, nLen, 0);
 	if (nRet == SOCKET_ERROR)
 	{
-#ifdef WIN32
 		cerr << "Send error: " << WSAGetLastError() << endl;
-#else
-		cerr << "Send error: " << errno << endl;
-#endif
 		return SOCK_ERROR;
 	}
 	return nRet;
@@ -168,11 +157,7 @@ bool CTcpServer::BindSocket()
 
         if (::bind(m_socket, (struct sockaddr*)&clientService, sizeof(clientService)) == SOCKET_ERROR)
 	{
-#ifdef WIN32
 		cerr << "Bind socket error: " << WSAGetLastError() << endl;
-#else
-		cerr << "Bind socket error: " << errno << endl;
-#endif
 		return false;
 	}
 
@@ -272,11 +257,7 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 		}
 		else if (SOCKET_ERROR == iResult)
 		{
-#ifdef WIN32
 			cerr << "Failed to select socket, error: " << WSAGetLastError() << endl;
-#else
-			cerr << "Failed to select socket, error: " << errno << endl;
-#endif
 			Sleep(100);
 		}
 	}
