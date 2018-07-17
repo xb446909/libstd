@@ -3,11 +3,14 @@
 #include "iniconfig.h"
 #include <sstream>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 #ifdef WIN32
 DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam);
+#else
+void* TCPListenReceiveThread(void* lpParam);
 #endif
 
 char g_szServerRecvBuf[RECV_BUF_SIZE];
@@ -50,6 +53,15 @@ void CTcpServer::SetParam(shared_ptr<CSocketLib::SocketParam> param)
 		{
 #ifdef WIN32
 			m_hThread = CreateThread(NULL, 0, TCPListenReceiveThread, this, 0, NULL);
+#else
+		pthread_t tid;
+		int err = pthread_create(&tid, NULL, TCPListenReceiveThread, this);
+		if (err != 0)
+		{
+			cerr << "Create thread error!" << endl;
+			return;
+		}
+		pthread_detach(tid);
 #endif
 		}
 	}
@@ -87,7 +99,7 @@ int CTcpServer::Receive(char * szRecvBuf, int nBufLen, int nTimeoutMs,
 	struct timeval timeout;
 	timeout.tv_sec = nTimeoutMs / 1000;
 	timeout.tv_usec = (nTimeoutMs % 1000) * 1000;
-	int ret = select(0, &r, 0, 0, &timeout);
+	int ret = select(m_vecClients[nIndex].AcceptSocket + 1, &r, 0, 0, &timeout);
 
 	int nRet = 0;
 
@@ -274,5 +286,120 @@ DWORD WINAPI TCPListenReceiveThread(LPVOID lpParam)
 	}
 
 	return SOCK_SUCCESS;
+}
+#else
+void* TCPListenReceiveThread(void* lpParam)
+{
+	CTcpServer* pServer = static_cast<CTcpServer*>(lpParam);
+
+	int maxfd;
+	vector<int> vecfds;
+	fd_set fd;
+	FD_ZERO(&fd);
+	FD_SET(pServer->GetSocket(), &fd);
+	vecfds.push_back(pServer->GetSocket());
+	maxfd = pServer->GetSocket();
+
+
+	struct timeval timeout;
+	timeout.tv_sec = 0;
+	timeout.tv_usec = 20000;
+
+	int iResult;
+	int iRecvSize;
+	sockaddr_in addrAccept, addrTemp;
+	socklen_t iAcceptLen = sizeof(addrAccept);
+	socklen_t iTempLen = sizeof(addrTemp);
+
+	if (listen(pServer->GetSocket(), SOMAXCONN) == SOCKET_ERROR)
+	{
+		return nullptr;
+	}
+
+	CTcpServer::RecvSocket RecvS;
+	while (pServer->ThreadEventIsSet())
+	{
+		fd_set fdOld = fd;
+
+		iResult = select(maxfd + 1, &fdOld, NULL, NULL, &timeout);
+		if (0 < iResult)
+		{
+			for (size_t i = 0; i < vecfds.size(); i++)
+			{
+				if (FD_ISSET(vecfds[i], &fdOld))
+				{
+					//如果socket是服务器，则接收连接
+					if (vecfds[i] == pServer->GetSocket())
+					{
+						memset(&addrAccept, 0, sizeof(addrAccept));
+						SOCKET socketAccept = accept(pServer->GetSocket(), (sockaddr *)&addrAccept, &iAcceptLen);
+
+						if (INVALID_SOCKET != socketAccept)
+						{
+							if (pServer->RecvCallback() != NULL)
+							pServer->RecvCallback()(RECV_SOCKET, inet_ntoa(addrAccept.sin_addr), ntohs(addrAccept.sin_port), 0, NULL, pServer->UserParam());
+							FD_SET(socketAccept, &fd);
+							if (socketAccept > maxfd)
+							{
+								maxfd = socketAccept;
+							}
+							vecfds.push_back(socketAccept);
+							RecvS.AcceptSocket = socketAccept;
+							memcpy(&RecvS.addr, &addrAccept, sizeof(sockaddr_in));
+							pServer->AddClient(RecvS);
+						}
+					}
+					else //非服务器,接收数据(因为fd是读数据集)
+					{
+						memset(g_szServerRecvBuf, 0, RECV_BUF_SIZE);
+						iRecvSize = recv(vecfds[i], g_szServerRecvBuf, RECV_BUF_SIZE, 0);
+						memset(&addrTemp, 0, sizeof(addrTemp));
+						iTempLen = sizeof(addrTemp);
+						getpeername(vecfds[i], (sockaddr *)&addrTemp, &iTempLen);
+
+						if (SOCKET_ERROR == iRecvSize)
+						{
+							if (pServer->RecvCallback() != NULL)
+							pServer->RecvCallback()(RECV_ERROR, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pServer->UserParam());
+							closesocket(vecfds[i]);
+							FD_CLR(vecfds[i], &fd);
+							vecfds.erase(vecfds.begin() + i);
+							i--;
+							continue;
+						}
+						else if (0 == iRecvSize)
+						{
+							//客户socket关闭
+							if (pServer->RecvCallback() != NULL)
+							pServer->RecvCallback()(RECV_CLOSE, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), 0, NULL, pServer->UserParam());
+							closesocket(vecfds[i]);
+							FD_CLR(vecfds[i], &fd);
+							vecfds.erase(vecfds.begin() + i);
+							pServer->EraseClient(addrTemp);
+							i--;
+						}
+						else if (0 < iRecvSize)
+						{
+							//打印接收的数据
+							if (pServer->RecvCallback() != NULL)
+							pServer->RecvCallback()(RECV_DATA, inet_ntoa(addrTemp.sin_addr), ntohs(addrTemp.sin_port), iRecvSize, g_szServerRecvBuf, pServer->UserParam());
+						}
+					}
+				}
+			}
+		}
+		else if (SOCKET_ERROR == iResult)
+		{
+			cerr << "Failed to select socket, error: " << WSAGetLastError() << endl;
+			sleep(100);
+		}
+	}
+
+	for (size_t i = 0; i < vecfds.size(); i++)
+	{
+		closesocket(vecfds[i]);
+	}
+
+	return nullptr;
 }
 #endif
