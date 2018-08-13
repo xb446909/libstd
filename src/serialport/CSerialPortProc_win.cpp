@@ -160,7 +160,7 @@ int CSerialPortProc::Read(char * szBuf, int nBufLen, int nTimeout)
 				if (!GetOverlappedResult(m_hSerialPort, &m_rdOverlapped, &dwRealRead, FALSE))
 				{
 					dwError = GetLastError();
-					if (dwError != ERROR_IO_INCOMPLETE) //��������
+					if (dwError != ERROR_IO_INCOMPLETE)
 					{
 						std::cout << "nRet: " << nRet << std::endl;
 						nRet = COM_ERROR;
@@ -185,8 +185,7 @@ DWORD WINAPI SerialPortRecvThread(__in LPVOID lpParameter)
 	CSerialPortProc* pProc = (CSerialPortProc*)lpParameter;
 	CSerialPortProc::ProcParam param = pProc->m_procParam;
 
-	char recvBuf[BUF_SIZE] =
-	{	0};
+	char recvBuf[BUF_SIZE] = { 0 };
 
 	while (true)
 	{

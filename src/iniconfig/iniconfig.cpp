@@ -2,63 +2,106 @@
 #include "iniconfig.h"
 #include <iostream>
 #include <sstream>
+#include <map>
+#include <memory>
 #include <string.h>
 #include "iniparser.h"
 
-int __stdcall ReadIniInt(const char* szSection, const char* szKey, int nDefault,
-		const char* szFile)
+#if __cplusplus >= 201103L
+using namespace std;
+#else
+using namespace std::tr1;
+#endif
+
+std::map<int, shared_ptr<iniparser>> g_mapParser;
+
+
+int __stdcall InitIniFile(int nId, const char* szFile)
 {
-	iniparser parser(szFile);
-	return parser.ReadInt(szSection, szKey, nDefault);
+	if (g_mapParser.find(nId) != g_mapParser.end())
+	{
+		g_mapParser.erase(nId);
+	}
+	g_mapParser[nId] = shared_ptr<iniparser>(new iniparser(szFile));
+	return 0;
 }
 
-void __stdcall WriteIniInt(const char* szSection, const char* szKey, int nVal,
-		const char* szFile)
+int __stdcall ReadIniInt(int nId, const char* szSection, const char* szKey, int nDefault)
 {
-	iniparser parser(szFile);
-	parser.WriteInt(szSection, szKey, nVal);
+	if (g_mapParser.find(nId) == g_mapParser.end())
+	{
+		return nDefault;
+	}
+	return g_mapParser[nId]->ReadInt(szSection, szKey, nDefault);
 }
 
-double __stdcall ReadIniDouble(const char* szSection, const char* szKey,
-		double dbDefault, const char* szFile)
+void __stdcall WriteIniInt(int nId, const char* szSection, const char* szKey, int nVal)
 {
-	iniparser parser(szFile);
-	return parser.ReadDouble(szSection, szKey, dbDefault);
+	if (g_mapParser.find(nId) == g_mapParser.end())
+	{
+		return;
+	}
+	g_mapParser[nId]->WriteInt(szSection, szKey, nVal);
 }
 
-void __stdcall WriteIniDouble(const char* szSection, const char* szKey,
-		double dbVal, const char* szFile)
+double __stdcall ReadIniDouble(int nId, const char* szSection, const char* szKey,
+		double dbDefault)
 {
-	iniparser parser(szFile);
-	parser.WriteDouble(szSection, szKey, dbVal);
+	if (g_mapParser.find(nId) == g_mapParser.end())
+	{
+		return dbDefault;
+	}
+	return g_mapParser[nId]->ReadDouble(szSection, szKey, dbDefault);
 }
 
-std::string __stdcall ReadIniStdString(const char* szSection, const char* szKey,
-		std::string strDefault, const char* szFile)
+void __stdcall WriteIniDouble(int nId, const char* szSection, const char* szKey,
+		double dbVal)
 {
-	iniparser parser(szFile);
-	return parser.ReadString(szSection, szKey, strDefault);
+	if (g_mapParser.find(nId) == g_mapParser.end())
+	{
+		return;
+	}
+	g_mapParser[nId]->WriteDouble(szSection, szKey, dbVal);
 }
 
-void __stdcall WriteIniStdString(const char* szSection, const char* szKey,
-		std::string str, const char* szFile)
+std::string __stdcall ReadIniStdString(int nId, const char* szSection, const char* szKey,
+		std::string strDefault)
 {
-	iniparser parser(szFile);
-	parser.WriteString(szSection, szKey, str);
+	if (g_mapParser.find(nId) == g_mapParser.end())
+	{
+		return strDefault;
+	}
+	return g_mapParser[nId]->ReadString(szSection, szKey, strDefault);
 }
 
-void __stdcall ReadIniString(const char* szSection, const char* szKey,
-		const char* szDefault, char* szOut, const char* szFile)
+void __stdcall WriteIniStdString(int nId, const char* szSection, const char* szKey,
+		std::string str)
 {
-	iniparser parser(szFile);
-	string val = parser.ReadString(szSection, szKey, szDefault);
+	if (g_mapParser.find(nId) == g_mapParser.end())
+	{
+		return;
+	}
+	g_mapParser[nId]->WriteString(szSection, szKey, str);
+}
+
+void __stdcall ReadIniString(int nId, const char* szSection, const char* szKey,
+		const char* szDefault, char* szOut)
+{
+	if (g_mapParser.find(nId) == g_mapParser.end())
+	{
+		return;
+	}
+	string val = g_mapParser[nId]->ReadString(szSection, szKey, szDefault);
 	strcpy(szOut, val.c_str());
 }
 
-void __stdcall WriteIniString(const char* szSection, const char* szKey,
-		const char* szVal, const char* szFile)
+void __stdcall WriteIniString(int nId, const char* szSection, const char* szKey,
+		const char* szVal)
 {
-	iniparser parser(szFile);
-	parser.WriteString(szSection, szKey, szVal);
+	if (g_mapParser.find(nId) == g_mapParser.end())
+	{
+		return;
+	}
+	g_mapParser[nId]->WriteString(szSection, szKey, szVal);
 }
 

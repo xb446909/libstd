@@ -7,24 +7,18 @@
 #define __stdcall
 #endif
 
-int __stdcall ReadIniInt(const char* szSection, const char* szKey, int nDefault,
-		const char* szFile);
-void __stdcall WriteIniInt(const char* szSection, const char* szKey, int nVal,
-		const char* szFile);
+int __stdcall InitIniFile(int nId, const char* szFile);
 
-double __stdcall ReadIniDouble(const char* szSection, const char* szKey,
-		double dbDefault, const char* szFile);
-void __stdcall WriteIniDouble(const char* szSection, const char* szKey,
-		double dbVal, const char* szFile);
+int __stdcall ReadIniInt(int nId, const char* szSection, const char* szKey, int nDefault);
+void __stdcall WriteIniInt(int nId, const char* szSection, const char* szKey, int nVal);
 
-std::string __stdcall ReadIniStdString(const char* szSection, const char* szKey,
-		std::string strDefault, const char* szFile);
-void __stdcall WriteIniStdString(const char* szSection, const char* szKey,
-		std::string str, const char* szFile);
+double __stdcall ReadIniDouble(int nId, const char* szSection, const char* szKey, double dbDefault);
+void __stdcall WriteIniDouble(int nId, const char* szSection, const char* szKey, double dbVal);
 
-void __stdcall ReadIniString(const char* szSection, const char* szKey,
-		const char* szDefault, char* szOut, const char* szFile);
-void __stdcall WriteIniString(const char* szSection, const char* szKey,
-		const char* szVal, const char* szFile);
+std::string __stdcall ReadIniStdString(int nId, const char* szSection, const char* szKey, std::string strDefault);
+void __stdcall WriteIniStdString(int nId, const char* szSection, const char* szKey, std::string str);
+
+void __stdcall ReadIniString(int nId, const char* szSection, const char* szKey, const char* szDefault, char* szOut);
+void __stdcall WriteIniString(int nId, const char* szSection, const char* szKey, const char* szVal);
 
 #endif
