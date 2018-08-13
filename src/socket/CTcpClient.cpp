@@ -37,12 +37,12 @@ CTcpClient::~CTcpClient()
 
 int CTcpClient::Connect(int nTimeoutMs)
 {
+	InitIniFile(0, m_param.szIniPath.c_str());
 	std::stringstream section;
 	section << "TcpClient" << m_param.nId;
-	string strIp = ReadIniStdString(section.str().c_str(), "Address",
-			"127.0.0.1", m_param.szIniPath.c_str());
-	int nPort = ReadIniInt(section.str().c_str(), "Port", 10000,
-			m_param.szIniPath.c_str());
+	string strIp = ReadIniStdString(0, section.str().c_str(), "Address",
+			"127.0.0.1");
+	int nPort = ReadIniInt(0, section.str().c_str(), "Port", 10000);
 
 	struct sockaddr_in clientService;
 

@@ -53,15 +53,16 @@ void CSerialPortProc::SetProcParam(ProcParam procParam)
 
 int CSerialPortProc::Open()
 {
+	InitIniFile(0, m_procParam.strIniPath.c_str());
 	std::stringstream ssSection;
 	ssSection << "SerialPort" << m_procParam.nId;
 
-	m_szPortName = ReadIniStdString(ssSection.str().c_str(), "PortName", "COM1", m_procParam.strIniPath.c_str());
-	int nBaudRate = ReadIniInt(ssSection.str().c_str(), "BaudRate", 115200, m_procParam.strIniPath.c_str());
-	int nDataBits = ReadIniInt(ssSection.str().c_str(), "DataBits", 8, m_procParam.strIniPath.c_str());
-	int nStopBits = ReadIniInt(ssSection.str().c_str(), "StopBits", 1, m_procParam.strIniPath.c_str());
-	int nParity = ReadIniInt(ssSection.str().c_str(), "Parity", 0, m_procParam.strIniPath.c_str());
-	int nFlowControl = ReadIniInt(ssSection.str().c_str(), "FlowControl", 0, m_procParam.strIniPath.c_str());
+	m_szPortName = ReadIniStdString(0, ssSection.str().c_str(), "PortName", "COM1");
+	int nBaudRate = ReadIniInt(0, ssSection.str().c_str(), "BaudRate", 115200);
+	int nDataBits = ReadIniInt(0, ssSection.str().c_str(), "DataBits", 8);
+	int nStopBits = ReadIniInt(0, ssSection.str().c_str(), "StopBits", 1);
+	int nParity = ReadIniInt(0, ssSection.str().c_str(), "Parity", 0);
+	int nFlowControl = ReadIniInt(0, ssSection.str().c_str(), "FlowControl", 0);
 
 	m_hSerialPort = CreateFileA(m_szPortName.c_str(),
 			GENERIC_READ | GENERIC_WRITE,
@@ -88,7 +89,7 @@ int CSerialPortProc::Open()
 	dcb.StopBits = (nStopBits == 2) ? 2 : 0;
 
 	COMMTIMEOUTS TimeOuts;
-	int nReadTimeout = ReadIniInt(ssSection.str().c_str(), "ReadInterval", 50, m_procParam.strIniPath.c_str());
+	int nReadTimeout = ReadIniInt(0, ssSection.str().c_str(), "ReadInterval", 50);
 	TimeOuts.ReadIntervalTimeout = nReadTimeout;
 	TimeOuts.ReadTotalTimeoutMultiplier = 0;
 	TimeOuts.ReadTotalTimeoutConstant = 0;
