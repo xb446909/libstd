@@ -1,6 +1,7 @@
 LIBRARY
 EXPORTS
 
+InitIniFile
 ReadIniInt
 WriteIniInt
 ReadIniDouble
