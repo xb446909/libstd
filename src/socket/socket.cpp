@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include "socket.h"
-#include "iniconfig.h"
 #include "CSocketLib.h"
 #include <map>
 #include <memory>

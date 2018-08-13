@@ -2,7 +2,7 @@
 #include "CTcpClient.h"
 #include <iostream>
 #include <sstream>
-#include "iniconfig.h"
+#include "../iniconfig/iniparser.h"
 #ifdef WIN32
 #include <Winsock2.h>
 #endif
@@ -37,12 +37,11 @@ CTcpClient::~CTcpClient()
 
 int CTcpClient::Connect(int nTimeoutMs)
 {
-	InitIniFile(0, m_param.szIniPath.c_str());
+	iniparser parser(m_param.szIniPath.c_str());
 	std::stringstream section;
 	section << "TcpClient" << m_param.nId;
-	string strIp = ReadIniStdString(0, section.str().c_str(), "Address",
-			"127.0.0.1");
-	int nPort = ReadIniInt(0, section.str().c_str(), "Port", 10000);
+	string strIp = parser.ReadString(section.str().c_str(), "Address", "127.0.0.1");
+	int nPort = parser.ReadInt(section.str().c_str(), "Port", 10000);
 
 	struct sockaddr_in clientService;
 

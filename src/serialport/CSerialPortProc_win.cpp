@@ -2,9 +2,9 @@
 #ifdef WIN32
 
 #include "CSerialPortProc_win.h"
-#include "iniconfig.h"
 #include <sstream>
 #include "../common/CriticalLock.h"
+#include "../iniconfig/iniparser.h"
 #include <iostream>
 
 DWORD WINAPI SerialPortRecvThread(__in LPVOID lpParameter);
@@ -53,16 +53,16 @@ void CSerialPortProc::SetProcParam(ProcParam procParam)
 
 int CSerialPortProc::Open()
 {
-	InitIniFile(0, m_procParam.strIniPath.c_str());
+	iniparser parser(m_procParam.strIniPath.c_str());
 	std::stringstream ssSection;
 	ssSection << "SerialPort" << m_procParam.nId;
 
-	m_szPortName = ReadIniStdString(0, ssSection.str().c_str(), "PortName", "COM1");
-	int nBaudRate = ReadIniInt(0, ssSection.str().c_str(), "BaudRate", 115200);
-	int nDataBits = ReadIniInt(0, ssSection.str().c_str(), "DataBits", 8);
-	int nStopBits = ReadIniInt(0, ssSection.str().c_str(), "StopBits", 1);
-	int nParity = ReadIniInt(0, ssSection.str().c_str(), "Parity", 0);
-	int nFlowControl = ReadIniInt(0, ssSection.str().c_str(), "FlowControl", 0);
+	m_szPortName = parser.ReadString(ssSection.str().c_str(), "PortName", "COM1");
+	int nBaudRate = parser.ReadInt(ssSection.str().c_str(), "BaudRate", 115200);
+	int nDataBits = parser.ReadInt(ssSection.str().c_str(), "DataBits", 8);
+	int nStopBits = parser.ReadInt(ssSection.str().c_str(), "StopBits", 1);
+	int nParity = parser.ReadInt(ssSection.str().c_str(), "Parity", 0);
+	int nFlowControl = parser.ReadInt(ssSection.str().c_str(), "FlowControl", 0);
 
 	m_hSerialPort = CreateFileA(m_szPortName.c_str(),
 			GENERIC_READ | GENERIC_WRITE,
@@ -89,7 +89,7 @@ int CSerialPortProc::Open()
 	dcb.StopBits = (nStopBits == 2) ? 2 : 0;
 
 	COMMTIMEOUTS TimeOuts;
-	int nReadTimeout = ReadIniInt(0, ssSection.str().c_str(), "ReadInterval", 50);
+	int nReadTimeout = parser.ReadInt(ssSection.str().c_str(), "ReadInterval", 50);
 	TimeOuts.ReadIntervalTimeout = nReadTimeout;
 	TimeOuts.ReadTotalTimeoutMultiplier = 0;
 	TimeOuts.ReadTotalTimeoutConstant = 0;
@@ -98,7 +98,7 @@ int CSerialPortProc::Open()
 
 	SetCommTimeouts(m_hSerialPort, &TimeOuts);
 	SetCommState(m_hSerialPort, &dcb);
-	PurgeComm(m_hSerialPort, PURGE_TXCLEAR | PURGE_RXCLEAR | PURGE_RXABORT | PURGE_TXABORT); //���һ�»�����
+	PurgeComm(m_hSerialPort, PURGE_TXCLEAR | PURGE_RXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
 
 	if (m_procParam.recvCallback != nullptr)
 	{

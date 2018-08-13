@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "CTcpServer.h"
-#include "iniconfig.h"
 #include <sstream>
 #include <iostream>
 #include <vector>
+#include "../iniconfig/iniparser.h"
 
 using namespace std;
 
@@ -160,11 +160,11 @@ int CTcpServer::FindSocket(const char * szDstIP, int nDstPort)
 
 bool CTcpServer::BindSocket()
 {
-	InitIniFile(0, m_param.szIniPath.c_str());
+	iniparser parser(m_param.szIniPath.c_str());
 	std::stringstream section;
 	section << "TcpServer" << m_param.nId;
-	string strIp = ReadIniStdString(0, section.str().c_str(), "Address", "0.0.0.0");
-	int nPort = ReadIniInt(0, section.str().c_str(), "Port", 10000);
+	string strIp = parser.ReadString(section.str().c_str(), "Address", "0.0.0.0");
+	int nPort = parser.ReadInt(section.str().c_str(), "Port", 10000);
 
 	struct sockaddr_in clientService;
 
