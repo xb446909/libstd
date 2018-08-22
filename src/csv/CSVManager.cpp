@@ -94,7 +94,7 @@ int CSVManager::LoadFile()
 	while (!m_fs.eof())
 	{
 		string strline;
-		m_fs >> strline;
+		getline(m_fs, strline);
 		if (strline.compare("") == 0)
 			continue;
 
