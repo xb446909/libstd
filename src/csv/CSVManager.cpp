@@ -89,7 +89,6 @@ int CSVManager::WriteData(std::vector<std::vector<std::string>> data)
 
 int CSVManager::LoadFile()
 {
-	const char delims[] = ",";
 	m_vecData.clear();
 	while (!m_fs.eof())
 	{
@@ -101,12 +100,35 @@ int CSVManager::LoadFile()
 		vector<string> vecString;
 		char* str = new char[strline.length() + 1];
 		strcpy(str, strline.c_str());
-		char* r = strtok(str, delims);
-		while (r != NULL)
+
+		char* tmp = new char[strline.length() + 1];
+		memset(tmp, '\0', strline.length() + 1);
+		int ptr = 0;
+		bool bQuot = false;
+		for (size_t i = 0; i < strline.length(); i++)
 		{
-			vecString.push_back(string(r));
-			r = strtok(NULL, delims);
+			if ((str[i] == ',') && (!bQuot))
+			{
+				vecString.push_back(string(tmp));
+				memset(tmp, '\0', strline.length() + 1);
+				ptr = 0;
+			}
+			else if ((str[i] == '"') && (!bQuot))
+			{
+				bQuot = true;
+			}
+			else if ((str[i] == '"') && (bQuot))
+			{
+				bQuot = false;
+			}
+			else
+			{
+				tmp[ptr] = str[i];
+				ptr++;
+			}
 		}
+		delete[] tmp;
+
 		delete[] str;
 		m_vecData.push_back(vecString);
 	}
