@@ -24,7 +24,7 @@ TCPSend
 TCPRecv
 
 InitTransform
-SetPoints
+SetTransformPoints
 Transform
 
 OpenCSVFile
@@ -34,3 +34,6 @@ GetDoubleData
 GetIntData
 GetStrData
 WriteAllData
+
+SetFitPoints
+GetFitAnswer

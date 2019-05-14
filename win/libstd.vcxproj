@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\coordtransform.h" />
+    <ClInclude Include="..\inc\cruvefit.h" />
     <ClInclude Include="..\inc\csv.h" />
     <ClInclude Include="..\inc\iniconfig.h" />
     <ClInclude Include="..\inc\serialport.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="..\src\common\CriticalLock.h" />
     <ClInclude Include="..\src\coordtransform\ccoordtransform.h" />
     <ClInclude Include="..\src\coordtransform\ccoordtransform3dmultipt.h" />
+    <ClInclude Include="..\src\cruvefit\CCruveFit.h" />
     <ClInclude Include="..\src\csv\CSVManager.h" />
     <ClInclude Include="..\src\iniconfig\iniparser.h" />
     <ClInclude Include="..\src\serialport\CSerialPort.h" />
@@ -180,6 +182,8 @@
     <ClCompile Include="..\src\coordtransform\ccoordtransform.cpp" />
     <ClCompile Include="..\src\coordtransform\ccoordtransform3dmultipt.cpp" />
     <ClCompile Include="..\src\coordtransform\coordtransform.cpp" />
+    <ClCompile Include="..\src\cruvefit\CCruveFit.cpp" />
+    <ClCompile Include="..\src\cruvefit\cruvefit.cpp" />
     <ClCompile Include="..\src\csv\csv.cpp" />
     <ClCompile Include="..\src\csv\CSVManager.cpp" />
     <ClCompile Include="..\src\iniconfig\iniconfig.cpp" />

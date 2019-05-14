@@ -15,7 +15,7 @@ int __stdcall InitTransform(int nID, int nType)
 	return 0;
 }
 
-int __stdcall SetPoints(int nID, double * srcX, double * srcY, double * srcZ,
+int __stdcall SetTransformPoints(int nID, double * srcX, double * srcY, double * srcZ,
 		double * dstX, double * dstY, double * dstZ, int nSize)
 {
 	if (g_mapTransforms.find(nID) == g_mapTransforms.end())

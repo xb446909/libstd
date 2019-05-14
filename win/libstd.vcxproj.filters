@@ -55,6 +55,12 @@
     <Filter Include="源文件\zlib">
       <UniqueIdentifier>{f85461ec-c6b1-45bf-b792-93f0db63d27d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\cruvefit">
+      <UniqueIdentifier>{4ea12762-19c3-47d6-9aca-c2f9935fb9c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\cruvefit">
+      <UniqueIdentifier>{3f6fdd47-77d3-444e-be06-a088552db1a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -107,6 +113,12 @@
     </ClInclude>
     <ClInclude Include="..\src\socket\CTcpServer.h">
       <Filter>头文件\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\cruvefit.h">
+      <Filter>头文件\cruvefit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cruvefit\CCruveFit.h">
+      <Filter>头文件\cruvefit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -343,6 +355,12 @@
     </ClCompile>
     <ClCompile Include="..\src\iniconfig\iniparser.cpp">
       <Filter>源文件\iniconfig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cruvefit\cruvefit.cpp">
+      <Filter>源文件\cruvefit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cruvefit\CCruveFit.cpp">
+      <Filter>源文件\cruvefit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
