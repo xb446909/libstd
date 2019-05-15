@@ -23,17 +23,17 @@ TCPConnect
 TCPSend
 TCPRecv
 
-InitTransform
-SetTransformPoints
-Transform
+;InitTransform
+;SetTransformPoints
+;Transform
 
-OpenCSVFile
-GetAllData
-GetStdStringData
-GetDoubleData
-GetIntData
-GetStrData
-WriteAllData
+;OpenCSVFile
+;GetAllData
+;GetStdStringData
+;GetDoubleData
+;GetIntData
+;GetStrData
+;WriteAllData
 
 SetFitPoints
 GetFitAnswer

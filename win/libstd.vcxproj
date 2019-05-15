@@ -169,6 +169,23 @@
     <ClInclude Include="..\src\cruvefit\CCruveFit.h" />
     <ClInclude Include="..\src\csv\CSVManager.h" />
     <ClInclude Include="..\src\iniconfig\iniparser.h" />
+    <ClInclude Include="..\src\opencv\arithm_core.hpp" />
+    <ClInclude Include="..\src\opencv\arithm_simd.hpp" />
+    <ClInclude Include="..\src\opencv\bufferpool.impl.hpp" />
+    <ClInclude Include="..\src\opencv\convert.hpp" />
+    <ClInclude Include="..\src\opencv\cvconfig.h" />
+    <ClInclude Include="..\src\opencv\hal_internal.hpp" />
+    <ClInclude Include="..\src\opencv\hal_replacement.hpp" />
+    <ClInclude Include="..\src\opencv\intel_gpu_gemm.inl.hpp" />
+    <ClInclude Include="..\src\opencv\ocl_deprecated.hpp" />
+    <ClInclude Include="..\src\opencv\opencl_kernels_core.hpp" />
+    <ClInclude Include="..\src\opencv\parallel_impl.hpp" />
+    <ClInclude Include="..\src\opencv\persistence.hpp" />
+    <ClInclude Include="..\src\opencv\precomp.hpp" />
+    <ClInclude Include="..\src\opencv\stat.hpp" />
+    <ClInclude Include="..\src\opencv\stat.simd.hpp" />
+    <ClInclude Include="..\src\opencv\stat.simd_declarations.hpp" />
+    <ClInclude Include="..\src\opencv\umatrix.hpp" />
     <ClInclude Include="..\src\serialport\CSerialPort.h" />
     <ClInclude Include="..\src\serialport\CSerialPortProc_win.h" />
     <ClInclude Include="..\src\socket\CSocketLib.h" />
@@ -179,9 +196,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\common\CriticalLock.cpp" />
-    <ClCompile Include="..\src\coordtransform\ccoordtransform.cpp" />
-    <ClCompile Include="..\src\coordtransform\ccoordtransform3dmultipt.cpp" />
-    <ClCompile Include="..\src\coordtransform\coordtransform.cpp" />
     <ClCompile Include="..\src\cruvefit\CCruveFit.cpp" />
     <ClCompile Include="..\src\cruvefit\cruvefit.cpp" />
     <ClCompile Include="..\src\csv\csv.cpp" />
