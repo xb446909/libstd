@@ -33,7 +33,6 @@
 /* @(#) $Id$ */
 
 /* #define GEN_TREES_H */
-#include "stdafx.h"
 #include "deflate.h"
 
 #ifdef ZLIB_DEBUG

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "iniconfig.h"
 #include <iostream>
 #include <sstream>

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "cruvefit.h"
 #include "CCruveFit.h"
 #include <memory>

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "CSVManager.h"
 #include "csv.h"
 #include <sstream>

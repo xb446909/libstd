@@ -1,14 +1,5 @@
-#ifndef OPENCV_CVCONFIG_H_INCLUDED
-#define OPENCV_CVCONFIG_H_INCLUDED
-
 /* OpenCV compiled as static or dynamic libs */
 #define BUILD_SHARED_LIBS
-
-/* OpenCV intrinsics optimized code */
-#define CV_ENABLE_INTRINSICS
-
-/* OpenCV additional optimized code */
-/* #undef CV_DISABLE_OPTIMIZATION */
 
 /* Compile for 'real' NVIDIA GPU architectures */
 #define CUDA_ARCH_BIN ""
@@ -40,9 +31,6 @@
 /* AMD's OpenCL Fast Fourier Transform Library*/
 /* #undef HAVE_CLAMDFFT */
 
-/* Clp support */
-/* #undef HAVE_CLP */
-
 /* Cocoa API */
 /* #undef HAVE_COCOA */
 
@@ -64,13 +52,6 @@
 /* IEEE1394 capturing support - libdc1394 v2.x */
 /* #undef HAVE_DC1394_2 */
 
-/* DirectX */
-/* #undef HAVE_DIRECTX */
-/* #undef HAVE_DIRECTX_NV12 */
-/* #undef HAVE_D3D11 */
-/* #undef HAVE_D3D10 */
-/* #undef HAVE_D3D9 */
-
 /* DirectShow Video Capture library */
 /* #undef HAVE_DSHOW */
 
@@ -80,46 +61,38 @@
 /* FFMpeg video library */
 /* #undef HAVE_FFMPEG */
 
-/* Geospatial Data Abstraction Library */
-/* #undef HAVE_GDAL */
-
 /* GStreamer multimedia framework */
 /* #undef HAVE_GSTREAMER */
 
 /* GTK+ 2.0 Thread support */
 /* #undef HAVE_GTHREAD */
 
+/* Windows Runtime support */
+/* #undef HAVE_WINRT */
+
+/* Win32 UI */
+/* #undef HAVE_WIN32UI */
+
 /* GTK+ 2.x toolkit */
 /* #undef HAVE_GTK */
 
-/* Halide support */
-/* #undef HAVE_HALIDE */
-
-/* Define to 1 if you have the <inttypes.h> header file. */
-/* #undef HAVE_INTTYPES_H */
+/* Apple ImageIO Framework */
+/* #undef HAVE_IMAGEIO */
 
 /* Intel Perceptual Computing SDK library */
 /* #undef HAVE_INTELPERC */
 
 /* Intel Integrated Performance Primitives */
 /* #undef HAVE_IPP */
-/* #undef HAVE_IPP_ICV */
-/* #undef HAVE_IPP_IW */
-
-/* Intel IPP Async */
-/* #undef HAVE_IPP_A */
 
 /* JPEG-2000 codec */
 /* #undef HAVE_JASPER */
 
 /* IJG JPEG codec */
-#define HAVE_JPEG
+/* #undef HAVE_JPEG */
 
 /* libpng/png.h needs to be included */
 /* #undef HAVE_LIBPNG_PNG_H */
-
-/* GDCM DICOM codec */
-/* #undef HAVE_GDCM */
 
 /* V4L/V4L2 capturing support via libv4l */
 /* #undef HAVE_LIBV4L */
@@ -136,7 +109,6 @@
 /* OpenCL Support */
 /* #undef HAVE_OPENCL */
 /* #undef HAVE_OPENCL_STATIC */
-/* #undef HAVE_OPENCL_SVM */
 
 /* OpenEXR codec */
 /* #undef HAVE_OPENEXR */
@@ -147,17 +119,8 @@
 /* OpenNI library */
 /* #undef HAVE_OPENNI */
 
-/* OpenNI library */
-/* #undef HAVE_OPENNI2 */
-
 /* PNG codec */
-#define HAVE_PNG
-
-/* Posix threads (pthreads) */
-/* #undef HAVE_PTHREAD */
-
-/* parallel_for with pthreads */
-/* #undef HAVE_PTHREADS_PF */
+/* #undef HAVE_PNG */
 
 /* Qt support */
 /* #undef HAVE_QT */
@@ -196,52 +159,5 @@
 /* #undef HAVE_XINE */
 
 /* Define if your processor stores words with the most significant byte
- first (like Motorola and SPARC, unlike Intel and VAX). */
+   first (like Motorola and SPARC, unlike Intel and VAX). */
 /* #undef WORDS_BIGENDIAN */
-
-/* gPhoto2 library */
-/* #undef HAVE_GPHOTO2 */
-
-/* VA library (libva) */
-/* #undef HAVE_VA */
-
-/* Intel VA-API/OpenCL */
-/* #undef HAVE_VA_INTEL */
-
-/* Intel Media SDK */
-/* #undef HAVE_MFX */
-
-/* Lapack */
-/* #undef HAVE_LAPACK */
-
-/* Library was compiled with functions instrumentation */
-/* #undef ENABLE_INSTRUMENTATION */
-
-/* OpenVX */
-/* #undef HAVE_OPENVX */
-
-#if defined(HAVE_XINE)         || \
-    defined(HAVE_GSTREAMER)    || \
-    defined(HAVE_QUICKTIME)    || \
-    defined(HAVE_QTKIT)        || \
-    defined(HAVE_AVFOUNDATION) || \
-    /*defined(HAVE_OPENNI)     || too specialized */ \
-    defined(HAVE_FFMPEG)       || \
-    defined(HAVE_MSMF)
-#define HAVE_VIDEO_INPUT
-#endif
-
-#if /*defined(HAVE_XINE)       || */\
-    defined(HAVE_GSTREAMER)    || \
-    defined(HAVE_QUICKTIME)    || \
-    defined(HAVE_QTKIT)        || \
-    defined(HAVE_AVFOUNDATION) || \
-    defined(HAVE_FFMPEG)       || \
-    defined(HAVE_MSMF)
-#define HAVE_VIDEO_OUTPUT
-#endif
-
-/* OpenCV trace utilities */
-#define OPENCV_TRACE
-
-#endif // OPENCV_CVCONFIG_H_INCLUDED

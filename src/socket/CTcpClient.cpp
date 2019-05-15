@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "CTcpClient.h"
 #include <iostream>
 #include <sstream>

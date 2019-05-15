@@ -1,6 +1,8 @@
 #ifndef __SERIALPORT_H
 #define __SERIALPORT_H
 
+#include <Windows.h>
+
 #ifndef WIN32
 #define __stdcall
 #endif

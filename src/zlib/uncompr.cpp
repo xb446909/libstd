@@ -4,7 +4,6 @@
  */
 
 /* @(#) $Id$ */
-#include "stdafx.h"
 #define ZLIB_INTERNAL
 #include "zlib.h"
 

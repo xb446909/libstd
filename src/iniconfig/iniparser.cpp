@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "iniparser.h"
 #include <fstream>
 #include <sstream>
