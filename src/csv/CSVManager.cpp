@@ -126,6 +126,10 @@ int CSVManager::LoadFile()
 				ptr++;
 			}
 		}
+		if (ptr > 0)
+		{
+			vecString.push_back(string(tmp));
+		}
 		delete[] tmp;
 
 		delete[] str;
